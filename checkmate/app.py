@@ -3,7 +3,7 @@ import os
 
 import pyramid.config
 
-REQUIRED_PARAMS = []
+REQUIRED_PARAMS = ["checkmate_blocklist_path"]
 
 
 def load_settings(settings):
@@ -28,7 +28,7 @@ def load_settings(settings):
     return settings
 
 
-def create_app(_=None, **settings):
+def create_app(_=None, **settings):  # pragma: no cover
     """Configure and return the WSGI app."""
     config = pyramid.config.Configurator(settings=load_settings(settings))
 

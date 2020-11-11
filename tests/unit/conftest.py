@@ -39,7 +39,7 @@ def pyramid_settings():
 @pytest.fixture
 def make_request(pyramid_config):
     def make_request(path="/irrelevant", params=None):
-        if params:
+        if params:  # pragma: no cover
             path += "?" + urlencode(params)
 
         pyramid_request = Request.blank(path)
