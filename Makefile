@@ -1,0 +1,78 @@
+.PHONY: help
+help:
+	@echo "make help              Show this help message"
+	@echo "make dev               Run the app in the development server"
+	@echo "make supervisor        Launch a supervisorctl shell for managing the processes "
+	@echo '                       that `make dev` starts, type `help` for docs'
+	@echo 'make services          Run the services that `make dev` requires'
+	@echo "make lint              Run the code linter(s) and print any warnings"
+	@echo "make format            Correctly format the code"
+	@echo "make checkformatting   Crash if the code isn't correctly formatted"
+	@echo "make test              Run the unit tests and produce a coverage report"
+	@echo "make sure              Make sure that the formatter, linter, tests, etc all pass"
+	@echo "make docker            Make the app's Docker image"
+	@echo "make clean             Delete development artefacts (cached files, "
+	@echo "                       dependencies, etc)"
+
+.PHONY: dev
+dev: python
+	@tox -qe dev
+
+.PHONY: supervisor
+supervisor: python
+	@tox -qe dev --run-command 'supervisorctl -c conf/supervisord-dev.conf $(command)'
+
+.PHONY: services
+services:
+	@true
+
+.PHONY: lint
+lint: python
+	@tox -qe lint
+
+.PHONY: format
+format: python
+	@tox -qe format
+
+.PHONY: checkformatting
+checkformatting: python
+	@tox -qe checkformatting
+
+.PHONY: test
+test: python
+	@tox -q
+
+.PHONY: sure
+sure: checkformatting lint test
+
+.PHONY: docker
+docker:
+	@git archive --format=tar HEAD | docker build -t hypothesis/checkmate:$(DOCKER_TAG) -
+
+.PHONY: run-docker
+run-docker:
+	@docker run \
+	    -it --rm \
+	    -e "NEW_RELIC_LICENSE_KEY=$(NEW_RELIC_LICENSE_KEY)" \
+	    -e "NEW_RELIC_ENVIRONMENT=dev" \
+	    -e "NEW_RELIC_APP_NAME=checkmate (dev)" \
+	    -e "CHECKMATE_BLOCKLIST_URL=https://hypothesis-via.s3-us-west-1.amazonaws.com/via-blocklist.txt" \
+	    -e "CHECKMATE_BLOCKLIST_PATH=/var/lib/hypothesis/blocklist.txt" \
+	    -p 9099:9099 \
+	    --name checkmate hypothesis/checkmate:$(DOCKER_TAG)
+
+.PHONY: clean
+clean:
+	@find . -type f -name "*.py[co]" -delete
+	@find . -type d -name "__pycache__" -delete
+	@find . -type f -name "*.gz" -delete
+
+.PHONY: web
+web: python
+	@tox -qe dev --run-command 'gunicorn -c conf/gunicorn/dev.conf.py --paste conf/development.ini'
+
+.PHONY: python
+python:
+	@./bin/install-python
+
+DOCKER_TAG = dev
