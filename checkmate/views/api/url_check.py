@@ -1,11 +1,11 @@
-"""Monitoring views."""
+"""URL checking."""
+from pyramid.httpexceptions import HTTPNoContent
+from pyramid.view import view_config
 
-from pyramid import response, view
 
-
-@view.view_config(route_name="url_check")
+@view_config(route_name="url_check")
 def url_check(_request):
-    """Status endpoint."""
+    """Check a given URL for any reasons we might want to block it."""
 
     # If everything is fine give a 204 which is successful, but has no body
-    return response.Response(status_int=204, status="204 OK")
+    return HTTPNoContent()
