@@ -36,5 +36,6 @@ def create_app(_=None, **settings):  # pragma: no cover
     config.include("h_pyramid_sentry")
 
     config.include("checkmate.views")
+    config.include("checkmate.routes")
 
     return config.make_wsgi_app()
