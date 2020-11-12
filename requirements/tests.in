@@ -3,5 +3,5 @@ httpretty
 pytest
 factory-boy
 webtest
-h-matchers >= 1.2.4
+h-matchers
 -r requirements.txt
