@@ -1,0 +1,7 @@
+coverage
+httpretty
+pytest
+factory-boy
+webtest
+h-matchers
+-r requirements.txt

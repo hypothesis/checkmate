@@ -1,0 +1,7 @@
+pylint
+pydocstyle
+rcssmin
+rjsmin
+htmlmin
+-r tests.txt
+-r requirements.txt
