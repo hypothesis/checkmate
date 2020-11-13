@@ -32,6 +32,14 @@ def pyramid_config(pyramid_settings):
 
 
 @pytest.fixture
+def pyramid_request(pyramid_config):
+    pyramid_request = Request.blank("/dummy")
+    pyramid_request.registry = pyramid_config.registry
+
+    return pyramid_request
+
+
+@pytest.fixture
 def pyramid_settings():
     return {}
 
