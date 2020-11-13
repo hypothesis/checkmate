@@ -20,7 +20,8 @@ enable=
 disable=bad-continuation,
         missing-type-doc,
         missing-return-type-doc,
-        too-few-public-methods
+        too-few-public-methods,
+        missing-yield-type-doc
 
 [REPORTS]
 output-format=colorized
