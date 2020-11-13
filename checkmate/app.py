@@ -30,6 +30,7 @@ def load_settings(settings):
 
 def create_app(_=None, **settings):  # pragma: no cover
     """Configure and return the WSGI app."""
+
     config = pyramid.config.Configurator(settings=load_settings(settings))
 
     config.include("pyramid_jinja2")
