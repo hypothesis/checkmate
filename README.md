@@ -89,28 +89,18 @@ Installing Checkmate in a development environment
 
 ### You will need
 
-* [Git](https://git-scm.com/)
-
 * [pyenv](https://github.com/pyenv/pyenv)
   Follow the instructions in the pyenv README to install it.
   The Homebrew method works best on macOS.
   
-### Clone the git repo
+### Clone the git repo and `cd` into the directory
 
     git clone https://github.com/hypothesis/checkmate.git
-
-This will download the code into a `checkmate` directory in your current working
-directory. You need to be in the `checkmate` directory from the remainder of the
-installation process:
-
     cd checkmate
 
 ### Start the development server
 
     make dev
-
-The first time you run `make dev` it might take a while to start because it'll
-need to install the application dependencies and build the assets.
 
 This will start the app on http://localhost:9099
 
