@@ -8,8 +8,8 @@ from checkmate.checker.url.blocklist import Blocklist
 from checkmate.exceptions import BadURLParameter
 
 
-@view_config(route_name="url_check", renderer="json")
-def url_check(request):
+@view_config(route_name="check_url", renderer="json")
+def check_url(request):
     """Check a given URL for any reasons we might want to block it."""
 
     try:

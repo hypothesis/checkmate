@@ -6,7 +6,7 @@ A service for checking URLs are safe.
 API
 ---
 
-### `GET /api/url?url=<url_to_check>`
+### `GET /api/check?url=<url_to_check>`
 
 Check a specific URL for problems. The return values are in a [JSON:API](https://jsonapi.org/) style.
 
