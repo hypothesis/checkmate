@@ -8,12 +8,6 @@ Installing Checkmate in a development environment
 
 ### You will need
 
-* Checkmate integrates with h and the Hypothesis client, so you will need to
-  set up development environments for each of those before you can develop Checkmate:
-
-  * https://h.readthedocs.io/en/latest/developing/install/
-  * https://h.readthedocs.io/projects/client/en/latest/developers/developing/
-
 * [Git](https://git-scm.com/)
 
 * [pyenv](https://github.com/pyenv/pyenv)
