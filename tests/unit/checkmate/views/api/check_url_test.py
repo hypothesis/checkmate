@@ -5,22 +5,22 @@ import pytest
 from checkmate.checker.url.blocklist import Blocklist
 from checkmate.checker.url.reason import Reason
 from checkmate.exceptions import BadURLParameter
-from checkmate.views.api.url_check import url_check
+from checkmate.views.api.check_url import check_url
 
 
 class TestURLCheck:
     def test_a_good_url(self, make_request):
-        request = make_request("/api/url", {"url": "http://happy.example.com"})
+        request = make_request("/api/check", {"url": "http://happy.example.com"})
 
-        result = url_check(request)
+        result = check_url(request)
 
         assert result.status_code == 204
 
     def test_a_bad_url(self, make_request, blocklist):
         blocklist.check_url.return_value = (Reason.MEDIA_IMAGE, Reason.MALICIOUS)
-        request = make_request("/api/url", {"url": "http://sad.example.com"})
+        request = make_request("/api/check", {"url": "http://sad.example.com"})
 
-        result = url_check(request)
+        result = check_url(request)
 
         assert request.response.status_code == 200
         assert result == {
@@ -34,10 +34,10 @@ class TestURLCheck:
         }
 
     def test_it_returns_an_error_for_no_url(self, make_request):
-        request = make_request("/api/url")
+        request = make_request("/api/check")
 
         with pytest.raises(BadURLParameter):
-            url_check(request)
+            check_url(request)
 
     @pytest.fixture
     def blocklist(self):
