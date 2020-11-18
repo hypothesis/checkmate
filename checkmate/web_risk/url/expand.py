@@ -1,9 +1,9 @@
+import re
 from urllib.parse import urlparse
 
-import re
 
 class ExpandURL:
-    IPV4 = re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
+    IPV4 = re.compile(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
 
     @classmethod
     def expand(cls, normalised_url):
@@ -22,19 +22,19 @@ class ExpandURL:
         if cls.IPV4.match(hostname):
             return
 
-        parts = hostname.split('.')
+        parts = hostname.split(".")
         start = max(len(parts) - 5, 1)
         for pos in range(start, len(parts) - 1):
-            yield '.'.join(parts[pos:])
+            yield ".".join(parts[pos:])
 
     @classmethod
     def vary_path(cls, path, query):
         if query:
-            yield path + '?' + query
+            yield path + "?" + query
 
         yield path
 
-        parts = path.rstrip('/').split('/')
+        parts = path.rstrip("/").split("/")
         max_parts = min(len(parts), 5)
         for pos in range(1, max_parts):
-            yield '/'.join(parts[:pos]) + '/'
+            yield "/".join(parts[:pos]) + "/"
