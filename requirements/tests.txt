@@ -18,9 +18,11 @@ httpretty==1.0.2          # via -r tests.in
 hupper==1.10.2            # via -r requirements.txt, pyramid
 idna==2.10                # via -r requirements.txt, requests
 importlib-metadata==2.0.0  # via pluggy, pytest
+importlib-resources==3.3.0  # via -r requirements.txt, netaddr
 iniconfig==1.1.1          # via pytest
 jinja2==2.11.2            # via -r requirements.txt, pyramid-jinja2
 markupsafe==1.1.1         # via -r requirements.txt, jinja2, pyramid-jinja2
+netaddr==0.8.0            # via -r requirements.txt
 newrelic==5.22.1.152      # via -r requirements.txt
 packaging==20.4           # via pytest
 pastedeploy==2.1.1        # via -r requirements.txt, plaster-pastedeploy
@@ -45,7 +47,7 @@ venusian==3.0.0           # via -r requirements.txt, pyramid
 waitress==1.4.4           # via webtest
 webob==1.8.6              # via -r requirements.txt, pyramid, webtest
 webtest==2.0.35           # via -r tests.in
-zipp==3.4.0               # via importlib-metadata
+zipp==3.4.0               # via -r requirements.txt, importlib-metadata, importlib-resources
 zope.deprecation==4.4.0   # via -r requirements.txt, pyramid, pyramid-jinja2
 zope.interface==5.2.0     # via -r requirements.txt, pyramid
 

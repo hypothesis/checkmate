@@ -10,8 +10,10 @@ gunicorn==20.0.4          # via -r requirements.in
 h-pyramid-sentry==1.2.1   # via -r requirements.in
 hupper==1.10.2            # via pyramid
 idna==2.10                # via requests
+importlib-resources==3.3.0  # via netaddr
 jinja2==2.11.2            # via pyramid-jinja2
 markupsafe==1.1.1         # via jinja2, pyramid-jinja2
+netaddr==0.8.0            # via -r requirements.in
 newrelic==5.22.1.152      # via -r requirements.in
 pastedeploy==2.1.1        # via plaster-pastedeploy
 plaster-pastedeploy==0.7  # via pyramid
@@ -24,6 +26,7 @@ translationstring==1.4    # via pyramid
 urllib3==1.26.1           # via requests, sentry-sdk
 venusian==3.0.0           # via pyramid
 webob==1.8.6              # via pyramid
+zipp==3.4.0               # via importlib-resources
 zope.deprecation==4.4.0   # via pyramid, pyramid-jinja2
 zope.interface==5.2.0     # via pyramid
 
