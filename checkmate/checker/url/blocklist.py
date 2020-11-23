@@ -3,7 +3,11 @@
 import fnmatch
 import os
 import re
+import shutil
 from logging import getLogger
+from tempfile import NamedTemporaryFile
+
+import requests
 
 from checkmate.checker.url.reason import Reason
 from checkmate.exceptions import MalformedURL
@@ -23,6 +27,7 @@ class Blocklist:
 
     # viahtml is ok with video, as far as we can tell
     PERMITTED = (Reason.MEDIA_VIDEO,)
+    CHUNK_SIZE = 65536
 
     def __init__(self, filename):
         self.LOG.debug("Monitoring blocklist file '%s'", filename)
@@ -74,6 +79,38 @@ class Blocklist:
             self.patterns[pattern] = reason
         else:
             self.domains[domain] = reason
+
+    def sync(self, source_url):
+        """Update the blocklist from the specified URL."""
+
+        if not source_url:
+            self.LOG.info("Not updating blocklist as the URL is blank")
+            return
+
+        try:
+            self._sync(source_url)
+        except requests.RequestException as err:
+            self.LOG.error(
+                f"Could not update blocklist with error: <{type(err)}> {err}"
+            )
+
+    def _sync(self, source_url):
+        source_url = source_url.strip()
+
+        with requests.get(source_url, stream=True, timeout=5) as response:
+            response.raise_for_status()
+
+            try:
+                with NamedTemporaryFile(delete=False) as temp_file:
+                    for chunk in response.iter_content(self.CHUNK_SIZE):
+                        temp_file.write(chunk)
+
+                    shutil.move(temp_file.name, self._filename)
+            finally:
+                # The move should result in the file being deleted, but if
+                # anything went wrong lets make sure
+                if os.path.exists(temp_file.name):
+                    os.unlink(temp_file.name)
 
     @classmethod
     def _domain(cls, url):

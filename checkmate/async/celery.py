@@ -2,9 +2,11 @@
 
 import os
 
+import celery.signals
 from celery import Celery
 from kombu import Exchange, Queue
 
+from checkmate.app import create_app
 from checkmate.async.policy import RETRY_POLICY_QUICK
 
 app = Celery("checkmate")
@@ -33,3 +35,11 @@ app.conf.update(
     worker_prefetch_multiplier=1,
     worker_disable_rate_limits=True,
 )
+
+
+@celery.signals.worker_init.connect
+def bootstrap_worker(sender, **kwargs):
+    """Set up the celery worker with one-time initialisation."""
+
+    # Put some common handy things around for tasks
+    sender.app.checkmate = create_app(celery_worker=True)
