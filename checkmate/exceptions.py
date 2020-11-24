@@ -33,3 +33,7 @@ class BadURLParameter(JSONAPIException):
         data["source"] = {"parameter": self.param}
 
         return data
+
+
+class MalformedURL(Exception):
+    """The URL is malformed in some way."""
