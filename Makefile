@@ -13,6 +13,7 @@ help:
 	@echo "make docker            Make the app's Docker image"
 	@echo "make clean             Delete development artefacts (cached files, "
 	@echo "                       dependencies, etc)"
+	@echo "make requirements      Compile all requirements files"
 
 .PHONY: dev
 dev: python
@@ -66,6 +67,10 @@ clean:
 	@find . -type f -name "*.py[co]" -delete
 	@find . -type d -name "__pycache__" -delete
 	@find . -type f -name "*.gz" -delete
+
+.PHONY: requirements
+requirements:
+	@sh requirements/compile.sh
 
 .PHONY: web
 web: python
