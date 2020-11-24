@@ -22,6 +22,25 @@ class CanonicalURL:
         :param url: URL to normalise
         :return: A normalised version of the URL
         """
+        parts = cls.canonical_split(url)
+        clean_url = urlunparse(parts)
+
+        # Get around the fact that URL parse strips off the '?' if the query
+        # string is empty
+        if url.endswith("?") and not clean_url.endswith("?"):
+            clean_url += "?"
+
+        return clean_url
+
+    @classmethod
+    def canonical_split(cls, url):
+        """Split a URL into canonical parts.
+
+        Note the fragment is always `None`. It is only returned for
+        compatibility with the arguments of `urllib.parse.urlunparse()`
+
+        :return: Tuple of (scheme, netloc, path, params, query, fragment)
+        """
         scheme, netloc, path, params, query = cls._pre_process_url(url)
 
         netloc = cls._canonicalize_host(netloc)
@@ -32,14 +51,7 @@ class CanonicalURL:
         netloc = cls._partial_quote(netloc)
         path = cls._partial_quote(path)
 
-        clean_url = urlunparse([scheme, netloc, path, params, query, None])
-
-        # Get around the fact that URL parse strips off the '?' if the query
-        # string is empty
-        if url.endswith("?") and not clean_url.endswith("?"):
-            clean_url += "?"
-
-        return clean_url
+        return scheme, netloc, path, params, query, None
 
     BANNED_CHARS = re.compile("[\x09\x0d\x0a]")
     SCHEME_PREFIX = re.compile(r"^([A-z]+):/+")
