@@ -23,6 +23,7 @@ h-pyramid-sentry==1.2.1   # via -r requirements/requirements.txt
 hupper==1.10.2            # via -r requirements/requirements.txt, pyramid
 idna==2.10                # via -r requirements/requirements.txt, requests
 importlib-metadata==2.0.0  # via jsonschema
+importlib-resources==3.3.0  # via -r requirements/requirements.txt, netaddr
 ipdb==0.13.4              # via -r requirements/dev.in
 ipython-genutils==0.2.0   # via traitlets
 ipython==7.16.1           # via -r requirements/dev.in, ipdb
@@ -30,6 +31,7 @@ jedi==0.17.2              # via ipython
 jinja2==2.11.2            # via -r requirements/requirements.txt, pyramid-jinja2
 jsonschema==3.2.0         # via docker-compose
 markupsafe==1.1.1         # via -r requirements/requirements.txt, jinja2, pyramid-jinja2
+netaddr==0.8.0            # via -r requirements/requirements.txt
 newrelic==5.22.1.152      # via -r requirements/requirements.txt
 paramiko==2.7.2           # via docker
 parso==0.7.1              # via jedi
@@ -60,7 +62,7 @@ venusian==3.0.0           # via -r requirements/requirements.txt, pyramid
 wcwidth==0.2.5            # via prompt-toolkit
 webob==1.8.6              # via -r requirements/requirements.txt, pyramid
 websocket-client==0.57.0  # via docker, docker-compose
-zipp==3.4.0               # via importlib-metadata
+zipp==3.4.0               # via -r requirements/requirements.txt, importlib-metadata, importlib-resources
 zope.deprecation==4.4.0   # via -r requirements/requirements.txt, pyramid, pyramid-jinja2
 zope.interface==5.2.0     # via -r requirements/requirements.txt, pyramid
 
