@@ -42,6 +42,7 @@ class CanonicalURL:
         return clean_url
 
     BANNED_CHARS = re.compile("[\x09\x0d\x0a]")
+    SCHEME_PREFIX = re.compile(r"^([A-z]+):/+")
 
     @classmethod
     def _pre_process_url(cls, url):
@@ -55,15 +56,25 @@ class CanonicalURL:
 
         clean_url = cls.BANNED_CHARS.sub("", clean_url)
 
+        # This is our own tweak, but if we have URLs like:
+        # http:/example.com or http:///example.com Chrome will go there so
+        # lets convert them to always have two slashes
+
+        clean_url = cls.SCHEME_PREFIX.sub("\\1://", clean_url)
+
         # Second, if the URL ends in a fragment, remove the fragment. For
         # example, shorten http://google.com/#frag to http://google.com/.
 
         scheme, netloc, path, params, query, _fragment = urlparse(clean_url)
 
-        if not scheme and not netloc:
-            # Without a scheme urlparse goes totally crazy, so add a default
-            # and try again
-            return cls._pre_process_url("http://" + url)
+        if not scheme:
+            if not netloc:
+                # Without a scheme urlparse often assumes the domain is the
+                # path. To prevent this add a fake scheme and try again
+                return cls._pre_process_url("http://" + url)
+
+            # Looks like we have a domain, but no scheme, so make one up
+            scheme = "http"
 
         # Third, repeatedly remove percent-escapes from the URL until it has
         # no more percent-escapes.
