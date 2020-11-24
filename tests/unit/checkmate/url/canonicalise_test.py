@@ -81,3 +81,11 @@ class TestCanonicalURL:
         result = CanonicalURL.canonicalize(url)
 
         assert result == canonical_url
+
+    def test_canonical_split(self):
+        # We don't need to go nuts here, as this is well covered above
+
+        parts = CanonicalURL.canonical_split(
+            "http:/example.com/path/abc;path_param?a=b#foo"
+        )
+        assert parts == ("http", "example.com", "/path/abc", "path_param", "a=b", None)
