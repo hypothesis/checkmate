@@ -8,6 +8,8 @@ from urllib.parse import urlparse
 
 from checkmate.checker.url.reason import Reason
 from checkmate.exceptions import MalformedURL
+from checkmate.url import canonicalize
+from checkmate.url.canonicalize import CanonicalURL
 
 
 class Blocklist:
@@ -77,12 +79,7 @@ class Blocklist:
 
     @classmethod
     def _domain(cls, url):
-        parsed_url = urlparse(url)
-
-        if not parsed_url.scheme:
-            parsed_url = urlparse(f"http://{url.lstrip('/')}")
-
-        return parsed_url.hostname
+        return CanonicalURL.canonical_split(url)[1] or None
 
     def _refresh(self):
         if self._file_changed:
