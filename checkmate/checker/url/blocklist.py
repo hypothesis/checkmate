@@ -7,6 +7,7 @@ from logging import getLogger
 from urllib.parse import urlparse
 
 from checkmate.checker.url.reason import Reason
+from checkmate.exceptions import MalformedURL
 
 
 class Blocklist:
@@ -37,11 +38,15 @@ class Blocklist:
         """Test the URL and return a list of reasons it should be blocked.
 
         :param url: URL to test
+        :raise MalformedURL: If the URL cannot be parsed
         :return: An iterable of Reason objects (which may be empty)
         """
         self._refresh()
 
         domain = self._domain(url)
+        if not domain:
+            raise MalformedURL(f"The URL: '{url}' has no domain to check")
+
         blocked = self.domains.get(domain)
         if blocked:
             yield blocked

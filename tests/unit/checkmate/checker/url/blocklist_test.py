@@ -5,6 +5,7 @@ from h_matchers import Any
 
 from checkmate.checker.url.blocklist import Blocklist
 from checkmate.checker.url.reason import Reason
+from checkmate.exceptions import MalformedURL
 
 
 class TestBlocklist:
@@ -110,6 +111,13 @@ class TestBlocklist:
         blocklist.add_domain("*.example.net", Reason.OTHER)
 
         assert blocklist.check_url(url) == Any.generator.containing(reasons).only()
+
+    @pytest.mark.parametrize("url", ("http://", "http:///", "http:///foo", "/"))
+    def test_it_raises_MalformedURL_for_bad_urls(self, url):
+        blocklist = Blocklist("missing.txt")
+
+        with pytest.raises(MalformedURL):
+            tuple(blocklist.check_url(url))
 
     @pytest.fixture
     def blocklist_file(self, tmp_path):

@@ -5,7 +5,7 @@ from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
 from checkmate.checker.url.blocklist import Blocklist
-from checkmate.exceptions import BadURLParameter
+from checkmate.exceptions import BadURLParameter, MalformedURL
 
 
 @view_config(route_name="check_url", renderer="json")
@@ -21,7 +21,10 @@ def check_url(request):
     reasons = set()
 
     # Update with reasons from our private list
-    reasons.update(request.registry.url_blocklist.check_url(url))
+    try:
+        reasons.update(request.registry.url_blocklist.check_url(url))
+    except MalformedURL as err:
+        raise BadURLParameter("url", err.args[0]) from err
 
     # Update with reasons from other services?
     ...
