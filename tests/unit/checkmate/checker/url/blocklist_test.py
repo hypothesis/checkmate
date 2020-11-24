@@ -92,6 +92,8 @@ class TestBlocklist:
         (
             ("https://www.example.com", [Reason.MALICIOUS]),
             ("http://www.example.com", [Reason.MALICIOUS]),
+            ("http:/www.example.com", [Reason.MALICIOUS]),
+            ("http://///www.example.com", [Reason.MALICIOUS]),
             ("//www.example.com", [Reason.MALICIOUS]),
             ("www.example.com", [Reason.MALICIOUS]),
             ("http://www.example.com/path", [Reason.MALICIOUS]),
@@ -118,6 +120,34 @@ class TestBlocklist:
 
         with pytest.raises(MalformedURL):
             tuple(blocklist.check_url(url))
+
+    @pytest.mark.parametrize(
+        "url,expected_domain",
+        (
+            # Normal things
+            ("https://www.example.com", "www.example.com"),
+            ("http://www.example.com", "www.example.com"),
+            ("http://www.example.com/path", "www.example.com"),
+            ("http://www.example.com/path?a=b", "www.example.com"),
+            # # Without scheme
+            ("//www.example.com", "www.example.com"),
+            ("www.example.com", "www.example.com"),
+            # Too many or too few slashes
+            ("http:/www.example.com", "www.example.com"),
+            ("http://///www.example.com", "www.example.com"),
+            # Paths instead
+            ("/www.example.com", "www.example.com"),
+            ("///www.example.com", "www.example.com"),
+            ("/", None),
+            ("//", None),
+        ),
+    )
+    def test_domain_extraction(self, url, expected_domain):
+        blocklist = Blocklist("missing.txt")
+
+        domain = blocklist._domain(url)
+
+        assert domain == expected_domain
 
     @pytest.fixture
     def blocklist_file(self, tmp_path):
