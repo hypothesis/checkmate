@@ -68,6 +68,13 @@ class TestCanonicalURL:
             ("http://0xc37f000b/blah", "http://195.127.0.11/blah"),
             # Punycode testing (added by us)
             ("http://ümlaut.com", "http://xn--mlaut-jva.com/"),
+            # Some unspecified behavior around badly formatted URLs (added by
+            # us). The logic being, if Chrome will open it, we should check it
+            ("/example.com", "http://example.com/"),
+            ("//example.com", "http://example.com/"),
+            ("///example.com", "http://example.com/"),
+            ("http:/example.com", "http://example.com/"),
+            ("http:///example.com", "http://example.com/"),
         ),
     )
     def test_canonicalise(self, url, canonical_url):
