@@ -4,11 +4,9 @@ import fnmatch
 import os
 import re
 from logging import getLogger
-from urllib.parse import urlparse
 
 from checkmate.checker.url.reason import Reason
 from checkmate.exceptions import MalformedURL
-from checkmate.url import canonicalize
 from checkmate.url.canonicalize import CanonicalURL
 
 

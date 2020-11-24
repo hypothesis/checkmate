@@ -114,7 +114,7 @@ class TestBlocklist:
 
         assert blocklist.check_url(url) == Any.generator.containing(reasons).only()
 
-    @pytest.mark.parametrize("url", ("http://", "http:///", "http:///foo", "/"))
+    @pytest.mark.parametrize("url", ("http://", "http:///", "/"))
     def test_it_raises_MalformedURL_for_bad_urls(self, url):
         blocklist = Blocklist("missing.txt")
 
@@ -145,6 +145,9 @@ class TestBlocklist:
     def test_domain_extraction(self, url, expected_domain):
         blocklist = Blocklist("missing.txt")
 
+        # This might be naughty but we want to be sure this is ok separately
+        # from the rest.
+        # pylint: disable=protected-access
         domain = blocklist._domain(url)
 
         assert domain == expected_domain
