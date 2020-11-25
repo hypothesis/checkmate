@@ -5,6 +5,7 @@ help:
 	@echo "make supervisor        Launch a supervisorctl shell for managing the processes "
 	@echo '                       that `make dev` starts, type `help` for docs'
 	@echo 'make services          Run the services that `make dev` requires'
+	@echo 'make db                Upgrade the DB schema to the latest version'
 	@echo "make lint              Run the code linter(s) and print any warnings"
 	@echo "make format            Correctly format the code"
 	@echo "make checkformatting   Crash if the code isn't correctly formatted"
@@ -27,6 +28,16 @@ supervisor: python
 services: args?=up -d
 services: python
 	@tox -qe dockercompose -- $(args)
+
+.PHONY: db
+db: args?=upgrade head
+db: python
+	@tox -qqe dev --run-command 'initdb conf/development.ini'  # See setup.py for what initdb is.
+	@tox -qe dev  --run-command 'alembic -c conf/alembic.ini $(args)'
+
+.PHONY: devdata
+devdata: python
+	@tox -qe dev --run-command 'devdata conf/development.ini'  # See setup.py for what devdata is.
 
 .PHONY: lint
 lint: python
