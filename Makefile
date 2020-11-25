@@ -24,8 +24,9 @@ supervisor: python
 	@tox -qe dev --run-command 'supervisorctl -c conf/supervisord-dev.conf $(command)'
 
 .PHONY: services
-services:
-	@true
+services: args?=up -d
+services: python
+	@tox -qe dockercompose -- $(args)
 
 .PHONY: lint
 lint: python
