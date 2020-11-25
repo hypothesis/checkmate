@@ -5,6 +5,8 @@ source =
     checkmate
     tests/unit
 omit =
+    checkmate/scripts*
+    checkmate/migrations/*
 
 [report]
 show_missing = True

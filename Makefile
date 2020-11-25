@@ -6,6 +6,7 @@ help:
 	@echo '                       that `make dev` starts, type `help` for docs'
 	@echo 'make services          Run the services that `make dev` requires'
 	@echo 'make db                Upgrade the DB schema to the latest version'
+	@echo "make sql               Connect to the dev database with a psql shell"
 	@echo "make lint              Run the code linter(s) and print any warnings"
 	@echo "make format            Correctly format the code"
 	@echo "make checkformatting   Crash if the code isn't correctly formatted"
@@ -34,6 +35,10 @@ db: args?=upgrade head
 db: python
 	@tox -qqe dev --run-command 'initdb conf/development.ini'  # See setup.py for what initdb is.
 	@tox -qe dev  --run-command 'alembic -c conf/alembic.ini $(args)'
+
+.PHONY: sql
+sql: python
+	@tox -qe dockercompose -- exec postgres psql --pset expanded=auto -U postgres
 
 .PHONY: devdata
 devdata: python

@@ -13,10 +13,11 @@ from pyramid.paster import bootstrap
 
 
 def update_dev_data():
+    """Create some usable data to run against in dev."""
     config_file = sys.argv[1]
 
     with bootstrap(config_file) as env:
-        request = env["request"]
+        _request = env["request"]
 
         # Go forth and add data...
         print("NOT IMPLEMENTED YET")
@@ -26,6 +27,8 @@ def update_dev_data():
 
 
 def initialize_db():
+    """Bootstrap the db in dev."""
+
     # Initialise the pyramid environment, which is enough to trigger the
     # initialisation code in `checkmate/db.py` to setup the DB for us.
     bootstrap(sys.argv[1])
