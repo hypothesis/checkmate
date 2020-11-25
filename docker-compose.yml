@@ -1,0 +1,14 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:11.5-alpine
+    ports:
+      - '127.0.0.1:5434:5432'
+    healthcheck:
+        test: ["CMD", "pg_isready", "-U", "postgres"]
+        interval: 1s
+  rabbit:
+    image: rabbitmq:3.6-management-alpine
+    ports:
+      - '127.0.0.1:5673:5672'
+      - '127.0.0.1:15673:15672'
