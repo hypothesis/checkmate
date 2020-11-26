@@ -1,7 +1,8 @@
 """Model for our own blocking rules."""
 
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.dialects.postgresql import ARRAY, insert
+from zope.sqlalchemy import mark_changed
 
 from checkmate.checker.url.reason import Reason
 from checkmate.db import BASE
@@ -28,6 +29,31 @@ class CustomRule(BASE):
 
     tags = sa.Column(ARRAY(sa.String, dimensions=1))
     """The list of reasons why we are blocking this"""
+
+    @classmethod
+    def bulk_update(cls, session, values):  # pragma: no cover
+        """Create or update a number of rows at once.
+
+        This will match on the "rule" portion and must include "hash" and
+        "tags". This will not delete any rows.
+
+        :param session: DB session to execute within
+        :param values: A list of dicts of columns to update
+        """
+        stmt = insert(CustomRule).values(values)
+        stmt = stmt.on_conflict_do_update(
+            # Match when the rules are the same
+            index_elements=["rule"],
+            # Then set these elements
+            set_={"hash": stmt.excluded.hash, "tags": stmt.excluded.tags},
+        )
+
+        session.execute(stmt)
+
+        # Let SQLAlchemy know that something has changed, otherwise it will
+        # never commit the transaction we are working on and it will get rolled
+        # back
+        mark_changed(session)
 
     @property
     def reasons(self):
