@@ -12,26 +12,23 @@ from checkmate.url.expand import ExpandURL
 # is going to look until we have our hands on some data.
 
 
-def hash_url(url, num_bytes=None):  # pragma: no cover
+def hash_url(raw_url):  # pragma: no cover
     """Create multiple hashed variations of a URL to check."""
 
-    if num_bytes is None:
-        num_bytes = 32
+    canonical_url = CanonicalURL.canonicalize(raw_url)
 
-    url = CanonicalURL.canonicalize(url)
-
-    for variant in ExpandURL.expand(url):
+    for variant in ExpandURL.expand(canonical_url):
         digest = sha256(variant.encode("ascii"))
 
-        yield digest.digest()[:num_bytes]
+        yield digest.hexdigest()
 
 
-def hash_for_rule(url):  # pragma: no cover
+def hash_for_rule(raw_url):  # pragma: no cover
     """Create a full hash of a URL for to compare against."""
 
-    url = CanonicalURL.canonicalize(url)
-    url = ExpandURL.expand_single(url)
+    canonical_url = CanonicalURL.canonicalize(raw_url)
+    expanded_url = ExpandURL.expand_single(canonical_url)
 
-    digest = sha256(url.encode("ascii"))
+    digest = sha256(expanded_url.encode("ascii"))
 
-    return digest.digest()
+    return expanded_url, digest.hexdigest()

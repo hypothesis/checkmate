@@ -1,6 +1,7 @@
 # pylint: disable=no-self-use
 """A place to put fixture functions that are useful application-wide."""
 import functools
+import os
 from unittest import mock
 from urllib.parse import urlencode
 
@@ -8,6 +9,10 @@ import httpretty
 import pytest
 from pyramid import testing
 from pyramid.request import Request
+from sqlalchemy.orm import sessionmaker
+
+from checkmate.db import create_engine
+from tests import factories
 
 
 def autopatcher(request, target, **kwargs):
@@ -42,6 +47,40 @@ def pyramid_request(pyramid_config):
 @pytest.fixture
 def pyramid_settings():
     return {}
+
+
+@pytest.fixture(scope="session")
+def db_engine():
+    database_url = os.environ.get(
+        "TEST_DATABASE_URL", "postgresql://postgres@localhost:5434/postgres"
+    )
+    if not database_url:  # pragma: no cover
+        raise EnvironmentError("TEST_DATABASE_URL required to run tests")
+
+    # Delete all database tables and re-initialize the database schema based on
+    # the current models. Doing this at the beginning of each test run ensures
+    # that any schema changes made to the models since the last test run will
+    # be applied to the test DB schema before running the tests again.
+    return create_engine(database_url, drop=True)
+
+
+SESSION_MAKER = sessionmaker()
+
+
+@pytest.fixture
+def db_session(db_engine):
+    """Get a standalone database session for preparing database state."""
+
+    conn = db_engine.connect()
+    session = SESSION_MAKER(bind=conn)
+
+    factories.set_sqlalchemy_session(session, persistence="commit")
+
+    try:
+        yield session
+    finally:
+        factories.clear_sqlalchemy_session()
+        session.close()  # pylint:disable=no-member
 
 
 @pytest.fixture

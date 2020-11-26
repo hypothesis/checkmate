@@ -30,7 +30,17 @@ class CustomRule(BASE):
     """The list of reasons why we are blocking this"""
 
     @property
-    def reasons(self):  # pragma: no cover
+    def reasons(self):
         """Get a list of reason object for this rule."""
 
         return [Reason.parse(tag) for tag in self.tags]
+
+    @staticmethod
+    def find_matches(session, hex_hashes):
+        """Find matching rules for the specified hashes.
+
+        :param session: DB session to execute within
+        :param hex_hashes: List of URL hashes to find
+        :return: Iterable of matching CustomRule objects
+        """
+        return session.query(CustomRule).filter(CustomRule.hash.in_(hex_hashes))
