@@ -30,6 +30,7 @@ class Blocklist:
         self._filename = filename
         self._last_modified = None
         self.domains = {}
+        self.raw_rules = {}
         self.patterns = {}
 
         self._refresh()
@@ -74,6 +75,8 @@ class Blocklist:
             self.patterns[pattern] = reason
         else:
             self.domains[domain] = reason
+
+        self.raw_rules[domain] = reason
 
     @classmethod
     def _domain(cls, url):
