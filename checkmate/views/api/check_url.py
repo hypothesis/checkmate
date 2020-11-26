@@ -5,7 +5,9 @@ from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
 from checkmate.checker.url.blocklist import Blocklist
+from checkmate.checker.url.custom_rules import CustomRules
 from checkmate.exceptions import BadURLParameter, MalformedURL
+from checkmate.url import hash_url
 
 
 @view_config(route_name="check_url", renderer="json")
@@ -17,14 +19,20 @@ def check_url(request):
     except KeyError as err:
         raise BadURLParameter("url", "Parameter 'url' is required") from err
 
+    url_hashes = list(hash_url(url))
+
     # Use a set to weed out repeated identifications
     reasons = set()
 
-    # Update with reasons from our private list
+    # Update with reasons from our private list file
     try:
         reasons.update(request.registry.url_blocklist.check_url(url))
     except MalformedURL as err:
         raise BadURLParameter("url", err.args[0]) from err
+
+    if hasattr(request, "db"):
+        # Update with reasons from our private list table
+        reasons.update(CustomRules(request.db).check_url(url_hashes))
 
     # Update with reasons from other services?
     ...

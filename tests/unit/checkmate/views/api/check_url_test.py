@@ -1,10 +1,11 @@
-from unittest.mock import create_autospec
+from unittest.mock import create_autospec, sentinel
 
 import pytest
 
 from checkmate.checker.url.blocklist import Blocklist
 from checkmate.checker.url.reason import Reason
 from checkmate.exceptions import BadURLParameter, MalformedURL
+from checkmate.url import hash_url
 from checkmate.views.api.check_url import check_url
 
 
@@ -48,6 +49,32 @@ class TestURLCheck:
         with pytest.raises(BadURLParameter):
             check_url(request)
 
+    def test_it_does_not_check_custom_rules_without_a_db(
+        self, make_request, CustomRules
+    ):
+        request = make_request("/api/check?url=http://example.com")
+
+        check_url(request)
+
+        CustomRules.assert_not_called()
+
+    def test_it_includes_results_from_custom_rules(self, make_request, CustomRules):
+        request = make_request("/api/check?url=http://example.com")
+        # This is going to need a rethink once this isn't optional any more
+        request.db = sentinel.db_session
+
+        CustomRules.return_value.check_url.return_value = (Reason.PUBLISHER_BLOCKED,)
+
+        results = check_url(request)
+
+        CustomRules.assert_called_once_with(request.db)
+        custom_rules = CustomRules.return_value
+        custom_rules.check_url.assert_called_once_with(
+            list(hash_url("http://example.com"))
+        )
+
+        assert results["data"][0]["id"] == Reason.PUBLISHER_BLOCKED.value
+
     @pytest.fixture
     def blocklist(self):
         blocklist = create_autospec(Blocklist, spec_set=True, instance=True)
@@ -59,3 +86,7 @@ class TestURLCheck:
         pyramid_config.registry.url_blocklist = blocklist
 
         return pyramid_config
+
+    @pytest.fixture(autouse=True)
+    def CustomRules(self, patch):
+        return patch("checkmate.views.api.check_url.CustomRules")
