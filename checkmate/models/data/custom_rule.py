@@ -11,7 +11,6 @@ class CustomRule(BASE):
     """Rule about blocking a particular resource."""
 
     __tablename__ = "custom_rule"
-    __table_args__ = (sa.Index("ix__hash", "hash"),)
 
     id = sa.Column(sa.Integer, autoincrement=True, primary_key=True)
 
@@ -23,7 +22,8 @@ class CustomRule(BASE):
     # We'd like to know if we have a hash collision
     # The C collation here allows the B-Tree default indexing type to be used
     # for prefix matching. This makes searching for 'ab2d23d45a%' very quick
-    hash = sa.Column(sa.String(collation="C"), nullable=False, unique=True)
+    # https://www.postgresql.org/docs/11/indexes-types.html
+    hash = sa.Column(sa.String(collation="C"), nullable=False, unique=True, index=True)
     """A hash for quick comparison"""
 
     tags = sa.Column(ARRAY(sa.String, dimensions=1))
