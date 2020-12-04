@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """A script for syncing the filebased blocklist to the DB.
 
 We shouldn't need this for long

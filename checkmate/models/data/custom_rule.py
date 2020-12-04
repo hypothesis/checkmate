@@ -30,8 +30,8 @@ class CustomRule(BASE):
     tags = sa.Column(ARRAY(sa.String, dimensions=1))
     """The list of reasons why we are blocking this"""
 
-    @classmethod
-    def bulk_update(cls, session, values):  # pragma: no cover
+    @staticmethod
+    def bulk_update(session, values):  # pragma: no cover
         """Create or update a number of rows at once.
 
         This will match on the "rule" portion and must include "hash" and

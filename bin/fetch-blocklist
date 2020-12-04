@@ -17,4 +17,4 @@ curl --silent --max-time 5 $CHECKMATE_BLOCKLIST_URL > $CHECKMATE_BLOCKLIST_PATH.
 mv $CHECKMATE_BLOCKLIST_PATH.new $CHECKMATE_BLOCKLIST_PATH
 
 echo "Syncing to DB"
-python bin/update_db.py
+bin/update_db.py

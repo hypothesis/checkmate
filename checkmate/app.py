@@ -69,8 +69,7 @@ def create_app(_=None, **settings):  # pragma: no cover
 
     config.include("checkmate.views")
     config.include("checkmate.routes")
-    # Give the models a once over, so that they are registered to SQLAlchemy
-    config.scan("checkmate.models.data")
+    config.include("checkmate.models")
     config.include("checkmate.db")
 
     return config.make_wsgi_app()
