@@ -5,6 +5,7 @@ ignore = D100,  # Missing docstring in public module
          D103,  # Missing docstring in public function
          D104,  # Missing docstring in public package
          D105,  # Missing docstring in magic method
+         D106,  # Missing docstring in public nested class
          D107,  # Missing docstring in __init__
          D202,  # "No blank lines allowed after function docstring" conflicts with
                 # the Black code formatter, which insists on inserting blank lines
