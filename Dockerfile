@@ -12,7 +12,10 @@ WORKDIR /var/lib/hypothesis
 COPY requirements/requirements.txt ./
 
 # Install build deps, build, and then clean up.
-RUN apk add --no-cache --virtual build-deps \
+RUN apk add --no-cache --virtual \
+    build-deps \
+    build-base \
+    postgresql-dev \
   && pip install --no-cache-dir -U pip \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del build-deps
