@@ -49,15 +49,6 @@ class TestURLCheck:
         with pytest.raises(BadURLParameter):
             check_url(request)
 
-    def test_it_does_not_check_custom_rules_without_a_db(
-        self, make_request, CustomRules
-    ):
-        request = make_request("/api/check?url=http://example.com")
-
-        check_url(request)
-
-        CustomRules.assert_not_called()
-
     def test_it_includes_results_from_custom_rules(self, make_request, CustomRules):
         request = make_request("/api/check?url=http://example.com")
         # This is going to need a rethink once this isn't optional any more

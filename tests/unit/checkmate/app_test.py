@@ -2,7 +2,9 @@ from unittest.mock import call
 
 import pytest
 
-from checkmate.app import REQUIRED_PARAMS, load_settings
+from checkmate.app import load_settings
+
+REQUIRED_PARAMS = ["database_url"]
 
 
 class TestLoadSettings:
@@ -20,9 +22,19 @@ class TestLoadSettings:
         assert settings[param] == os.environ.get.return_value
 
     @pytest.mark.parametrize("param", REQUIRED_PARAMS)
-    def test_it_crashes_without_a_required_param(self, param, os):
+    def test_it_crashes_without_a_required_param(self, param):
         with pytest.raises(ValueError):
             load_settings({param: None})
+
+    @pytest.mark.parametrize("param", REQUIRED_PARAMS + ["checkmate_blocklist_url"])
+    def test_it_crashes_without_a_required_param_as_celery_worker(self, param):
+        with pytest.raises(ValueError):
+            load_settings({param: None}, celery_worker=True)
+
+    def test_it_can_configure_for_celery_workers(self):
+        settings = load_settings({}, celery_worker=True)
+
+        assert settings["h_pyramid_sentry.celery_support"]
 
     @pytest.fixture(autouse=True)
     def os(self, patch):

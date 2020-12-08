@@ -30,9 +30,8 @@ def check_url(request):
     except MalformedURL as err:
         raise BadURLParameter("url", err.args[0]) from err
 
-    if hasattr(request, "db"):
-        # Update with reasons from our private list table
-        reasons.update(CustomRules(request.db).check_url(url_hashes))
+    # Update with reasons from our private list table
+    reasons.update(CustomRules(request.db).check_url(url_hashes))
 
     # Update with reasons from other services?
     ...
