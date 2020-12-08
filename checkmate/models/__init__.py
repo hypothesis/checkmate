@@ -1,6 +1,6 @@
 """Data and domain models."""
 
-from checkmate.models.data.custom_rule import CustomRule
+from checkmate.models.db.custom_rule import CustomRule
 
 
 def includeme(_config):  # pragma: no cover
