@@ -4,9 +4,8 @@ from operator import attrgetter
 from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
-from checkmate.checker.url.blocklist import Blocklist
 from checkmate.checker.url.custom_rules import CustomRules
-from checkmate.exceptions import BadURLParameter, MalformedURL
+from checkmate.exceptions import BadURLParameter
 from checkmate.url import hash_url
 
 
@@ -23,12 +22,6 @@ def check_url(request):
 
     # Use a set to weed out repeated identifications
     reasons = set()
-
-    # Update with reasons from our private list file
-    try:
-        reasons.update(request.registry.url_blocklist.check_url(url))
-    except MalformedURL as err:
-        raise BadURLParameter("url", err.args[0]) from err
 
     # Update with reasons from our private list table
     reasons.update(CustomRules(request.db).check_url(url_hashes))
@@ -50,14 +43,3 @@ def check_url(request):
             "maxSeverity": ordered_reasons[0].severity.value,
         },
     }
-
-
-def includeme(config):  # pragma: no cover
-    """Pyramid config."""
-
-    # We need this to be full global, so we don't re-read the file on every
-    # request. So we'll follow the suggestion here:
-    # https://stackoverflow.com/questions/62513766/connection-pool-to-external-services-redis-in-pyramid
-    config.registry.url_blocklist = Blocklist(
-        config.registry.settings["checkmate_blocklist_path"]
-    )
