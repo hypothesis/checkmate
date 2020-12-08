@@ -52,7 +52,7 @@ def pyramid_settings():
 @pytest.fixture(scope="session")
 def db_engine():
     database_url = os.environ.get(
-        "TEST_DATABASE_URL", "postgresql://postgres@localhost:5434/postgres"
+        "TEST_DATABASE_URL", "postgresql://postgres@localhost:5434/checkmate_test"
     )
     if not database_url:  # pragma: no cover
         raise EnvironmentError("TEST_DATABASE_URL required to run tests")
