@@ -62,3 +62,10 @@ onlyOnMain {
         deployApp(image: img, app: "checkmate", env: "prod")
     }
 }
+
+/** Return the URL of the test database in the Postgres container. */
+def databaseUrl(postgresContainer) {
+    hostIp = sh(script: "facter ipaddress_eth0", returnStdout: true).trim()
+    containerPort = sh(script: "docker port ${postgresContainer.id} 5432 | cut -d: -f2", returnStdout: true).trim()
+    return "postgresql://postgres@${hostIp}:${containerPort}/checkmate_test"
+}
