@@ -26,12 +26,19 @@ node {
     }
 
     stage("Tests") {
-        testApp(image: img, runArgs: "${runArgs}") {
-            /* Install dependencies required to run the tox env */
-            sh "apk add build-base postgresql-dev python3-dev"
-            sh "pip3 install -q tox>=3.8.0"
-            
-            sh "cd /var/lib/hypothesis && make test"
+        // Run the Postgres test DB in a Docker container.
+        postgresContainer = docker.image("postgres:11.5").run("-P -e POSTGRES_DB=checkmate_test")
+
+        try {
+            testApp(image: img, runArgs: "${runArgs} -e TEST_DATABASE_URL=${databaseUrl(postgresContainer)}") {
+                /* Install dependencies required to run the tox env */
+                sh "apk add build-base postgresql-dev python3-dev"
+                sh "pip3 install -q tox>=3.8.0"
+
+                sh "cd /var/lib/hypothesis && make test"
+            }
+        } finally {
+            postgresContainer.stop()
         }
     }
 
