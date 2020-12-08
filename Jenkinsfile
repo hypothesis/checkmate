@@ -27,8 +27,11 @@ node {
 
     stage("Tests") {
         testApp(image: img, runArgs: "${runArgs}") {
-            installDeps()
-            run("make test")
+            /* Install dependencies required to run the tox env */
+            sh "apk add build-base postgresql-dev python3-dev"
+            sh "pip3 install -q tox>=3.8.0"
+            
+            sh "cd /var/lib/hypothesis && make test"
         }
     }
 
@@ -51,20 +54,4 @@ onlyOnMain {
         milestone()
         deployApp(image: img, app: "checkmate", env: "prod")
     }
-}
-
-/**
- * Install some common system dependencies.
- *
- * These are test dependencies that're need to run most of the stages above
- * (tests, lint, ...) but that aren't installed in the production Docker image.
- */
-def installDeps() {
-    sh "pip3 install -q tox>=3.8.0"
-}
-
-/** Run the given command. */
-def run(command) {
-    sh "apk add build-base"
-    sh "cd /var/lib/hypothesis && ${command}"
 }
