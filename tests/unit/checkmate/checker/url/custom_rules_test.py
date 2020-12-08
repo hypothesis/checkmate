@@ -1,7 +1,7 @@
 import pytest
 from h_matchers import Any
 
-from checkmate.checker.url.custom_rules import CustomRules
+from checkmate.checker.url.custom_rules import BlocklistParser, CustomRules
 from checkmate.checker.url.reason import Reason
 from checkmate.url import hash_url
 from tests import factories
@@ -32,3 +32,33 @@ class TestCustomRules:
     @pytest.fixture
     def custom_rules(self, db_session):
         return CustomRules(db_session)
+
+
+class TestBlocklistParser:
+    @pytest.mark.parametrize(
+        "line,reason",
+        (
+            ("example.com publisher-blocked", Reason.PUBLISHER_BLOCKED),
+            ("example.com malicious", Reason.MALICIOUS),
+            ("   example.com    media-mixed   ", Reason.MEDIA_MIXED),
+            (
+                "example.com media-image   # trailing comment",
+                Reason.MEDIA_IMAGE,
+            ),
+            ("example.com  media-video", Reason.MEDIA_VIDEO),
+            ("example.com other", Reason.OTHER),
+            ("example.com right-format-wrong-value", Reason.OTHER),
+            # Comment
+            ("# any old comment", None),
+            # Unparsable
+            ("example.com", None),
+            ("example.com too many parts", None),
+        ),
+    )
+    def test_line_parsing(self, tmp_path, line, reason):
+        rules = BlocklistParser.parse_lines([line])
+
+        if reason:
+            assert list(rules) == [("example.com", reason)]
+        else:
+            assert not list(rules)
