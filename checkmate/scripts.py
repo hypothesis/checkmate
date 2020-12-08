@@ -11,19 +11,25 @@ import sys
 
 from pyramid.paster import bootstrap
 
+from checkmate.checker.url.custom_rules import CustomRules
+from checkmate.checker.url.reason import Reason
+
 
 def update_dev_data():
     """Create some usable data to run against in dev."""
     config_file = sys.argv[1]
 
     with bootstrap(config_file) as env:
-        _request = env["request"]
+        request = env["request"]
 
-        # Go forth and add data...
-        print("NOT IMPLEMENTED YET")
-
-        # For checkmate this is probably a case of pulling down a few lists
-        # from the internet or something
+        with request.tm:
+            raw_rules = {
+                "example.org": Reason.PUBLISHER_BLOCKED,
+                "example.net": Reason.MEDIA_VIDEO,
+                "bad.example.com": Reason.MALICIOUS,
+            }
+            CustomRules(request.db).load_simple_rules(raw_rules)
+            print(f"Loaded {len(raw_rules)} custom rules")
 
 
 def initialize_db():
