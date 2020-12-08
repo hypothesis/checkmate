@@ -18,7 +18,7 @@ def load_settings(settings, celery_worker=False):
     :return: A dict of settings
     """
 
-    required_params = ["database_url", "checkmate_blocklist_path"]
+    required_params = ["database_url"]
     if celery_worker:
         required_params.append("checkmate_blocklist_url")
 

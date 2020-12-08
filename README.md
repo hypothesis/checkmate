@@ -77,7 +77,6 @@ Environment variables:
 | Name | Effect | Example |
 |------|--------|---------|
 | `CHECKMATE_BLOCKLIST_URL`   | Where to download the blocklist online | `https://some-aws-s3.bucket/file.txt` |
-| `CHECKMATE_BLOCKLIST_PATH`  | Where to store the blocklist locally   | `/var/lib/hypothesis/blocklist.txt` |
 
 For details of changing the blocklist see:
 
