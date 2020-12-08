@@ -3,6 +3,7 @@
 import functools
 import os
 from unittest import mock
+from unittest.mock import MagicMock
 from urllib.parse import urlencode
 
 import httpretty
@@ -30,6 +31,16 @@ def patch(request):
     return functools.partial(autopatcher, request)
 
 
+@pytest.fixture(scope="session")
+def pyramid_settings():
+    return {
+        "database_url": os.environ.get(
+            "TEST_DATABASE_URL",
+            "postgresql://postgres@localhost:5434/checkmate_test",
+        )
+    }
+
+
 @pytest.fixture
 def pyramid_config(pyramid_settings):
     with testing.testConfig(settings=pyramid_settings) as config:
@@ -37,31 +48,37 @@ def pyramid_config(pyramid_settings):
 
 
 @pytest.fixture
-def pyramid_request(pyramid_config):
-    pyramid_request = Request.blank("/dummy")
+def pyramid_request(pyramid_config, db_engine):
+    return _make_request("/dummy", pyramid_config, db_engine)
+
+
+@pytest.fixture
+def make_request(pyramid_config, db_engine):
+    def make_request(path="/irrelevant", params=None):
+        if params:  # pragma: no cover
+            path += "?" + urlencode(params)
+
+        return _make_request(path, pyramid_config, db_engine)
+
+    return make_request
+
+
+def _make_request(path, pyramid_config, db_engine):
+    pyramid_request = Request.blank(path)
     pyramid_request.registry = pyramid_config.registry
+    pyramid_request.tm = MagicMock()
+    pyramid_request.db = db_engine
 
     return pyramid_request
 
 
-@pytest.fixture
-def pyramid_settings():
-    return {}
-
-
 @pytest.fixture(scope="session")
-def db_engine():
-    database_url = os.environ.get(
-        "TEST_DATABASE_URL", "postgresql://postgres@localhost:5434/checkmate_test"
-    )
-    if not database_url:  # pragma: no cover
-        raise EnvironmentError("TEST_DATABASE_URL required to run tests")
-
+def db_engine(pyramid_settings):
     # Delete all database tables and re-initialize the database schema based on
     # the current models. Doing this at the beginning of each test run ensures
     # that any schema changes made to the models since the last test run will
     # be applied to the test DB schema before running the tests again.
-    return create_engine(database_url, drop=True)
+    return create_engine(pyramid_settings["database_url"], drop=True)
 
 
 SESSION_MAKER = sessionmaker()
@@ -81,19 +98,6 @@ def db_session(db_engine):
     finally:
         factories.clear_sqlalchemy_session()
         session.close()  # pylint:disable=no-member
-
-
-@pytest.fixture
-def make_request(pyramid_config):
-    def make_request(path="/irrelevant", params=None):
-        if params:  # pragma: no cover
-            path += "?" + urlencode(params)
-
-        pyramid_request = Request.blank(path)
-        pyramid_request.registry = pyramid_config.registry
-        return pyramid_request
-
-    return make_request
 
 
 @pytest.fixture(autouse=True)
