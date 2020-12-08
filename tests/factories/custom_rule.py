@@ -3,7 +3,7 @@ from factory import Faker
 from factory.alchemy import SQLAlchemyModelFactory
 
 from checkmate.checker.url.reason import Reason
-from checkmate.models.data import custom_rule
+from checkmate.models.db import custom_rule
 from checkmate.url import hash_for_rule
 
 REASONS = list(Reason)

@@ -1,6 +1,6 @@
 """A checker based on our own curated ruleset."""
 
-from checkmate.models.data.custom_rule import CustomRule
+from checkmate.models.db.custom_rule import CustomRule
 from checkmate.url import hash_for_rule
 
 

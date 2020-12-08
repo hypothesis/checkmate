@@ -1,7 +1,7 @@
 import pytest
 
 from checkmate.checker.url.reason import Reason
-from checkmate.models.data.custom_rule import CustomRule
+from checkmate.models.db.custom_rule import CustomRule
 from tests import factories
 
 
