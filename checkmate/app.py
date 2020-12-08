@@ -4,26 +4,25 @@ import os
 import pyramid.config
 import pyramid_tm
 
-REQUIRED_PARAMS = ["checkmate_blocklist_path"]
-OPTIONAL_PARAMS = ["database_url"]
 
-
-def load_settings(settings):
+def load_settings(settings, celery_worker=False):
     """Load application settings from a dict or environment variables.
 
     Checks that the required parameters are either filled out in the provided
     dict, or that the required values can be loaded from the environment.
 
     :param settings: Settings dict
+    :param celery_worker: Only do the configuration strictly required for
+        celery workers
     :raise ValueError: If a required parameter is not filled
     :return: A dict of settings
     """
-    for param in OPTIONAL_PARAMS:  # pragma: no cover
-        value = settings.get(param, os.environ.get(param.upper()))
-        if value:
-            settings[param] = value
 
-    for param in REQUIRED_PARAMS:
+    required_params = ["database_url", "checkmate_blocklist_path"]
+    if celery_worker:
+        required_params.append("checkmate_blocklist_url")
+
+    for param in required_params:
         value = settings[param] = settings.get(param, os.environ.get(param.upper()))
 
         if value is None:
@@ -31,16 +30,19 @@ def load_settings(settings):
 
     # Configure sentry
     settings["h_pyramid_sentry.filters"] = []
+    if celery_worker:
+        settings["h_pyramid_sentry.celery_support"] = True
 
     return settings
 
 
-def create_app(_=None, **settings):  # pragma: no cover
-    """Configure and return the WSGI app."""
+def configure(config, celery_worker=False):  # pragma: no cover
+    """Set up a pyramid config object for checkmate.
 
-    config = pyramid.config.Configurator(settings=load_settings(settings))
-
-    config.include("pyramid_jinja2")
+    :param config: Pyramid configuration object to setup
+    :param celery_worker: Only do the configuration strictly required for
+        celery workers
+    """
 
     # Make sure that pyramid_exclog's tween runs under pyramid_tm's tween so
     # that pyramid_exclog doesn't re-open the DB session after pyramid_tm has
@@ -64,12 +66,25 @@ def create_app(_=None, **settings):  # pragma: no cover
     config.registry.settings["tm.manager_hook"] = pyramid_tm.explicit_manager
 
     config.include("pyramid_tm")
-
     config.include("h_pyramid_sentry")
 
-    config.include("checkmate.views")
-    config.include("checkmate.routes")
+    if not celery_worker:
+        # The celery workers don't need to know about this stuff
+        config.include("pyramid_jinja2")
+
+        config.include("checkmate.views")
+        config.include("checkmate.routes")
+
     config.include("checkmate.models")
     config.include("checkmate.db")
+
+
+def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover
+    """Configure and return the WSGI app."""
+
+    settings = load_settings(settings, celery_worker)
+    config = pyramid.config.Configurator(settings=settings)
+
+    configure(config, celery_worker=celery_worker)
 
     return config.make_wsgi_app()

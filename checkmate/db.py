@@ -119,12 +119,7 @@ def includeme(config):  # pragma: no cover
     """Pyramid config."""
 
     # Create the SQLAlchemy engine and save a reference in the app registry.
-    database_url = config.registry.settings.get("database_url")
-    if not database_url:
-        LOG.warning("Did not initialise the db: no 'database_url'")
-        # Remove once the DB is used in Prod!
-        return
-
+    database_url = config.registry.settings["database_url"]
     engine = create_engine(database_url)
     config.registry["database_engine"] = engine
 
