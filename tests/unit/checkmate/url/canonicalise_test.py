@@ -75,6 +75,10 @@ class TestCanonicalURL:
             ("///example.com", "http://example.com/"),
             ("http:/example.com", "http://example.com/"),
             ("http:///example.com", "http://example.com/"),
+            ("http:/", "http:///"),
+            ("http://", "http:///"),
+            ("/", "http:///"),
+            ("//", "http:///"),
         ),
     )
     def test_canonicalise(self, url, canonical_url):
