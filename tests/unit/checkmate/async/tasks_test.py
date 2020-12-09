@@ -35,7 +35,7 @@ class TestSyncBlocklist:
 
         # Nothing really happens, we just carry on
 
-    @pytest.fixture
+    @pytest.fixture(autouse=True)
     def CustomRules(self, patch):
         return patch("checkmate.async.tasks.CustomRules")
 
