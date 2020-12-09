@@ -4,7 +4,7 @@ import pytest
 
 from checkmate.app import load_settings
 
-REQUIRED_PARAMS = ["database_url"]
+REQUIRED_PARAMS = ["database_url", "checkmate_blocklist_path"]
 
 
 class TestLoadSettings:
