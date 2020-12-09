@@ -14,7 +14,7 @@ def sync_blocklist():
     """Download the online version of the blocklist."""
 
     # pylint: disable=no-member
-    # Pylint doesn't know about the `request_context` method that we add
+    # PyLint doesn't know about the `request_context` method that we add
     with app.request_context() as request:
         url = request.registry.settings["checkmate_blocklist_url"]
         if not url:
@@ -27,7 +27,7 @@ def sync_blocklist():
             try:
                 raw_rules = CustomRules(request.db).load_simple_rule_url(url)
             except RequestException as err:
-                LOG.error("Could not update blocklist with error: %s", err)
+                LOG.exception("Could not update blocklist")
                 return
 
         LOG.info("Updated %s custom rules", len(raw_rules))
