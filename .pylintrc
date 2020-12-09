@@ -17,11 +17,33 @@ enable=
     useless-suppression,
     use-symbolic-message-instead
 
-disable=bad-continuation,
-        missing-type-doc,
-        missing-return-type-doc,
-        too-few-public-methods,
-        missing-yield-type-doc
+disable=
+    # Docstrings are encouraged but we don't want to enforce that everything
+    # must have a docstring.
+    missing-docstring,
+
+    # We don't always want to have to put a `:return:` in a docstring.
+    missing-return-doc,
+
+    # We don't always want to have to put an `:rtype:` in a docstring.
+    missing-return-type-doc,
+
+    # We don't always want to document the types of things with :type: and
+    # :rtype: in docstrings.
+    missing-type-doc,
+    missing-return-type-doc,
+    missing-yield-type-doc,
+
+    # We use isort to sort and group our imports, so we don't need PyLint to
+    # check them for us.
+    ungrouped-imports,
+
+    # We use Black to format our code automatically, so we don't need PyLint to
+    # check formatting for us.
+    bad-continuation,
+    line-too-long,
+
+    too-few-public-methods,
 
 [REPORTS]
 output-format=colorized
