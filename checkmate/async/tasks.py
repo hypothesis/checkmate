@@ -27,7 +27,7 @@ def sync_blocklist():
             try:
                 raw_rules = CustomRules(request.db).load_simple_rule_url(url)
             except RequestException as err:
-                LOG.exception("Could not update blocklist")
+                LOG.exception("Could not update blocklist: %s", err)
                 return
 
         LOG.info("Updated %s custom rules", len(raw_rules))
