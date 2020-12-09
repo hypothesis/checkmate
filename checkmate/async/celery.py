@@ -26,14 +26,13 @@ app.conf.update(
     task_acks_late=True,
     # Don't store any results, we only use this for scheduling
     task_ignore_result=True,
-    task_default_queue="checkmate",
     task_queues=[
         Queue(
-            "checkmate",
+            "celery",
             # We don't care if the messages are lost if the broker restarts
             durable=False,
-            routing_key="checkmate",
-            exchange=Exchange("checkmate", type="direct", durable=False),
+            routing_key="celery",
+            exchange=Exchange("celery", type="direct", durable=False),
         ),
     ],
     # Only accept one task at a time rather than pulling lots off the queue
