@@ -72,7 +72,7 @@ def configure(config, celery_worker=False):  # pragma: no cover
         # The celery workers don't need to know about this stuff
         config.include("pyramid_jinja2")
 
-        config.include("checkmate.views")
+        config.scan("checkmate.views")
         config.include("checkmate.routes")
 
     config.include("checkmate.models")
