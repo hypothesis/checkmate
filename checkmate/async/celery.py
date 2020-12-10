@@ -55,12 +55,11 @@ def bootstrap_worker(sender, **_kwargs):  # pragma: no cover
     try:
         checkmate = create_app(celery_worker=True)
 
-    # pylint: disable=broad-except
-    except Exception as err:
+    except Exception:  # pylint: disable=broad-except
         # If we don't bail out here ourselves, Celery just hides the error
         # and continues. This means `request_context` will not be available
         # when attempting to run tasks, which is impossible to debug.
-        LOG.fatal("CELERY WORKER DID NOT START: Could not create app: %s", err)
+        LOG.critical("CELERY WORKER DID NOT START: Could not create app", exc_info=True)
         sys.exit(1)
 
     @contextmanager
