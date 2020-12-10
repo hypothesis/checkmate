@@ -1,7 +1,9 @@
 """Celery app and configuration."""
 
 import os
+import sys
 from contextlib import contextmanager
+from logging import getLogger
 
 import celery.signals
 from celery import Celery
@@ -10,6 +12,9 @@ from pyramid.scripting import prepare
 
 from checkmate.app import create_app
 from checkmate.async.policy import RETRY_POLICY_QUICK
+
+LOG = getLogger(__name__)
+
 
 app = Celery("checkmate")
 app.conf.update(
@@ -47,7 +52,16 @@ def bootstrap_worker(sender, **_kwargs):  # pragma: no cover
     """Set up the celery worker with one-time initialisation."""
 
     # Put some common handy things around for tasks
-    checkmate = create_app(celery_worker=True)
+    try:
+        checkmate = create_app(celery_worker=True)
+
+    # pylint: disable=broad-except
+    except Exception as err:
+        # If we don't bail out here ourselves, Celery just hides the error
+        # and continues. This means `request_context` will not be available
+        # when attempting to run tasks, which is impossible to debug.
+        LOG.fatal("CELERY WORKER DID NOT START: Could not create app: %s", err)
+        sys.exit(1)
 
     @contextmanager
     def request_context():
