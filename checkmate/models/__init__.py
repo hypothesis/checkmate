@@ -1,6 +1,7 @@
 """Data and domain models."""
 
 from checkmate.models.db.custom_rule import CustomRule
+from checkmate.models.db.url_haus_rule import URLHausRule
 
 
 def includeme(_config):  # pragma: no cover
