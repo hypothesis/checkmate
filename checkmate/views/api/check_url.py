@@ -4,7 +4,7 @@ from operator import attrgetter
 from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
-from checkmate.checker.url.custom_rules import CustomRules
+from checkmate.checker.url import CustomRules, URLHaus
 from checkmate.exceptions import BadURLParameter
 from checkmate.url import hash_url
 
@@ -21,13 +21,8 @@ def check_url(request):
     url_hashes = list(hash_url(url))
 
     # Use a set to weed out repeated identifications
-    reasons = set()
-
-    # Update with reasons from our private list table
-    reasons.update(CustomRules(request.db).check_url(url_hashes))
-
-    # Update with reasons from other services?
-    ...
+    reasons = set(CustomRules(request.db).check_url(url_hashes))
+    reasons.update(URLHaus(request.db).check_url(url_hashes))
 
     if not reasons:
         # If everything is fine give a 204 which is successful, but has no body

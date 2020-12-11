@@ -48,26 +48,26 @@ def pyramid_config(pyramid_settings):
 
 
 @pytest.fixture
-def pyramid_request(pyramid_config, db_engine):
-    return _make_request("/dummy", pyramid_config, db_engine)
+def pyramid_request(pyramid_config, db_session):
+    return _make_request("/dummy", pyramid_config, db_session)
 
 
 @pytest.fixture
-def make_request(pyramid_config, db_engine):
+def make_request(pyramid_config, db_session):
     def make_request(path="/irrelevant", params=None):
         if params:  # pragma: no cover
             path += "?" + urlencode(params)
 
-        return _make_request(path, pyramid_config, db_engine)
+        return _make_request(path, pyramid_config, db_session)
 
     return make_request
 
 
-def _make_request(path, pyramid_config, db_engine):
+def _make_request(path, pyramid_config, db_session):
     pyramid_request = Request.blank(path)
     pyramid_request.registry = pyramid_config.registry
     pyramid_request.tm = MagicMock()
-    pyramid_request.db = db_engine
+    pyramid_request.db = db_session
 
     return pyramid_request
 
