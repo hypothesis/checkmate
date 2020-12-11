@@ -37,3 +37,7 @@ class BadURLParameter(JSONAPIException):
 
 class MalformedURL(Exception):
     """The URL is malformed in some way."""
+
+
+class StageException(Exception):
+    """A stage within a checker pipeline failed."""
