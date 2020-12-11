@@ -47,7 +47,7 @@ class CustomRules:
         # Note: This currently has no way of removing things from the DB
         # Soon this won't matter as we won't be doing this any more
 
-        CustomRule.bulk_update(
+        CustomRule.bulk_upsert(
             self._session,
             values=[
                 self._value_from_domain(domain, reason)
