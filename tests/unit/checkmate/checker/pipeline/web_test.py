@@ -30,7 +30,7 @@ class TestDownload:
         with pytest.raises(StageException):
             Download(url)(tmpdir)
 
-        requests.get.assert_called_once_with(url, timeout=1)
+        requests.get.assert_called_once_with(url, timeout=10)
 
     @pytest.fixture
     def requests(self, patch):
