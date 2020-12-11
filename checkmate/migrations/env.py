@@ -1,10 +1,11 @@
 # We didn't write this, so we don't care
-# pylint: disable=no-member,invalid-name
+# pylint: disable=fixme,no-member
+
 import os
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import MetaData, engine_from_config, pool
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -18,8 +19,16 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
-
+# FIXME: This duplicates the naming_convention in checkmate/db.py.
+target_metadata = MetaData(
+    naming_convention={
+        "ix": "ix__%(column_0_label)s",
+        "uq": "uq__%(table_name)s__%(column_0_name)s",
+        "ck": "ck__%(table_name)s__%(constraint_name)s",
+        "fk": "fk__%(table_name)s__%(column_0_name)s__%(referred_table_name)s",
+        "pk": "pk__%(table_name)s",
+    }
+)
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
