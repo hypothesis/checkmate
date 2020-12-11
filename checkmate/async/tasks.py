@@ -4,7 +4,7 @@ from celery.utils.log import get_task_logger
 from requests import RequestException
 
 from checkmate.async.celery import app
-from checkmate.checker.url.custom_rules import CustomRules
+from checkmate.checker.url import CustomRules, URLHaus
 
 LOG = get_task_logger(__name__)
 
@@ -31,3 +31,33 @@ def sync_blocklist():
                 return
 
         LOG.info("Updated %s custom rules", len(raw_rules))
+
+
+@app.task
+def initialise_urlhaus():
+    """Download the full URLHaus list to our DB."""
+
+    # pylint: disable=no-member
+    # PyLint doesn't know about the `request_context` method that we add
+    with app.request_context() as request:
+        LOG.info("Performing full URLHaus re-sync")
+
+        with request.tm:
+            synced = URLHaus(request.db).reinitialise_db()
+
+        LOG.info("Reinitialised %s records", synced)
+
+
+@app.task
+def sync_urlhaus():
+    """Do a partial update of URLHaus rules."""
+
+    # pylint: disable=no-member
+    # PyLint doesn't know about the `request_context` method that we add
+    with app.request_context() as request:
+        LOG.info("Performing partial URLHaus update")
+
+        with request.tm:
+            synced = URLHaus(request.db).update_db()
+
+        LOG.info("Synced %s records", synced)

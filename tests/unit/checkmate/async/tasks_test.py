@@ -5,9 +5,10 @@ import pytest
 from requests import RequestException
 
 from checkmate.app import configure
-from checkmate.async.tasks import sync_blocklist
+from checkmate.async.tasks import initialise_urlhaus, sync_blocklist, sync_urlhaus
 
 
+@pytest.mark.usefixtures("CustomRules")
 class TestSyncBlocklist:
     def test_it_works_with_url(self, CustomRules, pyramid_request):
         pyramid_request.registry.settings["checkmate_blocklist_url"] = sentinel.url
@@ -35,24 +36,50 @@ class TestSyncBlocklist:
 
         # Nothing really happens, we just carry on
 
-    @pytest.fixture(autouse=True)
-    def CustomRules(self, patch):
-        return patch("checkmate.async.tasks.CustomRules")
 
-    @pytest.fixture(autouse=True)
-    def app(self, patch, pyramid_request):
-        app = patch("checkmate.async.tasks.app")
+@pytest.mark.usefixtures("URLHaus")
+class TestInitialiseURLHaus:
+    def test_it(self, pyramid_request, URLHaus):
+        initialise_urlhaus()
 
-        @contextmanager
-        def request_context():
-            yield pyramid_request
+        URLHaus.assert_called_once_with(pyramid_request.db)
+        URLHaus.return_value.reinitialise_db.assert_called_once_with()
 
-        app.request_context = request_context
 
-        return app
+@pytest.mark.usefixtures("URLHaus")
+class TestSyncURLHaus:
+    def test_it(self, pyramid_request, URLHaus):
+        sync_urlhaus()
 
-    @pytest.fixture
-    def pyramid_config(self, pyramid_config):
-        configure(pyramid_config, celery_worker=True)
+        URLHaus.assert_called_once_with(pyramid_request.db)
+        URLHaus.return_value.update_db.assert_called_once_with()
 
-        return pyramid_config
+
+@pytest.fixture
+def pyramid_config(pyramid_config):
+    configure(pyramid_config, celery_worker=True)
+
+    return pyramid_config
+
+
+@pytest.fixture()
+def CustomRules(patch):
+    return patch("checkmate.async.tasks.CustomRules")
+
+
+@pytest.fixture()
+def URLHaus(patch):
+    return patch("checkmate.async.tasks.URLHaus")
+
+
+@pytest.fixture(autouse=True)
+def app(patch, pyramid_request):
+    app = patch("checkmate.async.tasks.app")
+
+    @contextmanager
+    def request_context():
+        yield pyramid_request
+
+    app.request_context = request_context
+
+    return app
