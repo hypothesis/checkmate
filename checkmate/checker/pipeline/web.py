@@ -23,7 +23,7 @@ class Download(Stage):
 
     @classmethod
     def _download(cls, url, working_dir):
-        with requests.get(url, timeout=1) as response:
+        with requests.get(url, timeout=10) as response:
             response.raise_for_status()
 
             temp_file = cls.temp_file(working_dir, "zip")
