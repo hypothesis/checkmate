@@ -35,6 +35,6 @@ def update_dev_data():
 def initialize_db():
     """Bootstrap the db in dev."""
 
-    # Initialise the pyramid environment, which is enough to trigger the
+    # Initialize the pyramid environment, which is enough to trigger the
     # initialisation code in `checkmate/db.py` to setup the DB for us.
     bootstrap(sys.argv[1])
