@@ -52,7 +52,7 @@ class URLHaus:
         if hits.count():
             yield Reason.MALICIOUS
 
-    def reinitialise_db(self):
+    def reinitialize_db(self):
         """Completely resynchronise the DB from scratch."""
 
         URLHausRule.truncate(self._session)

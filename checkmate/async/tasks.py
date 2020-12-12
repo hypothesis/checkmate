@@ -34,7 +34,7 @@ def sync_blocklist():
 
 
 @app.task
-def initialise_urlhaus():
+def initialize_urlhaus():
     """Download the full URLHaus list to our DB."""
 
     # pylint: disable=no-member
@@ -43,9 +43,9 @@ def initialise_urlhaus():
         LOG.info("Performing full URLHaus re-sync")
 
         with request.tm:
-            synced = URLHaus(request.db).reinitialise_db()
+            synced = URLHaus(request.db).reinitialize_db()
 
-        LOG.info("Reinitialised %s records", synced)
+        LOG.info("Reinitialized %s records", synced)
 
 
 @app.task

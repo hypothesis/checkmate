@@ -5,7 +5,7 @@ import pytest
 from requests import RequestException
 
 from checkmate.app import configure
-from checkmate.async.tasks import initialise_urlhaus, sync_blocklist, sync_urlhaus
+from checkmate.async.tasks import initialize_urlhaus, sync_blocklist, sync_urlhaus
 
 
 @pytest.mark.usefixtures("CustomRules")
@@ -38,12 +38,12 @@ class TestSyncBlocklist:
 
 
 @pytest.mark.usefixtures("URLHaus")
-class TestInitialiseURLHaus:
+class TestInitializeURLHaus:
     def test_it(self, pyramid_request, URLHaus):
-        initialise_urlhaus()
+        initialize_urlhaus()
 
         URLHaus.assert_called_once_with(pyramid_request.db)
-        URLHaus.return_value.reinitialise_db.assert_called_once_with()
+        URLHaus.return_value.reinitialize_db.assert_called_once_with()
 
 
 @pytest.mark.usefixtures("URLHaus")

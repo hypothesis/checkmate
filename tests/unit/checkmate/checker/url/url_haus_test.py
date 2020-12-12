@@ -30,14 +30,14 @@ class TestURLHaus:
         assert response == Any.generator.containing([]).only()
 
     @httprettified
-    def test_reinitialise_db(self, URLHausRule):
+    def test_reinitialize_db(self, URLHausRule):
         httpretty.register_uri(
             httpretty.GET,
             "https://urlhaus.abuse.ch/downloads/csv/",
             body=self.read_fixture("csv.txt.zip"),
         )
 
-        URLHaus(sentinel.db_session).reinitialise_db()
+        URLHaus(sentinel.db_session).reinitialize_db()
 
         URLHausRule.truncate.assert_called_once_with(sentinel.db_session)
         self.assert_expected_sync(URLHausRule)
