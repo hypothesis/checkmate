@@ -1,9 +1,9 @@
 """Celery app and configuration."""
 
+import logging
 import os
 import sys
 from contextlib import contextmanager
-from logging import getLogger
 
 import celery.signals
 from celery import Celery
@@ -13,7 +13,7 @@ from pyramid.scripting import prepare
 from checkmate.app import create_app
 from checkmate.async.policy import RETRY_POLICY_QUICK
 
-LOG = getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 
 app = Celery("checkmate")
@@ -68,3 +68,34 @@ def bootstrap_worker(sender, **_kwargs):  # pragma: no cover
             yield env["request"]
 
     sender.app.request_context = request_context
+
+
+@celery.signals.task_prerun.connect
+def add_task_name_and_id_to_log_messages(
+    task_id, task, *_args, **_kwargs
+):  # pragma: no cover
+    """Add the Celery task name and ID to all messages logged by Celery tasks.
+
+    This makes it easier to observe Celery tasks by reading the logs. For
+    example you can find all messages logged by a given Celery task by
+    searching for the task's name in the logs.
+
+    This affects:
+
+    * Logging by Celery itself
+    * Logging in our Celery task functions or anything they call (directly or
+      indirectly)
+
+    """
+    # Replace the root logger's formatter with one that includes task.name and
+    # task_id in the format. This assumes that the root logger has one handler,
+    # which happens to be the case.
+    root_loggers_handler = logging.getLogger().handlers[0]
+
+    root_loggers_handler.setFormatter(
+        logging.Formatter(
+            "[%(asctime)s: %(levelname)s/%(processName)s] "
+            + f"{task.name}[{task_id}] "
+            + "%(message)s"
+        )
+    )
