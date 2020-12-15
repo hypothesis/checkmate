@@ -50,7 +50,7 @@ class BulkUpsertMixin:
     BULK_UPSERT_UPDATE_ELEMENTS = None
     """Elements to set in the event of a collision."""
 
-    BLOCK_SIZE = 10000
+    BLOCK_SIZE = 1000
     """Numer of elements to attempt to update in one go."""
 
     @classmethod
