@@ -50,6 +50,7 @@ class CanonicalURL:
         # 127, #, or %. The escapes should use uppercase hex characters.
         netloc = cls._partial_quote(netloc)
         path = cls._partial_quote(path)
+        query = cls._partial_quote(query)
 
         return scheme, netloc, path, params, query, None
 
@@ -93,6 +94,7 @@ class CanonicalURL:
 
         netloc = cls._repeated_unquote(netloc)
         path = cls._repeated_unquote(path)
+        query = cls._repeated_unquote(query)
 
         return scheme, netloc, path, params, query
 
