@@ -65,7 +65,7 @@ class TestBulkUpsertMixin:
         db_session.flush()
         self.TableWithBulkUpsert.BLOCK_SIZE = block_size
 
-        self.TableWithBulkUpsert.bulk_upsert(
+        result = self.TableWithBulkUpsert.bulk_upsert(
             db_session,
             [
                 {"id": 1, "name": "update_old", "other": "post_1"},
@@ -73,6 +73,8 @@ class TestBulkUpsertMixin:
                 {"id": 4, "name": "over_block_size", "other": "post_4"},
             ],
         )
+
+        assert result == 3
 
         rows = list(db_session.query(self.TableWithBulkUpsert))
 

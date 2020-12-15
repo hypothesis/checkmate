@@ -65,7 +65,7 @@ class URLHaus:
 
     def _update(self, feed):
         with TemporaryDirectory() as working_dir:
-            URLHausRule.bulk_upsert(
+            return URLHausRule.bulk_upsert(
                 session=self._session,
                 values=(self._value_from_row(row) for row in feed(working_dir)),
             )
