@@ -79,6 +79,7 @@ class TestCanonicalURL:
             ("http://", "http:///"),
             ("/", "http:///"),
             ("//", "http:///"),
+            ("https://www.tumblr.com/search/‘question?’/post_page/2", "https://www.tumblr.com/search/%2018question?%2019/post_page/2"),
         ),
     )
     def test_canonicalise(self, url, canonical_url):
