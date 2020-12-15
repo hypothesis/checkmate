@@ -37,10 +37,10 @@ class TestURLHaus:
             body=self.read_fixture("csv.txt.zip"),
         )
 
-        URLHaus(sentinel.db_session).reinitialize_db()
+        response = URLHaus(sentinel.db_session).reinitialize_db()
 
         URLHausRule.truncate.assert_called_once_with(sentinel.db_session)
-        self.assert_expected_sync(URLHausRule)
+        self.assert_expected_sync(response, URLHausRule)
 
     def test_partial_update(self, URLHausRule):
         httpretty.register_uri(
@@ -49,15 +49,16 @@ class TestURLHaus:
             body=self.read_fixture("csv.txt"),
         )
 
-        URLHaus(sentinel.db_session).update_db()
+        response = URLHaus(sentinel.db_session).update_db()
 
         URLHausRule.truncate.assert_not_called()
-        self.assert_expected_sync(URLHausRule)
+        self.assert_expected_sync(response, URLHausRule)
 
-    def assert_expected_sync(self, URLHausRule):
+    def assert_expected_sync(self, response, URLHausRule):
         URLHausRule.bulk_upsert.assert_called_once_with(
             session=sentinel.db_session, values=Any.generator()
         )
+        assert response == URLHausRule.bulk_upsert.return_value
         assert URLHausRule.updated_values == [
             {
                 "hash": "7d93a7a785da3bb7fc67b08cda3368745eb7cf6155e4d8b26415680e69a3f5c6",
@@ -83,6 +84,7 @@ class TestURLHaus:
 
         def exhaust(session, values):
             URLHausRule.updated_values = list(values)
+            return URLHausRule.bulk_upsert.return_value
 
         URLHausRule.bulk_upsert.side_effect = exhaust
 

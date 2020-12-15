@@ -82,6 +82,8 @@ class BulkUpsertMixin:
                 update_elements=cls.BULK_UPSERT_UPDATE_ELEMENTS,
             )
 
+        return total_items
+
     @classmethod
     def _chunk(cls, values):
         block = []
