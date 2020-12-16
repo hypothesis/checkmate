@@ -5,6 +5,7 @@ from requests import RequestException
 
 from checkmate.async.celery import app
 from checkmate.checker.url import CustomRules, URLHaus
+from checkmate.exceptions import StageRetryableException
 
 LOG = get_task_logger(__name__)
 
@@ -33,7 +34,22 @@ def sync_blocklist():
         LOG.info("Updated %s custom rules", len(raw_rules))
 
 
-@app.task
+def pipeline_task(wrapped_function):
+    """Mark a function as a standard checker pipeline task.
+
+    This will automatically retry for the correct errors etc.
+    """
+    return app.task(
+        autoretry_for=(StageRetryableException,),
+        retry_kwargs={
+            "max_retries": 3,
+            # Time in seconds to delay the retry for.
+            "countdown": 30,
+        },
+    )(wrapped_function)
+
+
+@pipeline_task
 def initialize_urlhaus():
     """Download the full URLHaus list to our DB."""
 
@@ -48,7 +64,7 @@ def initialize_urlhaus():
         LOG.info("Reinitialized %s records", synced)
 
 
-@app.task
+@pipeline_task
 def sync_urlhaus():
     """Do a partial update of URLHaus rules."""
 
