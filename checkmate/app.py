@@ -64,16 +64,27 @@ def configure(config, celery_worker=False):  # pragma: no cover
     #
     # https://docs.pylonsproject.org/projects/pyramid_tm/en/latest/#custom-transaction-managers
     config.registry.settings["tm.manager_hook"] = pyramid_tm.explicit_manager
-
     config.include("pyramid_tm")
-    config.include("h_pyramid_sentry")
 
-    if not celery_worker:
+    if celery_worker:
+        # Configure sentry
+        config.add_settings({"h_pyramid_sentry.celery_support": True})
+    else:
         # The celery workers don't need to know about this stuff
         config.include("pyramid_jinja2")
 
         config.scan("checkmate.views")
         config.include("checkmate.routes")
+
+    # Configure sentry
+    config.add_settings(
+        {
+            "h_pyramid_sentry.sqlalchemy_support": True,
+            # If we enable Pyramid retries
+            # "h_pyramid_sentry.retry_support": True,
+        }
+    )
+    config.include("h_pyramid_sentry")
 
     config.include("checkmate.models")
     config.include("checkmate.db")
