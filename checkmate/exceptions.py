@@ -41,3 +41,7 @@ class MalformedURL(Exception):
 
 class StageException(Exception):
     """A stage within a checker pipeline failed."""
+
+
+class StageTimeoutException(StageException):
+    """A stage within a checker pipeline took too long to do something."""

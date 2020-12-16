@@ -1,12 +1,13 @@
 import os
+from unittest.mock import sentinel
 
 import httpretty
 import pytest
 from httpretty import httprettified
-from requests.exceptions import ReadTimeout
+from requests.exceptions import HTTPError, ReadTimeout
 
 from checkmate.checker.pipeline import Download
-from checkmate.exceptions import StageException
+from checkmate.exceptions import StageException, StageTimeoutException
 
 
 class TestDownload:
@@ -23,14 +24,28 @@ class TestDownload:
 
         assert content == "some content"
 
-    def test_it_catches_requests_exceptions(self, tmpdir, requests):
-        requests.get.side_effect = ReadTimeout
+    @pytest.mark.parametrize(
+        "exception,expected",
+        (
+            (HTTPError, StageException),
+            (ReadTimeout, StageTimeoutException),
+        ),
+    )
+    def test_it_catches_requests_exceptions(
+        self, tmpdir, requests, exception, expected
+    ):
+        requests.get.side_effect = exception
         url = "https://example.com"
 
-        with pytest.raises(StageException):
+        with pytest.raises(expected):
             Download(url)(tmpdir)
 
         requests.get.assert_called_once_with(url, timeout=10)
+
+    def test_it_uses_the_timeout_value(self, tmpdir, requests):
+        Download(sentinel.url, timeout=sentinel.timeout)(tmpdir)
+
+        requests.get.assert_called_once_with(sentinel.url, timeout=sentinel.timeout)
 
     @pytest.fixture
     def requests(self, patch):
