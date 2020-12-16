@@ -18,7 +18,7 @@ class URLHaus(HashedURLChecker):
 
     INITIAL_FEED = Pipeline(
         [
-            Download("https://urlhaus.abuse.ch/downloads/csv/"),
+            Download("https://urlhaus.abuse.ch/downloads/csv/", timeout=30),
             UnzipFile("csv.txt"),
             ReadCSVFile(),
         ]
@@ -26,7 +26,7 @@ class URLHaus(HashedURLChecker):
 
     UPDATE_FEED = Pipeline(
         [
-            Download("https://urlhaus.abuse.ch/downloads/csv_recent/"),
+            Download("https://urlhaus.abuse.ch/downloads/csv_recent/", timeout=30),
             ReadCSVFile(),
         ]
     )
