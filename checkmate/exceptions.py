@@ -43,5 +43,9 @@ class StageException(Exception):
     """A stage within a checker pipeline failed."""
 
 
-class StageTimeoutException(StageException):
+class StageRetryableException(StageException):
+    """A stage within a checker pipeline failed temporarily."""
+
+
+class StageTimeoutException(StageRetryableException):
     """A stage within a checker pipeline took too long to do something."""
