@@ -4,7 +4,7 @@ import requests
 from requests.exceptions import ReadTimeout, RequestException
 
 from checkmate.checker.pipeline.core import Stage
-from checkmate.exceptions import StageException, StageTimeoutException
+from checkmate.exceptions import StageException, StageRetryableException
 
 
 class Download(Stage):
@@ -17,7 +17,7 @@ class Download(Stage):
 
         :param url: URL to retrieve
         :param timeout: Maximum time to wait on getting it
-        :raise StageTimeoutException: If the request takes too long
+        :raise StageRetryableException: If the request takes too long
         :raise StageException: For any other problems
         """
         self._url = url
@@ -27,7 +27,7 @@ class Download(Stage):
         try:
             return self._download(self._url, working_dir)
         except ReadTimeout as err:
-            raise StageTimeoutException(
+            raise StageRetryableException(
                 f"Could not download url {self._url}: Timeout after {self._timeout}"
             ) from err
         except RequestException as err:

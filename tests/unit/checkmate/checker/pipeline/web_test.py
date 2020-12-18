@@ -7,7 +7,7 @@ from httpretty import httprettified
 from requests.exceptions import HTTPError, ReadTimeout
 
 from checkmate.checker.pipeline import Download
-from checkmate.exceptions import StageException, StageTimeoutException
+from checkmate.exceptions import StageException, StageRetryableException
 
 
 class TestDownload:
@@ -28,7 +28,7 @@ class TestDownload:
         "exception,expected",
         (
             (HTTPError, StageException),
-            (ReadTimeout, StageTimeoutException),
+            (ReadTimeout, StageRetryableException),
         ),
     )
     def test_it_catches_requests_exceptions(
