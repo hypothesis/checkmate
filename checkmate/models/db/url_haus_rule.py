@@ -27,7 +27,10 @@ class URLHausRule(BASE, HashMatchMixin, BulkUpsertMixin):
     def delete_all(cls, session):
         """Remove all rows from this table."""
 
-        # Don't actually delete_all as this will cause the transaction to lock
+        # Don't use truncate as this will cause the transaction to lock
         # reads while we are filling the DB back up. See:
+        # https://www.postgresql.org/docs/11/explicit-locking.html
+        # Or for a slightly friendlier summary:
         # https://www.citusdata.com/blog/2018/02/15/when-postgresql-blocks/
-        session.execute("DELETE FROM urlhaus_rule")
+
+        session.query(cls).delete()
