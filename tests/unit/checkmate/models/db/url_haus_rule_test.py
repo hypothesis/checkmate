@@ -7,6 +7,6 @@ class TestURLHausRule:
         db_session.flush()
         assert db_session.query(URLHausRule).count() == 1
 
-        URLHausRule.truncate(db_session)
+        URLHausRule.delete_all(db_session)
 
         assert not db_session.query(URLHausRule).count()

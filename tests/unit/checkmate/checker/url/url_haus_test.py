@@ -39,7 +39,7 @@ class TestURLHaus:
 
         response = URLHaus(sentinel.db_session).reinitialize_db()
 
-        URLHausRule.truncate.assert_called_once_with(sentinel.db_session)
+        URLHausRule.delete_all.assert_called_once_with(sentinel.db_session)
         self.assert_expected_sync(response, URLHausRule)
 
     def test_partial_update(self, URLHausRule):
@@ -51,7 +51,7 @@ class TestURLHaus:
 
         response = URLHaus(sentinel.db_session).update_db()
 
-        URLHausRule.truncate.assert_not_called()
+        URLHausRule.delete_all.assert_not_called()
         self.assert_expected_sync(response, URLHausRule)
 
     def assert_expected_sync(self, response, URLHausRule):

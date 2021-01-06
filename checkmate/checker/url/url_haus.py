@@ -55,7 +55,7 @@ class URLHaus:
     def reinitialize_db(self):
         """Completely resynchronise the DB from scratch."""
 
-        URLHausRule.truncate(self._session)
+        URLHausRule.delete_all(self._session)
         return self._update(self.INITIAL_FEED)
 
     def update_db(self):
