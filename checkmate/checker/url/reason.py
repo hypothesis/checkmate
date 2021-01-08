@@ -44,6 +44,9 @@ class Reason(Enum):
     MEDIA_IMAGE = "media-image"  # Sites which are mostly image content
     MEDIA_MIXED = "media-mixed"  # Sites with a mixture of content
     HIGH_IO = "high-io"  # Sites with high interactivity and AJAX calls
+
+    NOT_ALLOWED = "not-explicitly-allowed"  # Not on the allow list
+
     OTHER = "other"  # Escape hatch for poorly formatted values
 
     @property
