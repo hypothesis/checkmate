@@ -6,7 +6,7 @@ from httpretty import httprettified, httpretty
 from pkg_resources import resource_string
 
 from checkmate.checker.url import URLHaus
-from checkmate.checker.url.reason import Reason
+from checkmate.models import Reason
 
 
 class TestURLHaus:

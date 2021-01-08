@@ -3,8 +3,7 @@
 from tempfile import TemporaryDirectory
 
 from checkmate.checker.pipeline import Download, Pipeline, ReadCSVFile, UnzipFile
-from checkmate.checker.url.reason import Reason
-from checkmate.models import URLHausRule
+from checkmate.models import Reason, URLHausRule
 from checkmate.url import hash_for_rule
 
 
