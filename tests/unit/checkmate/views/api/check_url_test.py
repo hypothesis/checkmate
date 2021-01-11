@@ -1,24 +1,20 @@
 import pytest
 
+from checkmate.checker.url.reason import Reason
 from checkmate.exceptions import BadURLParameter
-from checkmate.models import Reason
+from checkmate.url import hash_url
 from checkmate.views.api.check_url import check_url
 
 
 class TestURLCheck:
-    @pytest.mark.parametrize("allow_all", ("1", None))
-    def test_a_good_url(self, make_request, allow_all, CompoundRules):
-        params = {"url": "http://happy.example.com"}
-        if allow_all:
-            params["allow_all"] = allow_all
-
-        request = make_request("/api/check", params)
+    def test_a_good_url(self, make_request, CompoundRules):
+        request = make_request("/api/check", {"url": "http://happy.example.com"})
 
         response = check_url(request)
 
         assert response.status_code == 204
 
-        CompoundRules.assert_called_once_with(request.db, allow_all=allow_all)
+        CompoundRules.assert_called_once_with(request.db, allow_all=None)
         custom_rules = CompoundRules.return_value
         custom_rules.check_url.assert_called_once_with("http://happy.example.com")
 
