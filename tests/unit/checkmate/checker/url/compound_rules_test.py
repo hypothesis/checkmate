@@ -74,13 +74,13 @@ class TestCompoundRules:
         return patch_checker
 
     @pytest.fixture(autouse=True)
-    def AllowRules(self, patch_checker):
-        return patch_checker("AllowRules")
+    def AllowRules(self, fake_checker):
+        return fake_checker("AllowRules")
 
     @pytest.fixture(autouse=True)
-    def CustomRules(self, patch_checker):
-        return patch_checker("CustomRules")
+    def CustomRules(self, fake_checker):
+        return fake_checker("CustomRules")
 
     @pytest.fixture(autouse=True)
-    def URLHaus(self, patch_checker):
-        return patch_checker("URLHaus")
+    def URLHaus(self, fake_checker):
+        return fake_checker("URLHaus")
