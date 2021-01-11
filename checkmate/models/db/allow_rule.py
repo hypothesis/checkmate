@@ -1,6 +1,7 @@
 """Model for our own allow rules."""
 
 import sqlalchemy as sa
+from sqlalchemy.dialects.postgresql import ARRAY
 
 from checkmate.db import BASE
 from checkmate.models.db.mixins import HashMatchMixin
@@ -29,3 +30,8 @@ class AllowRule(BASE, HashMatchMixin):
     force = sa.Column(
         sa.Boolean, nullable=False, server_default=(sa.sql.expression.false())
     )
+
+    tags = sa.Column(
+        ARRAY(sa.String, dimensions=1), server_default="{}", nullable=False
+    )
+    """A list of tags documenting where this rule came from."""
