@@ -32,6 +32,7 @@ class AllowRule(BASE, HashMatchMixin):
     )
 
     tags = sa.Column(
-        ARRAY(sa.String, dimensions=1), server_default="{}", nullable=False
+        ARRAY(sa.String, dimensions=1),
+        sa.CheckConstraint("cardinality(tags) > 0", name="tags_cardinality"),
     )
     """A list of tags documenting where this rule came from."""
