@@ -1,6 +1,6 @@
 import pytest
 
-from checkmate.models import Reason
+from checkmate.checker.url.reason import Reason
 from tests import factories
 
 

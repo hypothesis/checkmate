@@ -4,7 +4,8 @@ from logging import getLogger
 
 import requests
 
-from checkmate.models import CustomRule, Reason
+from checkmate.checker.url.reason import Reason
+from checkmate.models.db.custom_rule import CustomRule
 from checkmate.url import hash_for_rule
 
 

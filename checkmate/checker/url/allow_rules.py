@@ -1,6 +1,7 @@
 """A checker based on our own curated allow list."""
 
-from checkmate.models import AllowRule, Reason
+from checkmate.checker.url.reason import Reason
+from checkmate.models.db.allow_rule import AllowRule
 
 
 class AllowRules:
