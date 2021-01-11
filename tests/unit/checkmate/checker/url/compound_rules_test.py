@@ -63,15 +63,13 @@ class TestCompoundRules:
         AllowRules.assert_not_called()
 
     @pytest.fixture
-    def patch_checker(self, patch):
-        """Return a function for patching a checker class."""
+    def fake_checker(self, patch):
+        def fake_checker(checker_class):
+            checker = patch(f"checkmate.checker.url.compound_rules.{checker_class}")
+            checker.return_value.check_url.return_value = tuple()
+            return checker
 
-        def patch_checker(checker_class):
-            checker_cls = patch(f"checkmate.checker.url.compound_rules.{checker_class}")
-            checker_cls.return_value.check_url.return_value = tuple()
-            return checker_cls
-
-        return patch_checker
+        return fake_checker
 
     @pytest.fixture(autouse=True)
     def AllowRules(self, fake_checker):
