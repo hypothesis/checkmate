@@ -12,7 +12,7 @@ import sys
 from pyramid.paster import bootstrap
 
 from checkmate.checker.url.custom_rules import CustomRules
-from checkmate.checker.url.reason import Reason
+from checkmate.models import Reason
 
 
 def update_dev_data():

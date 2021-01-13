@@ -2,16 +2,15 @@ import factory
 from factory import Faker
 from factory.alchemy import SQLAlchemyModelFactory
 
-from checkmate.checker.url.reason import Reason
-from checkmate.models.db import custom_rule
+from checkmate import models
 from checkmate.url import hash_for_rule
 
-REASONS = list(Reason)
+REASONS = list(models.Reason)
 
 
 class CustomRule(SQLAlchemyModelFactory):
     class Meta:
-        model = custom_rule.CustomRule
+        model = models.CustomRule
         exclude = ("url", "reasons")
 
     url = Faker("url")

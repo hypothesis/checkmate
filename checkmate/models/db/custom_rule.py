@@ -3,9 +3,9 @@
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import ARRAY
 
-from checkmate.checker.url.reason import Reason
 from checkmate.db import BASE
 from checkmate.models.db.mixins import BulkUpsertMixin, HashMatchMixin
+from checkmate.models.reason import Reason
 
 
 class CustomRule(BASE, HashMatchMixin, BulkUpsertMixin):
