@@ -2,7 +2,7 @@ import operator
 
 import pytest
 
-from checkmate.checker.url.reason import OrderedEnum, Reason, Severity
+from checkmate.models.reason import OrderedEnum, Reason, Severity
 
 
 class TestOrderedEnum:
