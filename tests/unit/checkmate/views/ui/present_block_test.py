@@ -11,7 +11,11 @@ class TestPresentBlock:
     def test_it_passes_through_params(self, make_request, params):
         result = present_block(sentinel.context, make_request(params=params))
 
-        assert result == {"blocked_url": params["url"], "reason": params["reason"]}
+        assert result == {
+            "blocked_url": params["url"],
+            "domain_to_annotate": "bad.example.com",  # From "url"
+            "reason": params["reason"],
+        }
 
     def test_it_checks_param_signing(self, make_request, secure_link_service, params):
         secure_link_service.is_secure.return_value = False
