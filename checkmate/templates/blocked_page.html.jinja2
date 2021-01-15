@@ -4,7 +4,7 @@
     Content not available
 {% endblock %}
 
-{% macro how_to_access() %}
+{% macro how_to_access(request_access=False) %}
     <p>
         <strong>To view the annotations on this page:</strong>
     </p>
@@ -19,6 +19,27 @@
             <a href="{{ blocked_url | e }}" target="_blank">{{ blocked_url }}</a>
             and click on the extension icon to see the annotations.
         </li>
+        {% if request_access %}
+            {% set email_subject %}Please allow access to '{{ domain_to_annotate | e }}'{% endset %}
+            {% set email_body -%}
+I'd like to access this page with Via:
+
+ * {{ blocked_url | e }}
+
+I'd like to be able to access this site because ...
+
+    <Please give the reasons you'd like to access the site here>
+
+Thanks!
+            {%- endset %}
+            <li>
+                Or
+                <a href="mailto:via@hypothes.is?subject={{ email_subject | urlencode }}&body={{ email_body | urlencode }}" target="_blank">
+                  email us
+                </a>
+                to let us know you'd like to annotate the page with Via.
+            </li>
+        {% endif %}
     </ol>
 {% endmacro %}
 
@@ -64,6 +85,13 @@
                 right away…"
         } %}
 
+    {% elif reason == "not-explicitly-allowed" %}
+        {% set text = {
+            "heading": "Content cannot be annotated yet",
+            "details": "Unfortunately, the contents of this page cannot be
+                annotated through this Hypothesis service at this time."
+        } %}
+
     {% else %}
         {% set text = {
             "heading": "Content cannot be annotated",
@@ -83,7 +111,7 @@
         {% if reason == "malicious" %}
             {{ bad_site_ahead() }}
         {% else %}
-            {{ how_to_access() }}
+            {{ how_to_access(request_access = (reason == "not-explicitly-allowed") ) }}
         {% endif %}
     </article>
 
