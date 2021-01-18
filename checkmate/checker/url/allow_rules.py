@@ -1,17 +1,10 @@
 """A checker based on our own curated allow list."""
-
+from checkmate.checker.url._hashed_url_checker import HashedURLChecker
 from checkmate.models import AllowRule, Reason
 
 
-class AllowRules:
+class AllowRules(HashedURLChecker):
     """A checker based on our own curated allow list."""
-
-    def __init__(self, session):
-        """Create a new AllowRules object.
-
-        :param session: A DB session to work in
-        """
-        self._session = session
 
     def check_url(self, hex_hashes):
         """Check to see if a URL is explicitly allowed, based on it's hashes.

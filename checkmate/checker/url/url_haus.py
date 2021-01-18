@@ -3,11 +3,12 @@
 from tempfile import TemporaryDirectory
 
 from checkmate.checker.pipeline import Download, Pipeline, ReadCSVFile, UnzipFile
+from checkmate.checker.url._hashed_url_checker import HashedURLChecker
 from checkmate.models import Reason, URLHausRule
 from checkmate.url import hash_for_rule
 
 
-class URLHaus:
+class URLHaus(HashedURLChecker):
     """A checker which works against and updates URLHaus rules."""
 
     # The columns provided in the CSV from URLHaus are:
@@ -29,13 +30,6 @@ class URLHaus:
             ReadCSVFile(),
         ]
     )
-
-    def __init__(self, session):
-        """Create a new URLHaus object.
-
-        :param session: A DB session to work in
-        """
-        self._session = session
 
     def check_url(self, hex_hashes):
         """Check for reasons to block a URL based on it's hashes.

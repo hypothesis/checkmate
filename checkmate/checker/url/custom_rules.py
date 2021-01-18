@@ -4,19 +4,13 @@ from logging import getLogger
 
 import requests
 
+from checkmate.checker.url._hashed_url_checker import HashedURLChecker
 from checkmate.models import CustomRule, Reason
 from checkmate.url import hash_for_rule
 
 
-class CustomRules:
+class CustomRules(HashedURLChecker):
     """A checker based on our own curated ruleset."""
-
-    def __init__(self, session):
-        """Create a new CustomRules object.
-
-        :param session: A DB session to work in
-        """
-        self._session = session
 
     def check_url(self, hex_hashes):
         """Check for reasons to block a URL based on it's hashes.
