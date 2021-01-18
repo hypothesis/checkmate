@@ -5,10 +5,10 @@ from checkmate.models import Reason
 from checkmate.views.api.check_url import check_url
 
 
-@pytest.mark.usefixtures("secure_link_service")
+@pytest.mark.usefixtures("secure_link_service", "url_checker_service")
 class TestURLCheck:
     @pytest.mark.parametrize("allow_all", ("1", None))
-    def test_a_good_url(self, make_request, allow_all, CompoundRules):
+    def test_a_good_url(self, make_request, allow_all, url_checker_service):
         params = {"url": "http://happy.example.com"}
         if allow_all:
             params["allow_all"] = allow_all
@@ -19,12 +19,12 @@ class TestURLCheck:
 
         assert response.status_code == 204
 
-        CompoundRules.assert_called_once_with(request.db, allow_all=allow_all)
-        custom_rules = CompoundRules.return_value
-        custom_rules.check_url.assert_called_once_with("http://happy.example.com")
+        url_checker_service.check_url.assert_called_once_with(
+            "http://happy.example.com", allow_all=allow_all
+        )
 
-    def test_a_bad_url(self, make_request, CompoundRules, secure_link_service):
-        CompoundRules.return_value.check_url.return_value = (
+    def test_a_bad_url(self, make_request, url_checker_service, secure_link_service):
+        url_checker_service.check_url.return_value = (
             Reason.MALICIOUS,
             Reason.MEDIA_IMAGE,
         )
@@ -55,9 +55,3 @@ class TestURLCheck:
 
         with pytest.raises(BadURLParameter):
             check_url(request)
-
-    @pytest.fixture(autouse=True)
-    def CompoundRules(self, patch):
-        CompoundRules = patch("checkmate.views.api.check_url.CompoundRules")
-        CompoundRules.return_value.check_url.return_value = tuple()
-        return CompoundRules

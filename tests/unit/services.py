@@ -2,6 +2,7 @@ from unittest import mock
 
 import pytest
 
+from checkmate.services import URLCheckerService
 from checkmate.services.secure_link import SecureLinkService
 
 
@@ -19,3 +20,8 @@ def mock_service(pyramid_config):
 @pytest.fixture
 def secure_link_service(mock_service):
     return mock_service(SecureLinkService)
+
+
+@pytest.fixture
+def url_checker_service(mock_service):
+    return mock_service(URLCheckerService)
