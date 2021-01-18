@@ -3,9 +3,8 @@
 from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
-from checkmate.checker.url import CompoundRules
 from checkmate.exceptions import BadURLParameter
-from checkmate.services import SecureLinkService
+from checkmate.services import SecureLinkService, URLCheckerService
 
 
 @view_config(route_name="check_url", renderer="json")
@@ -17,8 +16,8 @@ def check_url(request):
     except KeyError as err:
         raise BadURLParameter("url", "Parameter 'url' is required") from err
 
-    checker = CompoundRules(request.db, allow_all=request.GET.get("allow_all"))
-    reasons = list(checker.check_url(url))
+    url_checker = request.find_service(URLCheckerService)
+    reasons = list(url_checker.check_url(url, allow_all=request.GET.get("allow_all")))
 
     if not reasons:
         # If everything is fine give a 204 which is successful, but has no body
