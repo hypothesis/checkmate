@@ -60,11 +60,7 @@ class TestCanonicalURL:
             ("http://3279880203/blah", "http://195.127.0.11/blah"),
             ("http://0303.0177.0000.0013/blah", "http://195.127.0.11/blah"),
             ("http://030337600013/blah", "http://195.127.0.11/blah"),
-            (
-                "http://11000011.01111111.00000000.00001011/blah",
-                "http://195.127.0.11/blah",
-            ),
-            ("http://c3.7f.00.0b/blah", "http://195.127.0.11/blah"),
+            ("http://0xc3.0x7f.0x00.0x0b/blah", "http://195.127.0.11/blah"),
             ("http://0xc37f000b/blah", "http://195.127.0.11/blah"),
             # Punycode testing (added by us)
             ("http://ümlaut.com", "http://xn--mlaut-jva.com/"),
