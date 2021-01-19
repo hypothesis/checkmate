@@ -153,22 +153,9 @@ class CanonicalURL:
 
         return path or "/"
 
-    HEX_DOT_IP = re.compile(r"^[0-f]+\.[0-f]+\.[0-f]+\.[0-f]+$", re.IGNORECASE)
-    BINARY_DOT_IP = re.compile(r"^[01]+\.[01]+\.[01]+\.[01]+$", re.IGNORECASE)
-
     @classmethod
     def _decode_ip(cls, hostname):
         """Try and spot hostnames that are really encoded IP addresses."""
-        if cls.HEX_DOT_IP.match(hostname):
-            decoded = cls._decode_ip("0x" + hostname.replace(".", ""))
-
-            if decoded:
-                return decoded
-
-        if cls.BINARY_DOT_IP.match(hostname):
-            parts = [str(int(part, 2)) for part in hostname.split(".")]
-            return ".".join(parts)
-
         try:
             return str(IPAddress(hostname))
         except AddrFormatError:

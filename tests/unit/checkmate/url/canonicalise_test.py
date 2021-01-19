@@ -62,6 +62,14 @@ class TestCanonicalURL:
             ("http://030337600013/blah", "http://195.127.0.11/blah"),
             ("http://0xc3.0x7f.0x00.0x0b/blah", "http://195.127.0.11/blah"),
             ("http://0xc37f000b/blah", "http://195.127.0.11/blah"),
+            ("http://192.168.2.1/uploads/", "http://192.168.2.1/uploads/"),
+            ("http://0x7F.0.0.1/uploads/", "http://127.0.0.1/uploads/"),
+            ("http://0x7F.0.0.0x1/uploads/", "http://127.0.0.1/uploads/"),
+            ("http://10.0.0.1/uploads/", "http://10.0.0.1/uploads/"),
+            (
+                "http://022.101.31.153/uploads/",
+                "http://18.101.31.153/uploads/",
+            ),  # Leading 0 as octal
             # Punycode testing (added by us)
             ("http://ümlaut.com", "http://xn--mlaut-jva.com/"),
             # Some unspecified behavior around badly formatted URLs (added by
