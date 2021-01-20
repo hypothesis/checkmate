@@ -5,6 +5,7 @@ from checkmate.models import Reason
 from checkmate.views.api.check_url import check_url
 
 
+@pytest.mark.usefixtures("secure_link_service")
 class TestURLCheck:
     @pytest.mark.parametrize("allow_all", ("1", None))
     def test_a_good_url(self, make_request, allow_all, CompoundRules):
@@ -22,13 +23,14 @@ class TestURLCheck:
         custom_rules = CompoundRules.return_value
         custom_rules.check_url.assert_called_once_with("http://happy.example.com")
 
-    def test_a_bad_url(self, make_request, CompoundRules):
+    def test_a_bad_url(self, make_request, CompoundRules, secure_link_service):
         CompoundRules.return_value.check_url.return_value = (
             Reason.MALICIOUS,
             Reason.MEDIA_IMAGE,
         )
+        bad_url = "http://sad.example.com"
 
-        request = make_request("/api/check", {"url": "http://sad.example.com"})
+        request = make_request("/api/check", {"url": bad_url})
 
         result = check_url(request)
 
@@ -41,7 +43,12 @@ class TestURLCheck:
             "meta": {
                 "maxSeverity": "mandatory",
             },
+            "links": {"html": secure_link_service.route_url.return_value},
         }
+
+        secure_link_service.route_url.assert_called_once_with(
+            "present_block", _query={"url": bad_url, "reason": Reason.MALICIOUS.value}
+        )
 
     def test_it_returns_an_error_for_no_url(self, make_request):
         request = make_request("/api/check")
