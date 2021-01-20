@@ -5,6 +5,7 @@ psycopg2
 pyramid
 pyramid_exclog
 pyramid-jinja2
+pyramid-services
 pyramid_tm
 netaddr
 newrelic
