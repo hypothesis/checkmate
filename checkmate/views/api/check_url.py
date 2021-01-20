@@ -19,15 +19,25 @@ def check_url(request):
     url_checker = request.find_service(URLCheckerService)
 
     try:
-        reasons = list(
+        detections = list(
             url_checker.check_url(url, allow_all=request.GET.get("allow_all"))
         )
     except MalformedURL as err:
         raise BadURLParameter("url", "Parameter 'url' isn't valid") from err
 
-    if not reasons:
+    if not detections:
         # If everything is fine give a 204 which is successful, but has no body
         return HTTPNoContent()
+
+    # Get unique reasons from the detections sorted by severity (decreasing)
+    reasons = list(
+        reversed(
+            sorted(
+                set(detection.reason for detection in detections),
+                key=lambda reason: reason.severity,
+            )
+        )
+    )
 
     # Reasons are in severity order, worst first
     worst_reason = reasons[0]

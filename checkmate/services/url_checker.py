@@ -1,8 +1,7 @@
 from operator import attrgetter
 
 from checkmate.checker.url import AllowRules, CustomRules, URLHaus
-from checkmate.models import Severity
-from checkmate.models.source import Source
+from checkmate.models import Detection, Severity, Source
 from checkmate.url import hash_url
 
 
@@ -29,38 +28,34 @@ class URLCheckerService:
         :param url: URL to check
         :param allow_all: Disable the allow list protection
         :param fail_fast: Stop at the first mandatory reason we get
-        :returns: A generator of Reason objects (most severe first)
+        :returns: A generator of Detection objects (most severe first)
         """
 
         url_hashes = list(hash_url(url))
+        detections = self._get_detections(url_hashes, allow_all, fail_fast)
 
-        # Use a set to weed out repeated identifications
-        reasons = set()
+        # Sort the detections by worst first
+        return reversed(sorted(detections, key=attrgetter("severity")))
 
-        for _source, checker in self._get_checkers(allow_all):
-            reasons.update(checker.check_url(url_hashes))
+    def _get_detections(self, url_hashes, allow_all, fail_fast):
+        detections = []
 
-            # We don't need to keep searching the database if we've already
-            # been told this is a mandatory block
-            if fail_fast and self._has_mandatory(reasons):
-                break
+        for source, checker in self._get_checkers(allow_all):
+            for reason in checker.check_url(url_hashes):
+                detections.append(Detection(reason, source))
 
-        # Sort the reasons by worst first
-        return reversed(sorted(reasons, key=attrgetter("severity")))
+                # We don't need to keep searching the database if we've already
+                # been told this is a mandatory block
+                if fail_fast and reason.severity == Severity.MANDATORY:
+                    return detections
+
+        return detections
 
     def _get_checkers(self, allow_all):
         yield from self._blocking_checkers.items()
 
         if not allow_all:
             yield from self._allowing_checkers.items()
-
-    @classmethod
-    def _has_mandatory(cls, reasons):
-        for reason in reasons:
-            if reason.severity == Severity.MANDATORY:
-                return True
-
-        return False
 
 
 def factory(_context, request):
