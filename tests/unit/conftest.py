@@ -2,18 +2,17 @@
 """A place to put fixture functions that are useful application-wide."""
 import functools
 import os
-from unittest import mock
 from unittest.mock import MagicMock
 from urllib.parse import urlencode
 
 import httpretty
-import pytest
 from pyramid import testing
-from pyramid.request import Request
+from pyramid.request import Request, apply_request_extensions
 from sqlalchemy.orm import sessionmaker
 
 from checkmate.db import create_engine
 from tests import factories
+from tests.unit.services import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
 
 def autopatcher(request, target, **kwargs):
@@ -37,13 +36,15 @@ def pyramid_settings():
         "database_url": os.environ.get(
             "TEST_DATABASE_URL",
             "postgresql://postgres@localhost:5434/checkmate_test",
-        )
+        ),
+        "secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
     }
 
 
 @pytest.fixture
 def pyramid_config(pyramid_settings):
     with testing.testConfig(settings=pyramid_settings) as config:
+        config.include("pyramid_services")
         yield config
 
 
@@ -68,6 +69,8 @@ def _make_request(path, pyramid_config, db_session):
     pyramid_request.registry = pyramid_config.registry
     pyramid_request.tm = MagicMock()
     pyramid_request.db = db_session
+
+    apply_request_extensions(pyramid_request)
 
     return pyramid_request
 
