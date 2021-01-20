@@ -77,6 +77,7 @@ Environment variables:
 | Name | Effect | Example |
 |------|--------|---------|
 | `CHECKMATE_BLOCKLIST_URL`   | Where to download the blocklist online | `https://some-aws-s3.bucket/file.txt` |
+| `CHECKMATE_SECRET` | Secret used for signing URLs | `AB823F97FF2E330C1A20`
 
 For details of changing the blocklist see:
 
