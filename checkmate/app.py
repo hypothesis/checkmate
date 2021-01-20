@@ -69,12 +69,18 @@ def configure(config, celery_worker=False):  # pragma: no cover
     if celery_worker:
         # Configure sentry
         config.add_settings({"h_pyramid_sentry.celery_support": True})
+
     else:
         # The celery workers don't need to know about this stuff
         config.include("pyramid_jinja2")
+        config.include("pyramid_services")
+
+        # Include the secret for crytographic functions
+        config.registry.settings["secret"] = os.environ["CHECKMATE_SECRET"]
 
         config.scan("checkmate.views")
         config.include("checkmate.routes")
+        config.include("checkmate.services")
 
     # Configure sentry
     config.add_settings(
