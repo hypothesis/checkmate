@@ -1,23 +1,26 @@
 from unittest.mock import sentinel
 
 import pytest
-from h_matchers import Any
 
-from checkmate.models import Reason
+from checkmate.models import Reason, Source
+from checkmate.models.detection import Detection
 from checkmate.services.url_checker import URLCheckerService, factory
 from checkmate.url import hash_url
 
 
 class TestURLCheckerService:
     def test_it_calls_sub_checkers(self, checker, URLHaus, CustomRules, AllowRules):
-        URLHaus.return_value.check_url.return_value = (Reason.NOT_ALLOWED,)
+        URLHaus.return_value.check_url.return_value = (Reason.OTHER,)
         CustomRules.return_value.check_url.return_value = (Reason.MALICIOUS,)
         AllowRules.return_value.check_url.return_value = (Reason.NOT_ALLOWED,)
 
         results = checker.check_url("http://example.com", fail_fast=False)
 
-        # Deduped and sorted worst first
-        assert list(results) == [Reason.MALICIOUS, Reason.NOT_ALLOWED]
+        assert list(results) == [
+            Detection(Reason.MALICIOUS, Source.BLOCK_LIST),
+            Detection(Reason.NOT_ALLOWED, Source.ALLOW_LIST),
+            Detection(Reason.OTHER, Source.URL_HAUS),
+        ]
 
         url_hashes = list(hash_url("http://example.com"))
 
@@ -29,7 +32,7 @@ class TestURLCheckerService:
 
         results = checker.check_url("http://example.com", fail_fast=True)
 
-        assert list(results) == [Reason.MALICIOUS]
+        assert list(results) == [Detection(Reason.MALICIOUS, Source.URL_HAUS)]
 
         CustomRules.return_value.check_url.assert_not_called()
         AllowRules.return_value.check_url.assert_not_called()
@@ -43,12 +46,11 @@ class TestURLCheckerService:
 
         results = checker.check_url("http://example.com", fail_fast=True)
 
-        assert (
-            list(results)
-            == Any.list.containing(
-                [Reason.OTHER, Reason.HIGH_IO, Reason.NOT_ALLOWED]
-            ).only()
-        )
+        assert list(results) == [
+            Detection(Reason.NOT_ALLOWED, Source.ALLOW_LIST),
+            Detection(Reason.HIGH_IO, Source.BLOCK_LIST),
+            Detection(Reason.OTHER, Source.URL_HAUS),
+        ]
 
     def test_it_can_disable_the_allow_list(
         self, checker, URLHaus, CustomRules, AllowRules

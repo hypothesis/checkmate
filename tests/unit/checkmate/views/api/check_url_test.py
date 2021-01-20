@@ -1,7 +1,7 @@
 import pytest
 
 from checkmate.exceptions import BadURLParameter, MalformedURL
-from checkmate.models import Reason
+from checkmate.models import Detection, Reason, Source
 from checkmate.views.api.check_url import check_url
 
 
@@ -25,8 +25,9 @@ class TestURLCheck:
 
     def test_a_bad_url(self, make_request, url_checker_service, secure_link_service):
         url_checker_service.check_url.return_value = (
-            Reason.MALICIOUS,
-            Reason.MEDIA_IMAGE,
+            Detection(Reason.MALICIOUS, Source.URL_HAUS),
+            Detection(Reason.MEDIA_IMAGE, Source.BLOCK_LIST),
+            Detection(Reason.MEDIA_IMAGE, Source.BLOCK_LIST),
         )
         bad_url = "http://sad.example.com"
 
