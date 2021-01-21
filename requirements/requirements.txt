@@ -32,9 +32,10 @@ prompt-toolkit==3.0.8     # via click-repl
 psycopg2==2.8.6           # via -r requirements/requirements.in
 pyramid-exclog==1.0       # via -r requirements/requirements.in
 pyramid-jinja2==2.8       # via -r requirements/requirements.in
+pyramid-sanity==1.0.1     # via -r requirements/requirements.in
 pyramid-services==2.2     # via -r requirements/requirements.in
 pyramid-tm==2.4           # via -r requirements/requirements.in
-pyramid==1.10.5           # via -r requirements/requirements.in, h-pyramid-sentry, pyramid-exclog, pyramid-jinja2, pyramid-services, pyramid-tm
+pyramid==1.10.5           # via -r requirements/requirements.in, h-pyramid-sentry, pyramid-exclog, pyramid-jinja2, pyramid-sanity, pyramid-services, pyramid-tm
 python-dateutil==2.8.1    # via alembic
 python-editor==1.0.4      # via alembic
 pytz==2020.4              # via celery
