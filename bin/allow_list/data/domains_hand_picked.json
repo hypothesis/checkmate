@@ -1,0 +1,16 @@
+[
+    ["fastcompany.net", "h"],
+    ["disquscdn.com", "cdn"],
+    ["fonts.googleapis.com", "cdn"],
+    ["www.google-analytics.com", "tracking"],
+    ["www.googletagservices.com", "tracking"],
+    ["adnxs.com", "ads"],
+    ["googlesyndication.com", "ads"],
+    ["doubleclick.net", "ads"],
+    ["advertising.com", "ads"],
+    ["adsafeprotected.com", "ads"],
+    ["moatads.com", "ads"],
+    ["amazon-adsystem.com", "ads"],
+    ["adlightning.com", "ads"],
+    ["rubiconproject.com", "ads"]
+]
