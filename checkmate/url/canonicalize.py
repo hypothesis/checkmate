@@ -9,6 +9,8 @@ from urllib.parse import unquote, urlparse, urlunparse
 
 from netaddr import AddrFormatError, IPAddress
 
+from checkmate.exceptions import MalformedURL
+
 
 class CanonicalURL:
     """Implementation of Google Web Risk URL canonicalization."""
@@ -78,7 +80,10 @@ class CanonicalURL:
         # Second, if the URL ends in a fragment, remove the fragment. For
         # example, shorten http://google.com/#frag to http://google.com/.
 
-        scheme, netloc, path, params, query, _fragment = urlparse(clean_url)
+        try:
+            scheme, netloc, path, params, query, _fragment = urlparse(clean_url)
+        except ValueError as err:
+            raise MalformedURL("Can't canonicalize invalid URL") from err
 
         if not scheme:
             if not netloc:

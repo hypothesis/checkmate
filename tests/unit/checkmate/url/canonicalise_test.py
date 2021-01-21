@@ -1,5 +1,6 @@
 import pytest
 
+from checkmate.exceptions import MalformedURL
 from checkmate.url.canonicalize import CanonicalURL
 
 
@@ -101,3 +102,8 @@ class TestCanonicalURL:
             "http:/example.com/path/abc;path_param?a=b#foo"
         )
         assert parts == ("http", "example.com", "/path/abc", "path_param", "a=b", None)
+
+    @pytest.mark.parametrize("url", ("http://example.com]",))
+    def test_canonicalise_invalid(self, url):
+        with pytest.raises(MalformedURL):
+            CanonicalURL.canonicalize(url)
