@@ -104,4 +104,7 @@ def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover
 
     configure(config, celery_worker=celery_worker)
 
+    # pyramid-sanity should be activated as late as possible
+    config.include("pyramid_sanity")
+
     return config.make_wsgi_app()
