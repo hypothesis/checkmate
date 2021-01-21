@@ -1,6 +1,6 @@
 import pytest
 
-from checkmate.exceptions import BadURLParameter
+from checkmate.exceptions import BadURLParameter, MalformedURL
 from checkmate.models import Reason
 from checkmate.views.api.check_url import check_url
 
@@ -52,6 +52,16 @@ class TestURLCheck:
 
     def test_it_returns_an_error_for_no_url(self, make_request):
         request = make_request("/api/check")
+
+        with pytest.raises(BadURLParameter):
+            check_url(request)
+
+    def test_it_returns_an_error_for_invalid_url(
+        self, make_request, url_checker_service
+    ):
+        request = make_request("/api/check", {"url": "http://example.com]"})
+
+        url_checker_service.check_url.side_effect = MalformedURL()
 
         with pytest.raises(BadURLParameter):
             check_url(request)

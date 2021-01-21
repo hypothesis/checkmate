@@ -103,7 +103,6 @@ class TestCanonicalURL:
         )
         assert parts == ("http", "example.com", "/path/abc", "path_param", "a=b", None)
 
-    @pytest.mark.parametrize("url", ("http://example.com]",))
-    def test_canonicalise_invalid(self, url):
+    def test_canonicalise_invalid(self):
         with pytest.raises(MalformedURL):
-            CanonicalURL.canonicalize(url)
+            CanonicalURL.canonicalize("http://example.com]")

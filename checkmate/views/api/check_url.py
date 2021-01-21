@@ -3,7 +3,7 @@
 from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
-from checkmate.exceptions import BadURLParameter
+from checkmate.exceptions import BadURLParameter, MalformedURL
 from checkmate.services import SecureLinkService, URLCheckerService
 
 
@@ -17,7 +17,13 @@ def check_url(request):
         raise BadURLParameter("url", "Parameter 'url' is required") from err
 
     url_checker = request.find_service(URLCheckerService)
-    reasons = list(url_checker.check_url(url, allow_all=request.GET.get("allow_all")))
+
+    try:
+        reasons = list(
+            url_checker.check_url(url, allow_all=request.GET.get("allow_all"))
+        )
+    except MalformedURL as err:
+        raise BadURLParameter("url", "Parameter 'url' isn't valid") from err
 
     if not reasons:
         # If everything is fine give a 204 which is successful, but has no body
