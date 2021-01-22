@@ -72,7 +72,7 @@ Thanks!
     {% if reason == "malicious" %}
         {% set text = {
             "heading": "    <div class='icon danger'></div>Deceptive site ahead",
-            "details": "This site is not available through Hypothesis because
+            "details": "This site is not available through Via because
              it might be hosting <strong>harmful</strong> content."
         } %}
 
@@ -80,23 +80,22 @@ Thanks!
         {% set text = {
             "heading": "Content not available",
             "details": "Unfortunately, the publisher of this page has requested
-                that we disallow access to it through this Hypothesis service.
-                That means we can't show you the page you were looking for
-                right away…"
+             that we disallow annotating it with Via. That means we can't show
+             you the page you were looking for right away…"
         } %}
 
     {% elif reason == "not-explicitly-allowed" %}
         {% set text = {
             "heading": "Content cannot be annotated yet",
             "details": "Unfortunately, the contents of this page cannot be
-                annotated through this Hypothesis service at this time."
+                annotated with Via at this time."
         } %}
 
     {% else %}
         {% set text = {
             "heading": "Content cannot be annotated",
             "details": "Unfortunately, the contents of this page cannot be
-                annotated through this Hypothesis service."
+            annotated with Via."
         } %}
     {% endif %}
 
