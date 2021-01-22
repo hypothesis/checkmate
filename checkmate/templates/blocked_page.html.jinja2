@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% macro how_to_access(request_access=False) %}
-    <p>
-        <strong>To view the annotations on this page:</strong>
-    </p>
+    <h2>To annotate this page</h2>
+
+    <h3>Use our browser extension:</h3>
 
     <ol>
         <li>
-            Follow the <a href="https://web.hypothes.is/" target="_blank">instructions
+            Follow the <a href="https://web.hypothes.is/start/" target="_blank">instructions
             on our homepage</a> to install our browser extension.
         </li>
         <li>
@@ -19,28 +19,31 @@
             <a href="{{ blocked_url | e }}" target="_blank">{{ blocked_url }}</a>
             and click on the extension icon to see the annotations.
         </li>
-        {% if request_access %}
-            {% set email_subject %}Please allow access to '{{ domain_to_annotate | e }}'{% endset %}
-            {% set email_body -%}
+
+    </ol>
+
+    {% if request_access %}
+        <h3>Or get in contact:</h3>
+
+        {% set email_subject %}Please allow access to '{{ domain_to_annotate | e }}'{% endset %}
+        {% set email_body -%}
 I'd like to access this page with Via:
 
- * {{ blocked_url | e }}
+* {{ blocked_url | e }}
 
 I'd like to be able to access this site because ...
 
-    <Please give the reasons you'd like to access the site here>
+<Please give the reasons you'd like to access the site here>
 
 Thanks!
-            {%- endset %}
-            <li>
-                Or
-                <a href="mailto:via@hypothes.is?subject={{ email_subject | urlencode }}&body={{ email_body | urlencode }}" target="_blank">
-                  email us
-                </a>
-                to let us know you'd like to annotate the page with Via.
-            </li>
-        {% endif %}
-    </ol>
+        {%- endset %}
+        <p>
+            <a href="mailto:via@hypothes.is?subject={{ email_subject | urlencode }}&body={{ email_body | urlencode }}" target="_blank"
+            >Email us</a>
+            to let us know you'd like to annotate the page with Via.
+        </p>
+    {% endif %}
+
 {% endmacro %}
 
 {% macro bad_site_ahead() %}
