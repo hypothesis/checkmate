@@ -4,7 +4,7 @@ from unittest.mock import sentinel
 import pytest
 from requests import RequestException
 
-from checkmate.app import configure
+from checkmate.app import CheckmateConfigurator
 from checkmate.async.tasks import initialize_urlhaus, sync_blocklist, sync_urlhaus
 
 
@@ -57,7 +57,9 @@ class TestSyncURLHaus:
 
 @pytest.fixture
 def pyramid_config(pyramid_config):
-    configure(pyramid_config, celery_worker=True)
+    pyramid_config.registry.settings["checkmate_blocklist_url"] = sentinel.default
+
+    CheckmateConfigurator(pyramid_config, celery_worker=True)
 
     return pyramid_config
 
