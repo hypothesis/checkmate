@@ -100,10 +100,12 @@ class TestSecureLinkService:
 
 class TestFactory:
     def test_it(self, pyramid_request):
-        pyramid_request.registry.settings["secret"] = sentinel.secret
+        pyramid_request.registry.settings[
+            "checkmate_secret"
+        ] = sentinel.checkmate_secret
 
         service = factory(sentinel.context, pyramid_request)
 
         assert isinstance(service, SecureLinkService)
-        assert service._secret == sentinel.secret
+        assert service._secret == sentinel.checkmate_secret
         assert service._route_url == pyramid_request.route_url

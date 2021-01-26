@@ -76,7 +76,7 @@ def configure(config, celery_worker=False):  # pragma: no cover
         config.include("pyramid_services")
 
         # Include the secret for crytographic functions
-        config.registry.settings["secret"] = os.environ["CHECKMATE_SECRET"]
+        config.registry.settings["checkmate_secret"] = os.environ["CHECKMATE_SECRET"]
 
         config.scan("checkmate.views")
         config.include("checkmate.routes")

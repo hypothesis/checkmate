@@ -75,5 +75,6 @@ class SecureLinkService:
 
 def factory(_context, request):
     return SecureLinkService(
-        secret=request.registry.settings["secret"], route_url=request.route_url
+        secret=request.registry.settings["checkmate_secret"],
+        route_url=request.route_url,
     )
