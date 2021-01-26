@@ -37,7 +37,7 @@ def pyramid_settings():
             "TEST_DATABASE_URL",
             "postgresql://postgres@localhost:5434/checkmate_test",
         ),
-        "secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
+        "checkmate_secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
     }
 
 
