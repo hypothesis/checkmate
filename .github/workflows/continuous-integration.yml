@@ -24,6 +24,7 @@ jobs:
     - name: Create test databases
       run: |
         psql -U postgres -h localhost -p 5434 -c 'CREATE DATABASE checkmate_test'
+        psql -U postgres -h localhost -p 5434 -c 'CREATE DATABASE checkmate_functests'
     - name: Cache the .tox dir
       uses: actions/cache@v2
       with:
@@ -32,4 +33,4 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-tox-
     - name: Run tox
-      run: tox --parallel auto -e lint,checkformatting,tests
+      run: tox --parallel auto -e lint,checkformatting,tests,functests
