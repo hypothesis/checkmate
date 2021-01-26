@@ -10,7 +10,6 @@ from pyramid import testing
 from pyramid.request import Request, apply_request_extensions
 from sqlalchemy.orm import sessionmaker
 
-from checkmate.db import create_engine
 from tests import factories
 from tests.unit.services import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
@@ -73,15 +72,6 @@ def _make_request(path, pyramid_config, db_session):
     apply_request_extensions(pyramid_request)
 
     return pyramid_request
-
-
-@pytest.fixture(scope="session")
-def db_engine(pyramid_settings):
-    # Delete all database tables and re-initialize the database schema based on
-    # the current models. Doing this at the beginning of each test run ensures
-    # that any schema changes made to the models since the last test run will
-    # be applied to the test DB schema before running the tests again.
-    return create_engine(pyramid_settings["database_url"], drop=True)
 
 
 SESSION_MAKER = sessionmaker()
