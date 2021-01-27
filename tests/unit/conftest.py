@@ -11,6 +11,7 @@ from pyramid.request import Request, apply_request_extensions
 from sqlalchemy.orm import sessionmaker
 
 from checkmate.db import create_engine
+from checkmate.routes import add_routes
 from tests import factories
 from tests.unit.services import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
@@ -45,6 +46,7 @@ def pyramid_settings():
 def pyramid_config(pyramid_settings):
     with testing.testConfig(settings=pyramid_settings) as config:
         config.include("pyramid_services")
+        add_routes(config)
         yield config
 
 
