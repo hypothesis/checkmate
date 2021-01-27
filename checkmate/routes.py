@@ -1,8 +1,9 @@
 """The routes for the Pyramid app."""
 
 
-def includeme(config):  # pragma: no cover
-    """Pyramid config."""
+def add_routes(config):  # pragma: no cover
+    """Register all routes."""
+
     config.add_route("get_status", "/_status")
     config.add_route("check_url", "/api/check")
 
@@ -10,3 +11,8 @@ def includeme(config):  # pragma: no cover
     config.add_static_view("ui/static", "static/static", cache_max_age=3600)
 
     config.add_route("present_block", "/ui/block")
+
+
+def includeme(config):  # pragma: no cover
+    """Pyramid config."""
+    add_routes(config)
