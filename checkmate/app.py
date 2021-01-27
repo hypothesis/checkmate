@@ -1,8 +1,11 @@
 """The main application entrypoint module."""
+import logging
 import os
 
 import pyramid.config
 import pyramid_tm
+
+logger = logging.getLogger(__name__)
 
 
 class CheckmateConfigurator:
@@ -14,6 +17,7 @@ class CheckmateConfigurator:
         self._configure_db(config)
         self._configure_sentry(config)
         self._configure_checkmate(config)
+        self._configure_api_auth(config)
 
     def add_setting_from_env(self, param_name):
         value = self.config.registry.settings.get(param_name) or os.environ.get(
@@ -84,6 +88,20 @@ class CheckmateConfigurator:
             config.add_settings({"h_pyramid_sentry.celery_support": True})
 
         config.include("h_pyramid_sentry")
+
+    @classmethod
+    def _configure_api_auth(cls, config):
+        api_keys = {}
+        for envvar_name, envvar_value in os.environ.items():
+            if not envvar_name.startswith("CHECKMATE_API_KEY_"):
+                continue
+
+            username = envvar_name.split("CHECKMATE_API_KEY_")[1].lower()
+
+            api_keys[envvar_value] = username
+            logger.info("Loaded api_key value for %s", username)
+
+        config.add_settings({"api_keys": api_keys})
 
 
 def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover
