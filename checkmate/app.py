@@ -1,4 +1,5 @@
 """The main application entrypoint module."""
+import logging
 import os
 
 import pyramid.config
@@ -9,6 +10,8 @@ from pyramid.session import SignedCookieSessionFactory
 
 from checkmate.authentication import CascadingAuthenticationPolicy
 from checkmate.models import Principals
+
+logger = logging.getLogger(__name__)
 
 
 class CheckmateConfigurator:
@@ -21,6 +24,7 @@ class CheckmateConfigurator:
         self._configure_sentry(config)
         if not celery_worker:
             self._configure_authentication(config)
+            self._configure_api_auth(config)
 
         self._configure_checkmate(config)
 
@@ -128,6 +132,19 @@ class CheckmateConfigurator:
         # We don't use ACLs, but pyramid needs an authorization policy anyway
         config.set_authorization_policy(ACLAuthorizationPolicy())
 
+    @classmethod
+    def _configure_api_auth(cls, config):
+        api_keys = {}
+        for envvar_name, envvar_value in os.environ.items():
+            if not envvar_name.startswith("CHECKMATE_API_KEY_"):
+                continue
+
+            username = envvar_name.split("CHECKMATE_API_KEY_")[1].lower()
+
+            api_keys[envvar_value] = username
+            logger.info("Loaded api_key value for %s", username)
+
+        config.add_settings({"api_keys": api_keys})
 
 def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover
     """Configure and return the WSGI app."""
