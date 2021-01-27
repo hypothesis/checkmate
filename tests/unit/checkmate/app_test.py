@@ -5,8 +5,17 @@ from pyramid.config import Configurator
 
 from checkmate.app import CheckmateConfigurator
 
-CELERY_SETTINGS = {"database_url": "celery_db", "checkmate_blocklist_url": "some_url"}
-APP_SETTINGS = {"database_url": "app_db", "checkmate_secret": "not_a_secret"}
+CELERY_SETTINGS = {
+    "database_url": "celery_db",
+    "checkmate_blocklist_url": "some_url",
+}
+
+APP_SETTINGS = {
+    "database_url": "app_db",
+    "checkmate_secret": "not_a_secret",
+    "google_client_id": "some_long_hex_string",
+    "google_client_secret": "another_not_secret",
+}
 
 
 class TestCheckmateConfigurator:
@@ -33,6 +42,7 @@ class TestCheckmateConfigurator:
 
         config.scan.assert_has_calls([call("checkmate.views")])
 
+    @pytest.mark.usefixtures("with_clear_environ")
     @pytest.mark.parametrize("setting", list(APP_SETTINGS.keys()))
     def test_it_notices_missing_app_settings(self, config, setting):
         config.registry.settings.update(APP_SETTINGS)
@@ -72,6 +82,7 @@ class TestCheckmateConfigurator:
 
         config.scan.assert_not_called()
 
+    @pytest.mark.usefixtures("with_clear_environ")
     @pytest.mark.parametrize("setting", list(CELERY_SETTINGS.keys()))
     def test_it_notices_missing_celery_settings(self, config, setting):
         config.registry.settings.update(CELERY_SETTINGS)
@@ -85,6 +96,10 @@ class TestCheckmateConfigurator:
         config = create_autospec(Configurator(), spec_set=True)
         config.registry.settings = {}
         return config
+
+    @pytest.fixture
+    def with_clear_environ(self, os):
+        os.environ.get.return_value = None
 
     @pytest.fixture
     def os(self, patch):
