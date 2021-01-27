@@ -7,6 +7,7 @@ from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import SignedCookieSessionFactory
 
+from checkmate.authentication import CascadingAuthenticationPolicy
 from checkmate.models import Principals
 
 
@@ -109,7 +110,11 @@ class CheckmateConfigurator:
         config.set_session_factory(session_factory)
 
         config.set_authentication_policy(
-            SessionAuthenticationPolicy(callback=Principals.from_user_id)
+            CascadingAuthenticationPolicy(
+                sub_policies=[
+                    SessionAuthenticationPolicy(callback=Principals.from_user_id)
+                ]
+            ),
         )
         # We don't use ACLs, but pyramid needs an authorization policy anyway
         config.set_authorization_policy(ACLAuthorizationPolicy())
