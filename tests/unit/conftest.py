@@ -8,6 +8,7 @@ from urllib.parse import urlencode
 import httpretty
 from pyramid import testing
 from pyramid.request import Request, apply_request_extensions
+from pyramid.testing import DummySession
 from sqlalchemy.orm import sessionmaker
 
 from checkmate.db import create_engine
@@ -64,6 +65,13 @@ def make_request(pyramid_config, db_session):
         return _make_request(path, pyramid_config, db_session)
 
     return make_request
+
+
+@pytest.fixture
+def session(pyramid_request):
+    session = DummySession()
+    pyramid_request.session = session
+    return session
 
 
 def _make_request(path, pyramid_config, db_session):

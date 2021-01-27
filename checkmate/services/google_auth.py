@@ -188,7 +188,6 @@ def factory(_context, request):
             "client_id": request.registry.settings["google_client_id"],
             "client_secret": request.registry.settings["google_client_secret"],
             # Until this route exists we'll use a hard coded value
-            "redirect_uri": "http://localhost/ui/api/login_callback",
-            #'"redirect_uri": request.route_url("login_callback"),
+            "redirect_uri": request.route_url("login_callback"),
         },
     )
