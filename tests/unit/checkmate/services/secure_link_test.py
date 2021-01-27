@@ -4,6 +4,7 @@ from unittest.mock import create_autospec, sentinel
 import pytest
 from pyramid.urldispatch import Route
 
+from checkmate.services import SignatureService
 from checkmate.services.secure_link import SecureLinkService, factory
 
 # pylint: disable=protected-access, too-many-arguments
@@ -95,11 +96,16 @@ class TestSecureLinkService:
 
     @pytest.fixture
     def service(self, route_url):
-        return SecureLinkService(secret="not_very_secret", route_url=route_url)
+        # We're using the real SignatureService here, because otherwise these
+        # tests become a bit meaningless. So this is a slightly "functional"
+        # test
+        return SecureLinkService(
+            signature_service=SignatureService("not_very_secret"), route_url=route_url
+        )
 
 
 class TestFactory:
-    def test_it(self, pyramid_request):
+    def test_it(self, pyramid_request, signature_service):
         pyramid_request.registry.settings[
             "checkmate_secret"
         ] = sentinel.checkmate_secret
@@ -107,5 +113,5 @@ class TestFactory:
         service = factory(sentinel.context, pyramid_request)
 
         assert isinstance(service, SecureLinkService)
-        assert service._secret == sentinel.checkmate_secret
+        assert service._signature_service == signature_service
         assert service._route_url == pyramid_request.route_url

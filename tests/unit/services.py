@@ -2,7 +2,7 @@ from unittest import mock
 
 import pytest
 
-from checkmate.services import URLCheckerService
+from checkmate.services import SignatureService, URLCheckerService
 from checkmate.services.secure_link import SecureLinkService
 
 
@@ -15,6 +15,11 @@ def mock_service(pyramid_config):
         return mock_service
 
     return mock_service
+
+
+@pytest.fixture
+def signature_service(mock_service):
+    return mock_service(SignatureService)
 
 
 @pytest.fixture
