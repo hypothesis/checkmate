@@ -11,7 +11,7 @@ class SignatureService:
     SALT_LENGTH = 32
 
     def __init__(self, secret):
-        """Create a new BlockURLService object.
+        """Return a new SignatureService object.
 
         :param secret: The secret to sign and check args with
         """

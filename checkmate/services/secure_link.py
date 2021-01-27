@@ -64,8 +64,8 @@ class SecureLinkService:
         """Hash a route and arguments."""
 
         items = [route_name]
-        for key_value in sorted(args.items()):
-            items.extend(key_value)
+        for item in sorted(args.items()):
+            items.extend(item)
 
         return self._signature_service.sign_items(items)
 
