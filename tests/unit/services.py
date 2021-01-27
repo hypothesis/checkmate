@@ -19,7 +19,9 @@ def mock_service(pyramid_config):
 
 @pytest.fixture
 def signature_service(mock_service):
-    return mock_service(SignatureService)
+    signature_service = mock_service(SignatureService)
+    signature_service.sign_items.return_value = "secure_token"
+    return signature_service
 
 
 @pytest.fixture

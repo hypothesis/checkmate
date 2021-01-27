@@ -1,7 +1,7 @@
 """The routes for the Pyramid app."""
 
 
-def add_routes(config):  # pragma: no cover
+def add_routes(config):
     """Register all routes."""
 
     config.add_route("get_status", "/_status")
