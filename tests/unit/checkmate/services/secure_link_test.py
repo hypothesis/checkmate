@@ -1,106 +1,104 @@
-from copy import deepcopy
-from unittest.mock import create_autospec, sentinel
+from unittest.mock import sentinel
 
 import pytest
+from h_matchers import Any
 from pyramid.urldispatch import Route
 
-from checkmate.services import SignatureService
 from checkmate.services.secure_link import SecureLinkService, factory
-
-# pylint: disable=protected-access, too-many-arguments
 
 
 class TestSecureLinkService:
-    ROUTE_NAME = "my_view_name"
+    def test_route_url_works(self, service, signature_service):
+        signature_service.sign_items.return_value = "secure_token"
+        query = {"param_1": "value_1", "param_2": "value_2"}
+        result = service.route_url("present_block", _query=query)
 
-    def test_route_url_works(self, service, route, route_url, args, signed_args):
-        result = service.route_url(route.name, _query=args)
+        signature_service.sign_items.assert_called_once_with(
+            [
+                "present_block",
+                "param_1",
+                "value_1",
+                "param_2",
+                "value_2",
+                service.VERSION_ARG,
+                "1",
+            ]
+        )
 
-        assert result == route_url.return_value
-
-        route_url.assert_called_once_with(self.ROUTE_NAME, _query=signed_args)
+        assert result == Any.url.with_query(
+            dict(query, **{service.VERSION_ARG: "1", service.TOKEN_ARG: "secure_token"})
+        )
 
     def test_route_url_requires_a_query(self, service):
         with pytest.raises(ValueError):
-            service.route_url("irrelevant_route_name", _query=None)
+            service.route_url("present_block", _query=None)
 
-    def test_is_secure_allows_a_signed_value(self, service, signed_request):
-        assert service.is_secure(signed_request)
-
-    @pytest.mark.parametrize("key", ("arg_1", "arg_2", "v", "sec"))
-    @pytest.mark.parametrize("value", (None, "different"))
-    def test_is_secure_detects_mutated_args(self, service, signed_request, key, value):
-        if value:
-            signed_request.GET[key] = value
-        else:
-            signed_request.GET.pop(key)
-
-        before_call = deepcopy(dict(signed_request.GET))
-
-        assert not service.is_secure(signed_request)
-
-        # Check we don't mutate the args
-        assert before_call == signed_request.GET
-
-    def test_is_secure_detects_mismatched_route(self, service, signed_request):
-        signed_request.matched_route.name = "something_wrong"
-
-        assert not service.is_secure(signed_request)
-
-    def test_is_secure_checks_for_missing_version(self, service, signed_request):
-        signed_request.GET.pop(SecureLinkService.TOKEN_ARG)
-        signed_request.GET.pop(SecureLinkService.VERSION_ARG)
-
-        # These args are correctly signed, but don't have the version
-        signed_request.GET[SecureLinkService.TOKEN_ARG] = service._hash_args(
-            signed_request.matched_route.name, signed_request.GET
-        )
-
-        assert not service.is_secure(signed_request)
-
-    def test_is_secure_detects_additional_args(self, service, signed_request):
-        signed_request.GET["extra"] = "should not be here"
-
-        assert not service.is_secure(signed_request)
-
-    @pytest.fixture
-    def route(self):
-        return Route("my_view_name", "/some/url")
-
-    @pytest.fixture
-    def args(self):
-        return {"arg_1": "some_value", "arg_2": "some_other_value"}
-
-    @pytest.fixture
-    def signed_args(self, args):
-        signed_args = deepcopy(args)
-        signed_args.update(
+    def test_is_secure_allows_a_signed_value(
+        self, service, pyramid_request, signature_service
+    ):
+        pyramid_request.GET.update(
             {
-                "v": "1",
-                # This just happens to match the route name and args above
-                "sec": "1706de1486ff38efdea4089ca29a6ca5de3affa7ba919138a5b184365559829a",
+                service.TOKEN_ARG: "expected_token",
+                service.VERSION_ARG: "1",
+                "other": "value",
             }
         )
-        return signed_args
+
+        signature_service.sign_items.return_value = "expected_token"
+
+        assert service.is_secure(pyramid_request)
+
+        signature_service.sign_items.assert_called_once_with(
+            [
+                pyramid_request.matched_route.name,
+                "other",
+                "value",
+                service.VERSION_ARG,
+                "1",
+            ]
+        )
+
+    def test_is_secure_disallows_different_tokens(
+        self, service, pyramid_request, signature_service
+    ):
+        pyramid_request.GET.update(
+            {service.TOKEN_ARG: "unexpected_token", service.VERSION_ARG: "1"}
+        )
+
+        signature_service.sign_items.return_value = "expected_token"
+
+        assert not service.is_secure(pyramid_request)
+
+    def test_is_secure_checks_for_missing_version(self, service, pyramid_request):
+        pyramid_request.GET.update(
+            {
+                service.TOKEN_ARG: "unexpected_token",
+                # service.VERSION_ARG: "1",
+            }
+        )
+
+        assert not service.is_secure(pyramid_request)
+
+    def test_is_secure_checks_for_missing_token(self, service, pyramid_request):
+        pyramid_request.GET.update(
+            {
+                # service.TOKEN_ARG: "unexpected_token",
+                service.VERSION_ARG: "1",
+            }
+        )
+
+        assert not service.is_secure(pyramid_request)
 
     @pytest.fixture
-    def signed_request(self, pyramid_request, signed_args, route):
-        pyramid_request.GET.update(signed_args)
-        pyramid_request.matched_route = route
+    def pyramid_request(self, pyramid_request):
+        pyramid_request.matched_route = Route("present_block", "/ui/block")
 
         return pyramid_request
 
     @pytest.fixture
-    def route_url(self, pyramid_request):
-        return create_autospec(pyramid_request.route_url, spec_set=True)
-
-    @pytest.fixture
-    def service(self, route_url):
-        # We're using the real SignatureService here, because otherwise these
-        # tests become a bit meaningless. So this is a slightly "functional"
-        # test
+    def service(self, pyramid_request, signature_service):
         return SecureLinkService(
-            signature_service=SignatureService("not_very_secret"), route_url=route_url
+            signature_service=signature_service, route_url=pyramid_request.route_url
         )
 
 
@@ -113,5 +111,6 @@ class TestFactory:
         service = factory(sentinel.context, pyramid_request)
 
         assert isinstance(service, SecureLinkService)
+        # pylint: disable=protected-access
         assert service._signature_service == signature_service
         assert service._route_url == pyramid_request.route_url
