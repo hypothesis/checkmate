@@ -1,6 +1,7 @@
 """URL checking."""
 
-from pyramid.httpexceptions import HTTPNoContent
+from pyramid.httpexceptions import HTTPNoContent, HTTPUnauthorized
+from pyramid.security import forget
 from pyramid.view import view_config
 
 from checkmate.auth import APIAuthenticated
@@ -58,3 +59,10 @@ def check_url(request):
             )
         },
     }
+
+
+@view_config(route_name="check_url")
+def check_url_unauthorized(request):
+    response = HTTPUnauthorized()
+    response.headers.update(forget(request))
+    return response
