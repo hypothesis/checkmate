@@ -4,6 +4,9 @@ import os
 
 import pyramid.config
 import pyramid_tm
+from pyramid.authorization import ACLAuthorizationPolicy
+
+from checkmate.auth import APIHTTPAuth
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +21,7 @@ class CheckmateConfigurator:
         self._configure_sentry(config)
         self._configure_checkmate(config)
         self._configure_api_auth(config)
+        self._configure_auth(config)
 
     def add_setting_from_env(self, param_name):
         value = self.config.registry.settings.get(param_name) or os.environ.get(
@@ -102,6 +106,12 @@ class CheckmateConfigurator:
             logger.info("Loaded api_key value for %s", username)
 
         config.add_settings({"api_keys": api_keys})
+
+    @classmethod
+    def _configure_auth(cls, config):
+        authn_policy = APIHTTPAuth(check=APIHTTPAuth.check_callback)
+        config.set_authorization_policy(ACLAuthorizationPolicy())
+        config.set_authentication_policy(authn_policy)
 
 
 def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover
