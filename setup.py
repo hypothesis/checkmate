@@ -17,6 +17,7 @@ setup(
     entry_points="""\
     [console_scripts]
     devdata = checkmate.scripts:update_dev_data
+    devdata-remote = checkmate.scripts:update_remote_dev_data
     initdb = checkmate.scripts:initialize_db
     """,
 )
