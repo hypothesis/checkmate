@@ -1,6 +1,6 @@
 """Create and check secure links."""
 
-from hashlib import sha256
+from checkmate.services.signature import SignatureService
 
 
 class SecureLinkService:
@@ -9,13 +9,13 @@ class SecureLinkService:
     TOKEN_ARG = "sec"
     VERSION_ARG = "v"
 
-    def __init__(self, secret, route_url):
+    def __init__(self, signature_service, route_url):
         """Create a new BlockURLService object.
 
-        :param secret: The secret to sign and check args with
+        :param signature_service: SignatureService instance to use for signing
         :param route_url: The pyramid `request.route_url` function
         """
-        self._secret = secret
+        self._signature_service = signature_service
         self._route_url = route_url
 
     def route_url(self, route_name, *elements, **kw):
@@ -61,20 +61,17 @@ class SecureLinkService:
         return token == self._hash_args(request.matched_route.name, without_token)
 
     def _hash_args(self, route_name, args):
-        digest = sha256()
+        """Hash a route and arguments."""
 
-        digest.update(self._secret.encode("utf-8"))
-        digest.update(route_name.encode("utf-8"))
+        items = [route_name]
+        for key_value in sorted(args.items()):
+            items.extend(key_value)
 
-        for key, value in sorted(args.items()):
-            digest.update(key.encode("utf-8"))
-            digest.update(value.encode("utf-8"))
-
-        return digest.hexdigest()
+        return self._signature_service.sign_items(items)
 
 
 def factory(_context, request):
     return SecureLinkService(
-        secret=request.registry.settings["checkmate_secret"],
+        signature_service=request.find_service(SignatureService),
         route_url=request.route_url,
     )
