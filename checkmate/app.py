@@ -13,6 +13,9 @@ class CheckmateConfigurator:
         self._configure_logging(config)
         self._configure_db(config)
         self._configure_sentry(config)
+        if not celery_worker:
+            self._configure_authentication(config)
+
         self._configure_checkmate(config)
 
     def add_setting_from_env(self, param_name):
@@ -29,9 +32,6 @@ class CheckmateConfigurator:
             self.add_setting_from_env("checkmate_blocklist_url")
         else:
             # The celery workers don't need to know about this stuff
-
-            # Include the secret for crytographic functions
-            self.add_setting_from_env("checkmate_secret")
 
             config.include("pyramid_services")
             config.include("checkmate.services")
@@ -84,6 +84,14 @@ class CheckmateConfigurator:
             config.add_settings({"h_pyramid_sentry.celery_support": True})
 
         config.include("h_pyramid_sentry")
+
+    def _configure_authentication(self, _config):
+        # This is used here, but also by the SecureLink service
+        self.add_setting_from_env("checkmate_secret")
+
+        # Add values expected by the Google Auth service
+        self.add_setting_from_env("google_client_id")
+        self.add_setting_from_env("google_client_secret")
 
 
 def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover
