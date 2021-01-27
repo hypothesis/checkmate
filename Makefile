@@ -47,7 +47,9 @@ sql: python
 
 .PHONY: devdata
 devdata: python
-	@tox -qe dev --run-command 'devdata conf/development.ini'  # See setup.py for what devdata is.
+	# See setup.py for what devdata and devdata-remote are.
+	@tox -qe dev --run-command 'devdata-remote'
+	@tox -qe dev --run-command 'devdata conf/development.ini'
 
 .PHONY: lint
 lint: python

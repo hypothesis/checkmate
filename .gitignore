@@ -1,3 +1,4 @@
+.devdata.env
 .coverage*
 .tox
 *.pyc
