@@ -20,6 +20,8 @@ def add_routes(config):
     config.add_route("login_callback", "/ui/api/login_callback")
     config.add_route("logout", "/ui/api/logout")
 
+    config.add_route("analyze_url", "/ui/api/analyze")
+
 
 def includeme(config):  # pragma: no cover
     """Pyramid config."""
