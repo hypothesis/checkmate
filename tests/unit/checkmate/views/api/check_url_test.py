@@ -2,7 +2,7 @@ import pytest
 
 from checkmate.exceptions import BadURLParameter, MalformedURL
 from checkmate.models import Detection, Reason, Source
-from checkmate.views.api.check_url import check_url
+from checkmate.views.api.check_url import check_url, check_url_unauthorized
 
 
 @pytest.mark.usefixtures("secure_link_service", "url_checker_service")
@@ -66,3 +66,9 @@ class TestURLCheck:
 
         with pytest.raises(BadURLParameter):
             check_url(request)
+
+    def test_unauthorized_check_url(self, make_request, url_checker_service):
+        request = make_request("/api/check", {"url": "http://example.com"})
+        response = check_url_unauthorized(request)
+
+        assert response.status_code == 401
