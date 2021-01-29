@@ -41,13 +41,13 @@ class GoogleAuthService:
             * `redirect_uri` - Redirect URI registered with Google
         """
 
-        self.signature_service = signature_service
+        self._signature_service = signature_service
 
-        self.client_id = client_config["client_id"]
-        self.client_secret = client_config["client_secret"]
-        self.redirect_uri = client_config["redirect_uri"]
+        self._client_id = client_config["client_id"]
+        self._client_secret = client_config["client_secret"]
+        self._redirect_uri = client_config["redirect_uri"]
 
-        if not self.redirect_uri.startswith("https"):
+        if not self._redirect_uri.startswith("https"):
             # Allow HTTP in dev, otherwise we'll get errors when trying to
             # authenticate with some of the OAuth libraries
             os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -72,7 +72,7 @@ class GoogleAuthService:
             # If we happen to know who is logging in, we can pre-fill the form
             login_hint=login_hint,
             # Enable a nonce value we can verify to prevent XSS attacks
-            state=self.signature_service.get_nonce(),
+            state=self._signature_service.get_nonce(),
             # Should we make the user fill out the form again?
             prompt="select_account" if force_login else None,
         )
@@ -132,7 +132,7 @@ class GoogleAuthService:
         self._assert_state_valid(query.get("state"))
 
     def _assert_state_valid(self, state):
-        if not self.signature_service.check_nonce(state):
+        if not self._signature_service.check_nonce(state):
             raise UserNotAuthenticated("State check failed")
 
     @classmethod
@@ -159,8 +159,8 @@ class GoogleAuthService:
         # but they appear to have no effect
         client_args = {
             # Dynamic things
-            "client_id": self.client_id,
-            "client_secret": self.client_secret,
+            "client_id": self._client_id,
+            "client_secret": self._client_secret,
             # Static things
             "auth_uri": self.OPEN_ID_DISCOVERY["authorization_endpoint"],
             "token_uri": self.OPEN_ID_DISCOVERY["token_endpoint"],
@@ -173,7 +173,7 @@ class GoogleAuthService:
 
         # Indicate where the API server will redirect the user. This must match
         # our pre-registered redirect URIs.
-        flow.redirect_uri = self.redirect_uri
+        flow.redirect_uri = self._redirect_uri
 
         return flow
 
