@@ -86,7 +86,7 @@ class CheckmateConfigurator:
         config.include("h_pyramid_sentry")
 
     def _configure_authentication(self, _config):
-        # This is used here, but also by the SecureLink service
+        # This is used here, but also by the Signature service
         self.add_setting_from_env("checkmate_secret")
 
         # Add values expected by the Google Auth service
