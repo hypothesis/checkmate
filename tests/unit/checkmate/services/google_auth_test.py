@@ -8,6 +8,10 @@ from oauthlib.oauth2.rfc6749.errors import InvalidClientError, InvalidGrantError
 from checkmate.exceptions import BadOAuth2Config, UserNotAuthenticated
 from checkmate.services.google_auth import GoogleAuthService, factory
 
+# We do this all the time here, but it's ok for the tests of a file to poke
+# about in the innards of that file
+# pylint: disable=protected-access
+
 
 class TestGoogleAuthService:
     @pytest.mark.parametrize(
@@ -57,14 +61,14 @@ class TestGoogleAuthService:
             access_type="offline",
             include_granted_scopes="true",
             login_hint=Any(),
-            state=service.signature_service.get_nonce.return_value,
+            state=service._signature_service.get_nonce.return_value,
             prompt=Any(),
         )
 
         authorization_url, state = flow.authorization_url.return_value
 
         assert url == authorization_url
-        service.signature_service.check_nonce.assert_called_once_with(state)
+        service._signature_service.check_nonce.assert_called_once_with(state)
 
     @pytest.mark.parametrize("login_hint", (None, "staff@hypothes.is"))
     @pytest.mark.parametrize("force_login", (True, False))
@@ -80,7 +84,7 @@ class TestGoogleAuthService:
         )
 
     def test_login_url_verifies_the_state(self, service, flow):
-        service.signature_service.check_nonce.return_value = False
+        service._signature_service.check_nonce.return_value = False
 
         with pytest.raises(UserNotAuthenticated):
             service.login_url()
@@ -96,7 +100,7 @@ class TestGoogleAuthService:
         )
 
         # We extract and check the state/nonce
-        service.signature_service.check_nonce.assert_called_once_with("state_value")
+        service._signature_service.check_nonce.assert_called_once_with("state_value")
 
         assert user_details == JWT.return_value.decode.return_value
         assert credentials == {
@@ -114,7 +118,7 @@ class TestGoogleAuthService:
             service.exchange_auth_code("http://example.com?error=oh_dear")
 
     def test_exchange_auth_code_checks_the_state(self, service):
-        service.signature_service.check_nonce.return_value = False
+        service._signature_service.check_nonce.return_value = False
         with pytest.raises(UserNotAuthenticated):
             service.exchange_auth_code("http://example.com?state=BAD_STATE")
 
@@ -177,7 +181,7 @@ class TestFactory:
 
         result = factory(sentinel.context, pyramid_request)
 
-        assert result.signature_service == signature_service
-        assert result.client_id == sentinel.google_client_id
-        assert result.client_secret == sentinel.google_client_secret
-        assert result.redirect_uri == "http://localhost/ui/api/login_callback"
+        assert result._signature_service == signature_service
+        assert result._client_id == sentinel.google_client_id
+        assert result._client_secret == sentinel.google_client_secret
+        assert result._redirect_uri == "http://localhost/ui/api/login_callback"
