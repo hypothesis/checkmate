@@ -3,11 +3,14 @@ from urllib.parse import urlunparse
 from pyramid.view import view_config
 
 from checkmate.exceptions import BadURLParameter
+from checkmate.models import Principals
 from checkmate.services import URLCheckerService
 from checkmate.url import CanonicalURL, Domain
 
 
-@view_config(route_name="analyze_url", renderer="json")
+@view_config(
+    route_name="analyze_url", renderer="json", effective_principals=[Principals.STAFF]
+)
 def analyze_url(request):
     """Detailed feedback on a URL for the admin pages."""
 

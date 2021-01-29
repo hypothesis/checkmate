@@ -7,7 +7,8 @@ from checkmate.models import Principals
 
 @view_config(
     route_name="admin_pages",
-    renderer="checkmate:templates/admin/pages.html.jinja2",
+    #renderer="checkmate:templates/admin/pages.html.jinja2",
+    renderer="checkmate:templates/ui_app_dev.html.jinja2",
     effective_principals=[Principals.STAFF],
 )
 def admin_pages(_context, _request):

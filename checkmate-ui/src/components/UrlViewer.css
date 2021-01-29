@@ -1,0 +1,50 @@
+.URLComponent {
+    font-size:1.5em;
+    border: none;
+    border-color: #ccc;
+    text-align: left;
+    padding:0 2px;
+    margin:0;
+    background: white;
+    outline:none;
+}
+
+.URLComponent label {
+    font-size: 0.55em;
+    font-weight: normal;
+    color:black;
+    font-family: monospace;
+
+    border-width: 1px 0 0 5px;
+    border-style: solid;
+
+    margin-top:5px;
+    padding: 4px 0 0 4px;
+
+    width:100%;
+    display: block;
+}
+
+.URLComponent.fixed {
+    color: #767676;
+}
+
+.URLComponent.fixed label {
+    border-color: #767676;
+}
+
+.URLComponent.enabled label {
+    border-color: #1678c2;
+}
+
+
+
+.URLComponent.disabled {
+    opacity: 0.4;
+    color: black;
+}
+
+.URLComponent.disabled label {
+    border-color: #db2828;
+    border-style: dashed;
+}
