@@ -38,7 +38,7 @@ def login_callback(_context, request):
 
     google_auth = request.find_service(GoogleAuthService)
     try:
-        user, credentials = google_auth.exchange_auth_code(request.url)
+        user, _credentials = google_auth.exchange_auth_code(request.url)
 
     except UserNotAuthenticated as err:
         # Looks like the user isn't supposed to be here, but we need to give
@@ -47,7 +47,7 @@ def login_callback(_context, request):
         return HTTPFound(location=request.route_url("admin_login_failure"))
 
     # This doesn't power authentication, just stores useful things around
-    request.session.update({"user": user, "credentials": credentials})
+    request.session.update({"user": user})
 
     return HTTPFound(
         location=request.route_url("admin_pages"),
