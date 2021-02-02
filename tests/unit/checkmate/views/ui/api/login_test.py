@@ -48,16 +48,12 @@ class TestLoginCallback:
     ):
         session["some_noise"] = "which_should_be_cleared_out"
         user = {"email": "staff@hypothes.is", "user_other": "user_value"}
-        credentials = {"credentials": "cred_value"}
 
-        google_auth_service.exchange_auth_code.return_value = user, credentials
+        google_auth_service.exchange_auth_code.return_value = user, sentinel.credentials
 
         response = login_callback(sentinel.context, pyramid_request)
 
-        assert session == {
-            "user": user,
-            "credentials": credentials,
-        }
+        assert session == {"user": user}
         assert response.location == "http://localhost/ui/admin"
         auth_policy.remember.assert_called_once_with(
             pyramid_request, "staff@hypothes.is"
