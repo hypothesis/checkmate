@@ -5,8 +5,6 @@ from pyramid.authentication import SessionAuthenticationPolicy
 
 from checkmate.authentication import CascadingAuthenticationPolicy
 
-# pylint: disable=protected-access
-
 
 class TestCascadingAuthenticationPolicy:
     def test_it_requires_some_policies(self):
@@ -50,6 +48,7 @@ class TestCascadingAuthenticationPolicy:
     def test_method_pass_through(self, method, args, kwargs, policy):
         result = getattr(policy, method)(*args, **kwargs)
 
+        # pylint: disable=protected-access
         # We should use effective_policy here, but it messes up the counts
         proxied_method = getattr(policy._sub_policies[0], method)
         assert result == proxied_method.return_value
