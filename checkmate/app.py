@@ -3,6 +3,11 @@ import os
 
 import pyramid.config
 import pyramid_tm
+from pyramid.authentication import SessionAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
+from pyramid.session import SignedCookieSessionFactory
+
+from checkmate.models import Principals
 
 
 class CheckmateConfigurator:
@@ -26,6 +31,8 @@ class CheckmateConfigurator:
             raise ValueError(f"Param {param_name} must be provided.")
 
         self.config.add_settings({param_name: value})
+
+        return value
 
     def _configure_checkmate(self, config):
         if self.celery_worker:
@@ -85,13 +92,27 @@ class CheckmateConfigurator:
 
         config.include("h_pyramid_sentry")
 
-    def _configure_authentication(self, _config):
+    def _configure_authentication(self, config):
         # This is used here, but also by the Signature service
-        self.add_setting_from_env("checkmate_secret")
+        checkmate_secret = self.add_setting_from_env("checkmate_secret")
 
         # Add values expected by the Google Auth service
         self.add_setting_from_env("google_client_id")
         self.add_setting_from_env("google_client_secret")
+
+        # Setup a cookie based session to store our authentication details in
+        session_factory = SignedCookieSessionFactory(
+            checkmate_secret,
+            # Forward compatibility with Pyramid 2.0 defaults
+            serializer=pyramid.session.JSONSerializer(),
+        )
+        config.set_session_factory(session_factory)
+
+        config.set_authentication_policy(
+            SessionAuthenticationPolicy(callback=Principals.from_user_id)
+        )
+        # We don't use ACLs, but pyramid needs an authorization policy anyway
+        config.set_authorization_policy(ACLAuthorizationPolicy())
 
 
 def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover

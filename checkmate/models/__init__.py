@@ -4,6 +4,7 @@ from checkmate.models.db.allow_rule import AllowRule
 from checkmate.models.db.custom_rule import CustomRule
 from checkmate.models.db.url_haus_rule import URLHausRule
 from checkmate.models.detection import Detection
+from checkmate.models.principals import Principals
 from checkmate.models.reason import Reason, Severity
 from checkmate.models.source import Source
 
