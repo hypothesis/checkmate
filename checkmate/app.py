@@ -23,6 +23,12 @@ class CheckmateConfigurator:
 
         self._configure_checkmate(config)
 
+    @property
+    def is_dev(self):
+        """Get whether we are running in Dev."""
+
+        return bool(self.config.registry.settings.get("dev"))
+
     def add_setting_from_env(self, param_name):
         value = self.config.registry.settings.get(param_name) or os.environ.get(
             param_name.upper()
@@ -103,6 +109,9 @@ class CheckmateConfigurator:
         # Setup a cookie based session to store our authentication details in
         session_factory = SignedCookieSessionFactory(
             checkmate_secret,
+            # Lock down the cookie as much as we can
+            httponly=True,
+            secure=not self.is_dev,
             # Forward compatibility with Pyramid 2.0 defaults
             serializer=pyramid.session.JSONSerializer(),
         )
