@@ -83,6 +83,19 @@ class TestCheckmateConfigurator:
         config.scan.assert_not_called()
 
     @pytest.mark.usefixtures("with_clear_environ")
+    def test_load_api_keys_empty(self, config):
+        # pylint: disable=protected-access
+        api_keys = CheckmateConfigurator._get_api_keys_from_env()
+        assert list(api_keys) == []
+
+    def test_load_api_keys(self, monkeypatch):
+        # pylint: disable=protected-access
+        monkeypatch.setenv("CHECKMATE_API_KEY_USER_1", "api-key")
+        api_keys = CheckmateConfigurator._get_api_keys_from_env()
+
+        assert list(api_keys) == [("api-key", "user_1")]
+
+    @pytest.mark.usefixtures("with_clear_environ")
     @pytest.mark.parametrize("setting", list(CELERY_SETTINGS.keys()))
     def test_it_notices_missing_celery_settings(self, config, setting):
         config.registry.settings.update(CELERY_SETTINGS)

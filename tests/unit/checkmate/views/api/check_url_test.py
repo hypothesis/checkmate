@@ -67,7 +67,9 @@ class TestURLCheck:
         with pytest.raises(BadURLParameter):
             check_url(request)
 
-    def test_unauthorized_check_url(self, make_request, url_checker_service):
+    def test_it_errors_if_the_request_is_unauthorized(
+        self, make_request, url_checker_service
+    ):
         request = make_request("/api/check", {"url": "http://example.com"})
         response = check_url_unauthorized(request)
 
