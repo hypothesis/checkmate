@@ -4,12 +4,10 @@ import os
 
 import pyramid.config
 import pyramid_tm
-from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import SignedCookieSessionFactory
 
-from checkmate.authentication import APIHTTPAuth, CascadingAuthenticationPolicy
-from checkmate.models import Principals
+from checkmate.authentication import AuthenticationPolicy
 
 logger = logging.getLogger(__name__)
 
@@ -122,14 +120,7 @@ class CheckmateConfigurator:
         )
         config.set_session_factory(session_factory)
 
-        config.set_authentication_policy(
-            CascadingAuthenticationPolicy(
-                sub_policies=[
-                    SessionAuthenticationPolicy(callback=Principals.from_user_id),
-                    APIHTTPAuth(check=APIHTTPAuth.check_callback),
-                ]
-            ),
-        )
+        config.set_authentication_policy(AuthenticationPolicy())
         # We don't use ACLs, but pyramid needs an authorization policy anyway
         config.set_authorization_policy(ACLAuthorizationPolicy())
 
