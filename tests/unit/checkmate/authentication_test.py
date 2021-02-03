@@ -1,7 +1,11 @@
-from unittest.mock import call, create_autospec
+from unittest.mock import call, create_autospec, sentinel
 
 import pytest
-from pyramid.authentication import SessionAuthenticationPolicy
+from pyramid.authentication import (
+    BasicAuthAuthenticationPolicy,
+    RemoteUserAuthenticationPolicy,
+    SessionAuthenticationPolicy,
+)
 
 from checkmate.authentication import CascadingAuthenticationPolicy
 
@@ -36,17 +40,16 @@ class TestCascadingAuthenticationPolicy:
         assert policy.effective_policy(pyramid_request) == sub_policies[1]
 
     @pytest.mark.parametrize(
-        "method,args,kwargs",
+        "method,args",
         (
-            ("authenticated_userid", ["request"], {}),
-            ("unauthenticated_userid", ["request"], {}),
-            ("effective_principals", ["request"], {}),
-            ("remember", ["request", "userid"], {"k": "v"}),
-            ("forget", ["request"], {}),
+            ("authenticated_userid", ["request"]),
+            ("unauthenticated_userid", ["request"]),
+            ("effective_principals", ["request"]),
+            ("forget", ["request"]),
         ),
     )
-    def test_method_pass_through(self, method, args, kwargs, policy):
-        result = getattr(policy, method)(*args, **kwargs)
+    def test_method_pass_through(self, method, args, policy):
+        result = getattr(policy, method)(*args)
 
         # pylint: disable=protected-access
         # We should use effective_policy here, but it messes up the counts
@@ -54,11 +57,36 @@ class TestCascadingAuthenticationPolicy:
         assert result == proxied_method.return_value
 
         if method == "authenticated_userid":
-            proxied_method.assert_has_calls(
-                [call(*args, **kwargs), call(*args, **kwargs)]
-            )
+            proxied_method.assert_has_calls([call(*args), call(*args)])
         else:
-            proxied_method.assert_called_once_with(*args, **kwargs)
+            proxied_method.assert_called_once_with(*args)
+
+    @pytest.mark.parametrize("sub_policy_index", (0, 1))
+    def test_remember_picks_a_policy(self, policy, sub_policy_index):
+        # pylint: disable=protected-access
+        sub_policy = policy._sub_policies[sub_policy_index]
+        kwargs = {"a": 1, "b": 2}
+
+        result = policy.remember(
+            sentinel.request, sentinel.userid, iface=sub_policy.__class__, **kwargs
+        )
+
+        assert result == sub_policy.remember.return_value
+        sub_policy.remember.assert_called_once_with(
+            sentinel.request, sentinel.userid, **kwargs
+        )
+
+    @pytest.mark.parametrize(
+        "iface,exception",
+        (
+            (None, TypeError),
+            # Our setup doesn't have one of these and should raise
+            (RemoteUserAuthenticationPolicy, KeyError),
+        ),
+    )
+    def test_remember_raises_with_bad_policy_settings(self, policy, iface, exception):
+        with pytest.raises(exception):
+            policy.remember(sentinel.request, sentinel.userid, iface=iface)
 
     @pytest.fixture
     def policy(self, sub_policies):
@@ -66,15 +94,14 @@ class TestCascadingAuthenticationPolicy:
 
     @pytest.fixture
     def sub_policies(self):
-        sub_policies = [self.get_auth_policy(), self.get_auth_policy()]
+        sub_policies = [
+            create_autospec(SessionAuthenticationPolicy, instance=True, spec_set=True),
+            create_autospec(
+                BasicAuthAuthenticationPolicy, instance=True, spec_set=True
+            ),
+        ]
 
         for pos, policy in enumerate(sub_policies):
             policy.authenticated_userid.return_value = f"user_{pos}"
 
         return sub_policies
-
-    def get_auth_policy(self):
-        # Any policy will do, as they should have the same interface
-        return create_autospec(
-            SessionAuthenticationPolicy, instance=True, spec_set=True
-        )

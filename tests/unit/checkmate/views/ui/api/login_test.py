@@ -4,6 +4,7 @@ import pytest
 from h_matchers import Any
 from pyramid.authentication import SessionAuthenticationPolicy
 
+from checkmate.authentication import GoogleAuthenticationPolicy
 from checkmate.exceptions import UserNotAuthenticated
 from checkmate.views.ui.api.login import login, login_callback, logout
 
@@ -56,7 +57,7 @@ class TestLoginCallback:
         assert session == {"user": user}
         assert response.location == "http://localhost/ui/admin"
         auth_policy.remember.assert_called_once_with(
-            pyramid_request, "staff@hypothes.is"
+            pyramid_request, "staff@hypothes.is", iface=GoogleAuthenticationPolicy
         )
         assert "Remember-Header" in list(response.headers)
 
