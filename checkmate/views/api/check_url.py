@@ -4,13 +4,13 @@ from pyramid.httpexceptions import HTTPNoContent, HTTPUnauthorized
 from pyramid.security import forget
 from pyramid.view import view_config
 
-from checkmate.auth import APIAuthenticated
 from checkmate.exceptions import BadURLParameter, MalformedURL
+from checkmate.models import Principals
 from checkmate.services import SecureLinkService, URLCheckerService
 
 
 @view_config(
-    route_name="check_url", renderer="json", effective_principals=APIAuthenticated
+    route_name="check_url", renderer="json", effective_principals=Principals.API
 )
 def check_url(request):
     """Check a given URL for any reasons we might want to block it."""
