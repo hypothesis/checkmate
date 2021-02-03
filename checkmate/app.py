@@ -4,16 +4,12 @@ import os
 
 import pyramid.config
 import pyramid_tm
-<<<<<<< HEAD
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import SignedCookieSessionFactory
 
-from checkmate.authentication import CascadingAuthenticationPolicy
+from checkmate.authentication import APIHTTPAuth, CascadingAuthenticationPolicy
 from checkmate.models import Principals
-from pyramid.authorization import ACLAuthorizationPolicy
-
-from checkmate.auth import APIHTTPAuth
 
 logger = logging.getLogger(__name__)
 
@@ -27,9 +23,8 @@ class CheckmateConfigurator:
         self._configure_db(config)
         self._configure_sentry(config)
         if not celery_worker:
+            self._configure_api_keys(config)
             self._configure_authentication(config)
-            self._configure_auth(config)
-            self._configure_api_auth(config)
 
         self._configure_checkmate(config)
 
@@ -130,7 +125,8 @@ class CheckmateConfigurator:
         config.set_authentication_policy(
             CascadingAuthenticationPolicy(
                 sub_policies=[
-                    SessionAuthenticationPolicy(callback=Principals.from_user_id)
+                    SessionAuthenticationPolicy(callback=Principals.from_user_id),
+                    APIHTTPAuth(check=APIHTTPAuth.check_callback),
                 ]
             ),
         )
@@ -138,7 +134,7 @@ class CheckmateConfigurator:
         config.set_authorization_policy(ACLAuthorizationPolicy())
 
     @classmethod
-    def _configure_api_auth(cls, config):
+    def _configure_api_keys(cls, config):
         api_keys = {}
         for envvar_name, envvar_value in os.environ.items():
             if not envvar_name.startswith("CHECKMATE_API_KEY_"):
@@ -150,13 +146,6 @@ class CheckmateConfigurator:
             logger.info("Loaded api_key value for %s", username)
 
         config.add_settings({"api_keys": api_keys})
-
-    @classmethod
-    def _configure_auth(cls, config):
-        # TODO LEAVING THIS HERE UNTIL CASCADE POLICY is merged
-        authn_policy = APIHTTPAuth(check=APIHTTPAuth.check_callback)
-        config.set_authorization_policy(ACLAuthorizationPolicy())
-        config.set_authentication_policy(authn_policy)
 
 
 def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover

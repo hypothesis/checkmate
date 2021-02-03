@@ -6,21 +6,22 @@ import pyramid.config
 import pytest
 
 from checkmate.app import CheckmateConfigurator
-from checkmate.auth import APIAuthenticated, APIHTTPAuth
+from checkmate.authentication import APIHTTPAuth
+from checkmate.models import Principals
 
 
 class TestAPIAuth:
     @mock.patch.dict(os.environ, {})
     def test_load_keys_empty(self):
         config = pyramid.config.Configurator(settings={})
-        CheckmateConfigurator._configure_api_auth(config)
+        CheckmateConfigurator._configure_api_keys(config)
         settings = config.get_settings()
         assert settings["api_keys"] == {}
 
     @mock.patch.dict(os.environ, {"CHECKMATE_API_KEY_USER_1": "api-key"})
     def test_load_keys(self):
         config = pyramid.config.Configurator(settings={})
-        CheckmateConfigurator._configure_api_auth(config)
+        CheckmateConfigurator._configure_api_keys(config)
         settings = config.get_settings()
 
         assert settings["api_keys"] == {"api-key": "user_1"}
@@ -35,7 +36,7 @@ class TestAPIAuth:
         pyramid_request.registry.settings["api_keys"] = {"api-key": "user_1"}
         principals = APIHTTPAuth.check_callback("api-key", "password", pyramid_request)
 
-        assert principals == [APIAuthenticated]
+        assert principals == [Principals.API]
 
     def test_get_userid_no_credentials(
         self, extract_http_basic_credentials, auth, pyramid_request
@@ -74,4 +75,4 @@ def auth():
 
 @pytest.fixture
 def extract_http_basic_credentials(patch):
-    return patch("checkmate.auth.extract_http_basic_credentials")
+    return patch("checkmate.authentication.extract_http_basic_credentials")

@@ -16,7 +16,7 @@ def db_engine():
     )
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def pyramid_settings():
     return {
         "database_url": os.environ.get(
