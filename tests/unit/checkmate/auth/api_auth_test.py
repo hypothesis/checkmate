@@ -67,12 +67,10 @@ class TestAPIAuth:
 
         assert userid == "user_1"
 
+    @pytest.fixture
+    def auth(self):
+        return APIHTTPAuth()
 
-@pytest.fixture
-def auth():
-    return APIHTTPAuth(check=None)
-
-
-@pytest.fixture
-def extract_http_basic_credentials(patch):
-    return patch("checkmate.authentication.extract_http_basic_credentials")
+    @pytest.fixture
+    def extract_http_basic_credentials(self, patch):
+        return patch("checkmate.authentication.extract_http_basic_credentials")
