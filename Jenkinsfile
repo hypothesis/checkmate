@@ -32,7 +32,7 @@ node {
         try {
             testApp(image: img, runArgs: "${runArgs} -e TEST_DATABASE_URL=${databaseUrl(postgresContainer)}") {
                 /* Install dependencies required to run the tox env */
-                sh "apk add build-base postgresql-dev python3-dev libffi-dev"
+                sh "apk add build-deps postgresql-dev python3-dev"
                 sh "pip3 install -q tox>=3.8.0"
 
                 sh "cd /var/lib/hypothesis && make test"
