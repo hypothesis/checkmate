@@ -22,4 +22,6 @@ def pyramid_settings():
             "postgresql://postgres@localhost:5434/checkmate_test",
         ),
         "secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
+        "google_client_id": "google_client_id",
+        "google_client_secret": "google_client_secret",
     }

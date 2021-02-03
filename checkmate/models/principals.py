@@ -5,6 +5,7 @@ class Principals(Enum):
     """Security principals."""
 
     STAFF = "staff"
+    API = "api"
 
     @staticmethod
     def from_user_id(user_id, _request):
