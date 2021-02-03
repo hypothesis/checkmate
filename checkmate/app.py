@@ -1,6 +1,7 @@
 """The main application entrypoint module."""
 import logging
 import os
+import re
 
 import pyramid.config
 import pyramid_tm
@@ -10,6 +11,8 @@ from pyramid.session import SignedCookieSessionFactory
 from checkmate.authentication import AuthenticationPolicy
 
 logger = logging.getLogger(__name__)
+
+API_KEY_RE = re.compile(r"^CHECKMATE_API_KEY_(?P<user>.*)$")
 
 
 class CheckmateConfigurator:
@@ -21,7 +24,6 @@ class CheckmateConfigurator:
         self._configure_db(config)
         self._configure_sentry(config)
         if not celery_worker:
-            self._configure_api_keys(config)
             self._configure_authentication(config)
 
         self._configure_checkmate(config)
@@ -109,6 +111,9 @@ class CheckmateConfigurator:
         self.add_setting_from_env("google_client_id")
         self.add_setting_from_env("google_client_secret")
 
+        # API keys used by APIHTTPAuth
+        config.add_settings({"api_keys": dict(self._get_api_keys_from_env())})
+
         # Setup a cookie based session to store our authentication details in
         session_factory = SignedCookieSessionFactory(
             checkmate_secret,
@@ -121,22 +126,18 @@ class CheckmateConfigurator:
         config.set_session_factory(session_factory)
 
         config.set_authentication_policy(AuthenticationPolicy())
+
         # We don't use ACLs, but pyramid needs an authorization policy anyway
         config.set_authorization_policy(ACLAuthorizationPolicy())
 
     @classmethod
-    def _configure_api_keys(cls, config):
-        api_keys = {}
-        for envvar_name, envvar_value in os.environ.items():
-            if not envvar_name.startswith("CHECKMATE_API_KEY_"):
-                continue
-
-            username = envvar_name.split("CHECKMATE_API_KEY_")[1].lower()
-
-            api_keys[envvar_value] = username
-            logger.info("Loaded api_key value for %s", username)
-
-        config.add_settings({"api_keys": api_keys})
+    def _get_api_keys_from_env(cls):
+        for name, api_key in os.environ.items():
+            match = API_KEY_RE.match(name)
+            if match:
+                username = match.group("user").lower()
+                logger.info("Loaded api_key value for %s", username)
+                yield api_key, username
 
 
 def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover
