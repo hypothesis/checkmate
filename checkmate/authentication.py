@@ -2,6 +2,7 @@ from functools import lru_cache
 
 from pyramid.authentication import (
     BasicAuthAuthenticationPolicy,
+    SessionAuthenticationPolicy,
     extract_http_basic_credentials,
 )
 
@@ -9,7 +10,13 @@ from checkmate.models import Principals
 
 
 class CascadingAuthenticationPolicy:
-    """Top-level authentication policy that delegates to sub-policies."""
+    """Top-level authentication policy that delegates to sub-policies.
+
+    It's important that the policies you use are mutually exclusive. It should
+    not be possible to be legitimately logged into two different policies at
+    once. If you require this, then you should merge those two non-exclusive
+    policies into your own custom class.
+    """
 
     def __init__(self, sub_policies):
         """Create a policy which delegates to the first policy with a user.
@@ -31,11 +38,38 @@ class CascadingAuthenticationPolicy:
     def effective_principals(self, request):
         return self.effective_policy(request).effective_principals(request)
 
-    def remember(self, request, userid, **kw):
-        return self.effective_policy(request).remember(request, userid, **kw)
+    def remember(self, request, userid, iface=None, **kw):
+        """Remember the user for future logins.
+
+        As the correct policy cannot be determined by inspecting the user when
+        it comes to storing a new one, we need to be told which policy to use.
+        This takes inspiration from Pyramid services and requires you to pass
+        the classname of the policy to use.
+
+        :param request: Pyramid request to use
+        :param userid: User id to remember
+        :param iface: The class of the policy to use to store it
+        :param kw: Arbitrary arguments to pass to underlying policies
+        """
+        return self._get_specific_policy(iface).remember(request, userid, **kw)
 
     def forget(self, request):
         return self.effective_policy(request).forget(request)
+
+    def _get_specific_policy(self, iface=None):
+        if iface is None:
+            raise TypeError(
+                "A policy class is required to determine which policy "
+                "should remember the user details"
+            )
+
+        for policy in self._sub_policies:
+            if isinstance(policy, iface):
+                return policy
+
+        raise KeyError(
+            f"Could not find a policy matching the requested interface: {iface}"
+        )
 
     @lru_cache(1)
     def effective_policy(self, request):
@@ -52,9 +86,30 @@ class CascadingAuthenticationPolicy:
         return self._sub_policies[-1]
 
 
+class AuthenticationPolicy(CascadingAuthenticationPolicy):
+    """The overall authentication policy for Checkmate."""
+
+    def __init__(self):
+        super().__init__(
+            sub_policies=[
+                GoogleAuthenticationPolicy(),
+                APIHTTPAuth(),
+            ]
+        )
+
+
+class GoogleAuthenticationPolicy(SessionAuthenticationPolicy):
+    """Google OAuth2 based policy used for admin pages."""
+
+    def __init__(self):
+        super().__init__(callback=Principals.from_user_id)
+
+
 class APIHTTPAuth(BasicAuthAuthenticationPolicy):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    """Basic HTTP auth based API key used for API calls."""
+
+    def __init__(self):
+        super().__init__(check=APIHTTPAuth.check_callback)
 
     def unauthenticated_userid(self, request):
         """Overridden to return the api username.
