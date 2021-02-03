@@ -90,12 +90,7 @@ class AuthenticationPolicy(CascadingAuthenticationPolicy):
     """The overall authentication policy for Checkmate."""
 
     def __init__(self):
-        super().__init__(
-            sub_policies=[
-                GoogleAuthenticationPolicy(),
-                APIHTTPAuth(),
-            ]
-        )
+        super().__init__(sub_policies=[APIHTTPAuth(), GoogleAuthenticationPolicy()])
 
 
 class GoogleAuthenticationPolicy(SessionAuthenticationPolicy):
