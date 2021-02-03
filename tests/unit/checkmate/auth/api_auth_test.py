@@ -4,6 +4,7 @@ from unittest.mock import Mock
 
 import pyramid.config
 import pytest
+from pyramid.authentication import HTTPBasicCredentials
 
 from checkmate.app import CheckmateConfigurator
 from checkmate.authentication import APIHTTPAuth
@@ -11,21 +12,6 @@ from checkmate.models import Principals
 
 
 class TestAPIAuth:
-    @mock.patch.dict(os.environ, {})
-    def test_load_keys_empty(self):
-        config = pyramid.config.Configurator(settings={})
-        CheckmateConfigurator._configure_api_keys(config)
-        settings = config.get_settings()
-        assert settings["api_keys"] == {}
-
-    @mock.patch.dict(os.environ, {"CHECKMATE_API_KEY_USER_1": "api-key"})
-    def test_load_keys(self):
-        config = pyramid.config.Configurator(settings={})
-        CheckmateConfigurator._configure_api_keys(config)
-        settings = config.get_settings()
-
-        assert settings["api_keys"] == {"api-key": "user_1"}
-
     def test_auth_callback_missing(self, pyramid_request):
         pyramid_request.registry.settings["api_keys"] = {}
         principals = APIHTTPAuth.check_callback("api_key", "password", pyramid_request)
@@ -57,10 +43,11 @@ class TestAPIAuth:
         assert userid is None
 
     def test_get_userid_credentials(
-        self, extract_http_basic_credentials, auth, pyramid_request
+        self, auth, extract_http_basic_credentials, pyramid_request
     ):
         # HTTP auth username is the api key itself
-        extract_http_basic_credentials.return_value = Mock(username="api-key")
+        credentials = HTTPBasicCredentials("api-key", None)
+        extract_http_basic_credentials.return_value = credentials
         pyramid_request.registry.settings["api_keys"] = {"api-key": "user_1"}
 
         userid = auth.unauthenticated_userid(pyramid_request)
