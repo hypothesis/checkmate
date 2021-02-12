@@ -1,17 +1,14 @@
 """URL checking."""
 
-from pyramid.httpexceptions import HTTPNoContent, HTTPUnauthorized
-from pyramid.security import forget
+from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
 from checkmate.exceptions import BadURLParameter, MalformedURL
-from checkmate.models import Principals
+from checkmate.models import Permissions
 from checkmate.services import SecureLinkService, URLCheckerService
 
 
-@view_config(
-    route_name="check_url", renderer="json", effective_principals=Principals.API
-)
+@view_config(route_name="check_url", renderer="json", permission=Permissions.CHECK_URL)
 def check_url(request):
     """Check a given URL for any reasons we might want to block it."""
 
@@ -59,10 +56,3 @@ def check_url(request):
             )
         },
     }
-
-
-@view_config(route_name="check_url")
-def check_url_unauthorized(request):
-    response = HTTPUnauthorized()
-    response.headers.update(forget(request))
-    return response
