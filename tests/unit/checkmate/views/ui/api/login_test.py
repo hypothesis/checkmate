@@ -4,7 +4,7 @@ import pytest
 from h_matchers import Any
 from pyramid.authentication import SessionAuthenticationPolicy
 
-from checkmate.authentication import GoogleAuthenticationPolicy
+from checkmate.auth import GoogleAuthenticationPolicy
 from checkmate.exceptions import UserNotAuthenticated
 from checkmate.views.ui.api.login import login, login_callback, logout
 

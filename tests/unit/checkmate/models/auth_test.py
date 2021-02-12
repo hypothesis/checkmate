@@ -2,7 +2,7 @@ from unittest.mock import sentinel
 
 import pytest
 
-from checkmate.models.principals import Principals
+from checkmate.models.auth import Principals
 
 
 class TestPrincipals:
