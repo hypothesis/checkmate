@@ -6,7 +6,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import forget, remember
 from pyramid.view import view_config
 
-from checkmate.authentication import GoogleAuthenticationPolicy
+from checkmate.auth import GoogleAuthenticationPolicy
 from checkmate.exceptions import UserNotAuthenticated
 from checkmate.services import GoogleAuthService
 

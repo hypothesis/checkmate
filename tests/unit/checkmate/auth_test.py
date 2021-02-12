@@ -6,8 +6,10 @@ from pyramid.authentication import (
     RemoteUserAuthenticationPolicy,
     SessionAuthenticationPolicy,
 )
+from pyramid.security import Allowed, Authenticated, Denied, Everyone
 
-from checkmate.authentication import CascadingAuthenticationPolicy
+from checkmate.auth import AuthorizationPolicy, CascadingAuthenticationPolicy
+from checkmate.models import Permissions, Principals
 
 
 class TestCascadingAuthenticationPolicy:
@@ -105,3 +107,27 @@ class TestCascadingAuthenticationPolicy:
             policy.authenticated_userid.return_value = f"user_{pos}"
 
         return sub_policies
+
+
+class TestAuthorizationPolicy:
+    @pytest.mark.parametrize(
+        "permission,principals,expected_result",
+        [
+            # API-authenticated requests get the CHECK_URL permission.
+            (
+                Permissions.CHECK_URL,
+                [Everyone, Authenticated, "dev", Principals.API],
+                Allowed,
+            ),
+            # Other requests don't get the check_url permission.
+            (Permissions.CHECK_URL, [Everyone, Authenticated], Denied),
+        ],
+    )
+    def test_it(self, policy, permission, principals, expected_result):
+        result = policy.permits(sentinel.contest, principals, permission)
+
+        assert isinstance(result, expected_result)
+
+    @pytest.fixture
+    def policy(self):
+        return AuthorizationPolicy()

@@ -7,7 +7,7 @@ import pytest
 from pyramid.authentication import HTTPBasicCredentials
 
 from checkmate.app import CheckmateConfigurator
-from checkmate.authentication import APIHTTPAuth
+from checkmate.auth import APIHTTPAuth
 from checkmate.models import Principals
 
 
@@ -60,4 +60,4 @@ class TestAPIAuth:
 
     @pytest.fixture
     def extract_http_basic_credentials(self, patch):
-        return patch("checkmate.authentication.extract_http_basic_credentials")
+        return patch("checkmate.auth.extract_http_basic_credentials")
