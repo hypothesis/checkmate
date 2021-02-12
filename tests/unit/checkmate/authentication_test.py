@@ -1,107 +1,57 @@
-from unittest.mock import call, create_autospec, sentinel
-
 import pytest
-from pyramid.authentication import (
-    BasicAuthAuthenticationPolicy,
-    RemoteUserAuthenticationPolicy,
-    SessionAuthenticationPolicy,
-)
+from pyramid.authentication import HTTPBasicCredentials
 
-from checkmate.authentication import CascadingAuthenticationPolicy
+from checkmate.auth import APIHTTPAuth
+from checkmate.models import Principals
 
 
-class TestCascadingAuthenticationPolicy:
-    def test_it_requires_some_policies(self):
-        with pytest.raises(ValueError):
-            CascadingAuthenticationPolicy([])
+class TestAPIAuth:
+    def test_auth_callback_missing(self, pyramid_request):
+        pyramid_request.registry.settings["api_keys"] = {}
+        principals = APIHTTPAuth.check_callback("api_key", "password", pyramid_request)
 
-    def test_effective_policy_reads_the_first(
-        self, policy, sub_policies, pyramid_request
+        assert principals is None
+
+    def test_auth_callback_existing(self, pyramid_request):
+        pyramid_request.registry.settings["api_keys"] = {"api-key": "user_1"}
+        principals = APIHTTPAuth.check_callback("api-key", "password", pyramid_request)
+
+        assert principals == [Principals.API]
+
+    def test_get_userid_no_credentials(
+        self, extract_http_basic_credentials, auth, pyramid_request
     ):
-        assert policy.effective_policy(pyramid_request) == sub_policies[0]
+        extract_http_basic_credentials.return_value = None
+        userid = auth.unauthenticated_userid(pyramid_request)
 
-        sub_policies[0].authenticated_userid.assert_called_once_with(pyramid_request)
-        sub_policies[1].authenticated_userid.assert_not_called()
+        assert userid is None
 
-    def test_effective_policy_cascades(self, policy, sub_policies, pyramid_request):
-        sub_policies[0].authenticated_userid.return_value = None
-
-        assert policy.effective_policy(pyramid_request) == sub_policies[1]
-
-        sub_policies[0].authenticated_userid.assert_called_once_with(pyramid_request)
-        sub_policies[1].authenticated_userid.assert_called_once_with(pyramid_request)
-
-    def test_effective_policy_returns_the_last_if_none_apply(
-        self, policy, sub_policies, pyramid_request
+    def test_get_userid_unknown_credentials(
+        self, extract_http_basic_credentials, auth, pyramid_request
     ):
-        sub_policies[0].authenticated_userid.return_value = None
-        sub_policies[1].authenticated_userid.return_value = None
+        extract_http_basic_credentials.return_value = None
+        pyramid_request.registry.settings["api_keys"] = {}
 
-        assert policy.effective_policy(pyramid_request) == sub_policies[1]
+        userid = auth.unauthenticated_userid(pyramid_request)
 
-    @pytest.mark.parametrize(
-        "method,args",
-        (
-            ("authenticated_userid", ["request"]),
-            ("unauthenticated_userid", ["request"]),
-            ("effective_principals", ["request"]),
-            ("forget", ["request"]),
-        ),
-    )
-    def test_method_pass_through(self, method, args, policy):
-        result = getattr(policy, method)(*args)
+        assert userid is None
 
-        # pylint: disable=protected-access
-        # We should use effective_policy here, but it messes up the counts
-        proxied_method = getattr(policy._sub_policies[0], method)
-        assert result == proxied_method.return_value
+    def test_get_userid_credentials(
+        self, auth, extract_http_basic_credentials, pyramid_request
+    ):
+        # HTTP auth username is the api key itself
+        credentials = HTTPBasicCredentials("api-key", None)
+        extract_http_basic_credentials.return_value = credentials
+        pyramid_request.registry.settings["api_keys"] = {"api-key": "user_1"}
 
-        if method == "authenticated_userid":
-            proxied_method.assert_has_calls([call(*args), call(*args)])
-        else:
-            proxied_method.assert_called_once_with(*args)
+        userid = auth.unauthenticated_userid(pyramid_request)
 
-    @pytest.mark.parametrize("sub_policy_index", (0, 1))
-    def test_remember_picks_a_policy(self, policy, sub_policy_index):
-        # pylint: disable=protected-access
-        sub_policy = policy._sub_policies[sub_policy_index]
-        kwargs = {"a": 1, "b": 2}
-
-        result = policy.remember(
-            sentinel.request, sentinel.userid, iface=sub_policy.__class__, **kwargs
-        )
-
-        assert result == sub_policy.remember.return_value
-        sub_policy.remember.assert_called_once_with(
-            sentinel.request, sentinel.userid, **kwargs
-        )
-
-    @pytest.mark.parametrize(
-        "iface,exception",
-        (
-            (None, TypeError),
-            # Our setup doesn't have one of these and should raise
-            (RemoteUserAuthenticationPolicy, KeyError),
-        ),
-    )
-    def test_remember_raises_with_bad_policy_settings(self, policy, iface, exception):
-        with pytest.raises(exception):
-            policy.remember(sentinel.request, sentinel.userid, iface=iface)
+        assert userid == "user_1"
 
     @pytest.fixture
-    def policy(self, sub_policies):
-        return CascadingAuthenticationPolicy(sub_policies)
+    def auth(self):
+        return APIHTTPAuth()
 
     @pytest.fixture
-    def sub_policies(self):
-        sub_policies = [
-            create_autospec(SessionAuthenticationPolicy, instance=True, spec_set=True),
-            create_autospec(
-                BasicAuthAuthenticationPolicy, instance=True, spec_set=True
-            ),
-        ]
-
-        for pos, policy in enumerate(sub_policies):
-            policy.authenticated_userid.return_value = f"user_{pos}"
-
-        return sub_policies
+    def extract_http_basic_credentials(self, patch):
+        return patch("checkmate.auth.extract_http_basic_credentials")

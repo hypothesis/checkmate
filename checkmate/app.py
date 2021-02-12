@@ -5,10 +5,9 @@ import re
 
 import pyramid.config
 import pyramid_tm
-from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import SignedCookieSessionFactory
 
-from checkmate.authentication import AuthenticationPolicy
+from checkmate.auth import AuthenticationPolicy, AuthorizationPolicy
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,7 @@ class CheckmateConfigurator:
         self._configure_db(config)
         self._configure_sentry(config)
         if not celery_worker:
-            self._configure_authentication(config)
+            self._configure_auth(config)
 
         self._configure_checkmate(config)
 
@@ -103,7 +102,7 @@ class CheckmateConfigurator:
 
         config.include("h_pyramid_sentry")
 
-    def _configure_authentication(self, config):
+    def _configure_auth(self, config):
         # This is used here, but also by the Signature service
         checkmate_secret = self.add_setting_from_env("checkmate_secret")
 
@@ -126,9 +125,7 @@ class CheckmateConfigurator:
         config.set_session_factory(session_factory)
 
         config.set_authentication_policy(AuthenticationPolicy())
-
-        # We don't use ACLs, but pyramid needs an authorization policy anyway
-        config.set_authorization_policy(ACLAuthorizationPolicy())
+        config.set_authorization_policy(AuthorizationPolicy())
 
     @classmethod
     def _get_api_keys_from_env(cls):

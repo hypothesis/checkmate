@@ -1,3 +1,5 @@
+"""Pyramid authentication-related models."""
+
 from enum import Enum
 
 
@@ -17,3 +19,9 @@ class Principals(Enum):
             return (Principals.STAFF,)
 
         return None
+
+
+class Permissions(Enum):
+    """Security permissions."""
+
+    CHECK_URL = "check_url"

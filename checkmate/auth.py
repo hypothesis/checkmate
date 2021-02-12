@@ -5,8 +5,9 @@ from pyramid.authentication import (
     SessionAuthenticationPolicy,
     extract_http_basic_credentials,
 )
+from pyramid.security import Allowed, Denied
 
-from checkmate.models import Principals
+from checkmate.models import Permissions, Principals
 
 
 class CascadingAuthenticationPolicy:
@@ -138,3 +139,14 @@ class APIHTTPAuth(BasicAuthAuthenticationPolicy):
             return [Principals.API]
 
         return None
+
+
+class AuthorizationPolicy:
+    """Checkmate's custom Pyramid authorization policy."""
+
+    @staticmethod
+    def permits(_context, principals, permission):
+        if permission == Permissions.CHECK_URL and Principals.API in principals:
+            return Allowed("allowed")
+
+        return Denied("denied")
