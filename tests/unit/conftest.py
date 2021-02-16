@@ -6,6 +6,7 @@ from unittest.mock import MagicMock
 from urllib.parse import urlencode
 
 import httpretty
+import sqlalchemy
 from pyramid import testing
 from pyramid.request import Request, apply_request_extensions
 from pyramid.testing import DummySession
@@ -92,7 +93,17 @@ def db_session(db_engine):
     """Get a standalone database session for preparing database state."""
 
     conn = db_engine.connect()
+    trans = conn.begin()
     session = SESSION_MAKER(bind=conn)
+    session.begin_nested()  # pylint:disable=no-member
+
+    @sqlalchemy.event.listens_for(session, "after_transaction_end")
+    def restart_savepoint(session, transaction):  # pylint:disable=unused-variable
+        if (
+            transaction.nested
+            and not transaction._parent.nested  # pylint: disable=protected-access
+        ):
+            session.begin_nested()
 
     factories.set_sqlalchemy_session(session, persistence="commit")
 
@@ -101,6 +112,8 @@ def db_session(db_engine):
     finally:
         factories.clear_sqlalchemy_session()
         session.close()  # pylint:disable=no-member
+        trans.rollback()
+        conn.close()
 
 
 @pytest.fixture(autouse=True)
