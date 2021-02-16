@@ -47,7 +47,12 @@ BASE = declarative_base(
 SESSION = sessionmaker()
 
 
-def create_engine(database_url, drop=False):  # pragma: no cover
+def create_engine(
+    database_url,
+    drop=False,
+    pool_size=5,
+    max_overflow=10,
+):  # pragma: no cover
     """Create all the database tables if they don't already exist.
 
     If `drop=True` is given then delete all existing tables first and then
@@ -56,10 +61,14 @@ def create_engine(database_url, drop=False):  # pragma: no cover
 
     :param database_url: Postgres DSN to connect to
     :param drop: Whether or not to delete existing tables
+    :param pool_size: Number of connections to keep open inside the connection pool
+    :param max_overflow: Number of connections that can be opened above and beyond `pool_size`
     :return: An SQLAlchemy engine object
     """
 
-    engine = sqlalchemy.create_engine(database_url)
+    engine = sqlalchemy.create_engine(
+        database_url, pool_size=pool_size, max_overflow=max_overflow
+    )
     if drop:
         BASE.metadata.drop_all(engine)
 
