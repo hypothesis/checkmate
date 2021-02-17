@@ -5,8 +5,10 @@ import re
 
 import pyramid.config
 import pyramid_tm
+from pyramid.events import NewRequest
 from pyramid.session import SignedCookieSessionFactory
 
+from checkmate import subscribers
 from checkmate.auth import AuthenticationPolicy, AuthorizationPolicy
 
 logger = logging.getLogger(__name__)
@@ -56,6 +58,10 @@ class CheckmateConfigurator:
             config.include("pyramid_jinja2")
             config.scan("checkmate.views")
             config.include("checkmate.routes")
+
+            self.add_setting_from_env("public_host")
+            self.add_setting_from_env("public_scheme")
+            config.add_subscriber(subscribers.set_public_server_name, NewRequest)
 
         # pyramid-sanity should be activated as late as possible
         config.include("pyramid_sanity")
