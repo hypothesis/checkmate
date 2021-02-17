@@ -21,6 +21,7 @@ cryptography==3.2.1       # via -r requirements/requirements.txt, jwt
 google-auth-oauthlib==0.4.2  # via -r requirements/requirements.txt
 google-auth==1.24.0       # via -r requirements/requirements.txt, google-auth-oauthlib
 gunicorn==20.0.4          # via -r requirements/requirements.txt
+h-matchers==1.2.10        # via -r requirements/functests.in
 h-pyramid-sentry==1.2.1   # via -r requirements/requirements.txt
 hupper==1.10.2            # via -r requirements/requirements.txt, pyramid
 idna==2.10                # via -r requirements/requirements.txt, requests
