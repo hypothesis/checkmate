@@ -15,6 +15,8 @@ APP_SETTINGS = {
     "checkmate_secret": "not_a_secret",
     "google_client_id": "some_long_hex_string",
     "google_client_secret": "another_not_secret",
+    "public_host": "localhost",
+    "public_scheme": "http",
 }
 
 

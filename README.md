@@ -78,6 +78,8 @@ Environment variables:
 |------|--------|---------|
 | `CHECKMATE_BLOCKLIST_URL`   | Where to download the blocklist online | `https://some-aws-s3.bucket/file.txt` |
 | `CHECKMATE_SECRET` | Secret used for signing URLs | `AB823F97FF2E330C1A20`
+| `PUBLIC_SCHEME` | Scheme used on the public accessible checkmate instance | `https`
+| `PUBLIC_HOST` | Host of the public accessible checkmate instance | `some-domain.com`
 
 For details of changing the blocklist see:
 

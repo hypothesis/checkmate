@@ -26,4 +26,6 @@ def pyramid_settings():
         "secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
         "google_client_id": "google_client_id",
         "google_client_secret": "google_client_secret",
+        "public_host": "localhost",
+        "public_scheme": "http",
     }

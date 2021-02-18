@@ -57,6 +57,9 @@ class CheckmateConfigurator:
             config.scan("checkmate.views")
             config.include("checkmate.routes")
 
+            self.add_setting_from_env("public_host")
+            self.add_setting_from_env("public_scheme")
+
         # pyramid-sanity should be activated as late as possible
         config.include("pyramid_sanity")
 

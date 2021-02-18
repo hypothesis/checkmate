@@ -1,7 +1,6 @@
 # pylint: disable=no-self-use
 """A place to put fixture functions that are useful application-wide."""
 import functools
-import os
 from unittest.mock import MagicMock
 from urllib.parse import urlencode
 
@@ -30,17 +29,6 @@ def autopatcher(request, target, **kwargs):
 @pytest.fixture
 def patch(request):
     return functools.partial(autopatcher, request)
-
-
-@pytest.fixture(scope="session")
-def pyramid_settings():
-    return {
-        "database_url": os.environ.get(
-            "TEST_DATABASE_URL",
-            "postgresql://postgres@localhost:5434/checkmate_test",
-        ),
-        "checkmate_secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
-    }
 
 
 @pytest.fixture

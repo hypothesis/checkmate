@@ -23,7 +23,9 @@ class TestURLCheck:
             "http://happy.example.com", allow_all=allow_all
         )
 
-    def test_a_bad_url(self, make_request, url_checker_service, secure_link_service):
+    def test_a_bad_url(
+        self, make_request, url_checker_service, secure_link_service, pyramid_settings
+    ):
         url_checker_service.check_url.return_value = (
             Detection(Reason.MALICIOUS, Source.URL_HAUS),
             Detection(Reason.MEDIA_IMAGE, Source.BLOCK_LIST),
@@ -48,7 +50,10 @@ class TestURLCheck:
         }
 
         secure_link_service.route_url.assert_called_once_with(
-            "present_block", _query={"url": bad_url, "reason": Reason.MALICIOUS.value}
+            "present_block",
+            _scheme=pyramid_settings["public_scheme"],
+            _host=pyramid_settings["public_host"],
+            _query={"url": bad_url, "reason": Reason.MALICIOUS.value},
         )
 
     def test_it_returns_an_error_for_no_url(self, make_request):
