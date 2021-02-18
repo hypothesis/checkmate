@@ -1,4 +1,4 @@
-from unittest.mock import call, create_autospec
+from unittest.mock import ANY, call, create_autospec
 
 import pytest
 from pyramid.config import Configurator
@@ -10,14 +10,19 @@ CELERY_SETTINGS = {
     "checkmate_blocklist_url": "some_url",
 }
 
-APP_SETTINGS = {
+REQUIRED_APP_SETTINGS = {
     "database_url": "app_db",
     "checkmate_secret": "not_a_secret",
     "google_client_id": "some_long_hex_string",
     "google_client_secret": "another_not_secret",
     "public_host": "localhost",
-    "public_scheme": "http",
 }
+
+OPTIONAL_APP_SETTINGS = {
+    "public_scheme": "localhost",
+}
+
+APP_SETTINGS = {**REQUIRED_APP_SETTINGS, **OPTIONAL_APP_SETTINGS}
 
 
 class TestCheckmateConfigurator:
@@ -45,13 +50,21 @@ class TestCheckmateConfigurator:
         config.scan.assert_has_calls([call("checkmate.views")])
 
     @pytest.mark.usefixtures("with_clear_environ")
-    @pytest.mark.parametrize("setting", list(APP_SETTINGS.keys()))
+    @pytest.mark.parametrize("setting", list(REQUIRED_APP_SETTINGS.keys()))
     def test_it_notices_missing_app_settings(self, config, setting):
-        config.registry.settings.update(APP_SETTINGS)
+        config.registry.settings.update(REQUIRED_APP_SETTINGS)
         config.registry.settings.pop(setting)
 
         with pytest.raises(ValueError):
             CheckmateConfigurator(config, celery_worker=False)
+
+    @pytest.mark.usefixtures("with_clear_environ")
+    @pytest.mark.parametrize("setting", list(OPTIONAL_APP_SETTINGS.keys()))
+    def test_takes_default_value_setting(self, config, setting):
+        config.registry.settings.update(REQUIRED_APP_SETTINGS)
+        CheckmateConfigurator(config, celery_worker=False)
+
+        config.add_settings.assert_has_calls([call({setting: ANY})])
 
     @pytest.mark.parametrize("setting", (APP_SETTINGS.keys()))
     def test_it_reads_from_os(self, config, setting, os):
