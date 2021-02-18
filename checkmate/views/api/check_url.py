@@ -52,7 +52,10 @@ def check_url(request):
         },
         "links": {
             "html": request.find_service(SecureLinkService).route_url(
-                "present_block", _query={"url": url, "reason": worst_reason.value}
+                "present_block",
+                _scheme=request.registry.settings["public_scheme"],
+                _host=request.registry.settings["public_host"],
+                _query={"url": url, "reason": worst_reason.value},
             )
         },
     }
