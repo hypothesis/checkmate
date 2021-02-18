@@ -33,14 +33,14 @@ class CheckmateConfigurator:
 
         return bool(self.config.registry.settings.get("dev"))
 
-    def add_setting_from_env(self, param_name):
+    def add_setting_from_env(self, param_name, default=None):
         value = self.config.registry.settings.get(param_name) or os.environ.get(
             param_name.upper()
         )
-        if value is None:
+        if value is None and default is None:
             raise ValueError(f"Param {param_name} must be provided.")
 
-        self.config.add_settings({param_name: value})
+        self.config.add_settings({param_name: value or default})
 
         return value
 
@@ -57,8 +57,8 @@ class CheckmateConfigurator:
             config.scan("checkmate.views")
             config.include("checkmate.routes")
 
+            self.add_setting_from_env("public_scheme", default="https")
             self.add_setting_from_env("public_host")
-            self.add_setting_from_env("public_scheme")
 
         # pyramid-sanity should be activated as late as possible
         config.include("pyramid_sanity")
