@@ -28,4 +28,5 @@ def pyramid_settings():
         "google_client_secret": "google_client_secret",
         "public_host": "localhost",
         "public_scheme": "http",
+        "public_port": "9099",
     }

@@ -54,6 +54,7 @@ def check_url(request):
             "html": request.find_service(SecureLinkService).route_url(
                 "present_block",
                 _scheme=request.registry.settings["public_scheme"],
+                _port=request.registry.settings["public_port"],
                 _host=request.registry.settings["public_host"],
                 _query={"url": url, "reason": worst_reason.value},
             )
