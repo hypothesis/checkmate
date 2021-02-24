@@ -2,6 +2,7 @@ import webtest
 from h_matchers import Any
 
 from checkmate.app import create_app
+from checkmate.models import BlockedFor
 
 
 class TestAPIAuth:
@@ -37,5 +38,6 @@ class TestAPIAuth:
                 "reason": "not-explicitly-allowed",
                 "v": "1",
                 "sec": Any.string(),
+                "blocked_for": BlockedFor.GENERAL.value,
             }
         )

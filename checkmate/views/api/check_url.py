@@ -4,7 +4,7 @@ from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
 from checkmate.exceptions import BadURLParameter, MalformedURL
-from checkmate.models import Permissions
+from checkmate.models import BlockedFor, Permissions
 from checkmate.services import SecureLinkService, URLCheckerService
 
 
@@ -43,6 +43,8 @@ def check_url(request):
     # Reasons are in severity order, worst first
     worst_reason = reasons[0]
 
+    blocked_for = request.GET.get("blocked_for", BlockedFor.GENERAL.value)
+
     # https://jsonapi.org/format/#document-top-level
     return {
         "data": [reason.serialise() for reason in reasons],
@@ -56,7 +58,11 @@ def check_url(request):
                 _scheme=request.registry.settings["public_scheme"],
                 _port=request.registry.settings["public_port"],
                 _host=request.registry.settings["public_host"],
-                _query={"url": url, "reason": worst_reason.value},
+                _query={
+                    "url": url,
+                    "reason": worst_reason.value,
+                    "blocked_for": blocked_for,
+                },
             )
         },
     }

@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 from pyramid.exceptions import HTTPForbidden
 from pyramid.view import view_config
 
+from checkmate.models import BlockedFor
 from checkmate.services import SecureLinkService
 
 
@@ -26,8 +27,13 @@ def present_block(_context, request):
     # assume that they are correct.
     url_to_annotate = request.GET["url"]
 
-    return {
+    template_args = {
         "blocked_url": url_to_annotate,
         "domain_to_annotate": urlparse(url_to_annotate).netloc,
         "reason": request.GET["reason"],
     }
+
+    # Tweak the pages based on where they are going to be displayed
+    blocked_for = BlockedFor.parse(request.GET.get("blocked_for"))
+
+    return {**template_args, **blocked_for.extra_args}
