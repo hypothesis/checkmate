@@ -30,7 +30,7 @@ class TestAPIAuth:
         assert res.json["data"][0]["id"] == "not-explicitly-allowed"
         assert res.json["links"]["html"] == Any.url(
             scheme=pyramid_settings["public_scheme"],
-            host=pyramid_settings["public_host"],
+            host=f"{pyramid_settings['public_host']}:{pyramid_settings['public_port']}",
         ).with_query(
             {
                 "url": checked_url,

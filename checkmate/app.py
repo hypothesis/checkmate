@@ -58,6 +58,7 @@ class CheckmateConfigurator:
             config.include("checkmate.routes")
 
             self.add_setting_from_env("public_scheme", default="https")
+            self.add_setting_from_env("public_port", default="443")
             self.add_setting_from_env("public_host")
 
         # pyramid-sanity should be activated as late as possible

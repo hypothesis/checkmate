@@ -20,6 +20,7 @@ REQUIRED_APP_SETTINGS = {
 
 OPTIONAL_APP_SETTINGS = {
     "public_scheme": "localhost",
+    "public_port": "9099",
 }
 
 APP_SETTINGS = {**REQUIRED_APP_SETTINGS, **OPTIONAL_APP_SETTINGS}

@@ -52,6 +52,7 @@ class TestURLCheck:
         secure_link_service.route_url.assert_called_once_with(
             "present_block",
             _scheme=pyramid_settings["public_scheme"],
+            _port=pyramid_settings["public_port"],
             _host=pyramid_settings["public_host"],
             _query={"url": bad_url, "reason": Reason.MALICIOUS.value},
         )
