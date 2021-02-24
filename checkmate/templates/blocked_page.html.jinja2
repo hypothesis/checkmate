@@ -27,7 +27,7 @@
 
         {% set email_subject %}Please allow access to '{{ domain_to_annotate | e }}'{% endset %}
         {% set email_body -%}
-I'd like to access this page with Via:
+I'd like to access this page with {{annotated_with}}:
 
 * {{ blocked_url | e }}
 
@@ -40,7 +40,7 @@ Thanks!
         <p>
             <a href="mailto:via@hypothes.is?subject={{ email_subject | urlencode }}&body={{ email_body | urlencode }}" target="_blank"
             >Email us</a>
-            to let us know you'd like to annotate the page with Via.
+            to let us know you'd like to annotate the page with {{annotated_with}}.
         </p>
     {% endif %}
 
@@ -75,7 +75,7 @@ Thanks!
     {% if reason == "malicious" %}
         {% set text = {
             "heading": "    <div class='icon danger'></div>Deceptive site ahead",
-            "details": "This site is not available through Via because
+            "details": "This site is not available through " + annotated_with + " because
              it might be hosting <strong>harmful</strong> content."
         } %}
 
@@ -83,22 +83,21 @@ Thanks!
         {% set text = {
             "heading": "Content not available",
             "details": "Unfortunately, the publisher of this page has requested
-             that we disallow annotating it with Via. That means we can't show
-             you the page you were looking for right away…"
+             that we disallow annotating it with " + annotated_with + "."
         } %}
 
     {% elif reason == "not-explicitly-allowed" %}
         {% set text = {
             "heading": "Content cannot be annotated yet",
             "details": "Unfortunately, the contents of this page cannot be
-                annotated with Via at this time."
+                annotated with " + annotated_with + " at this time."
         } %}
 
     {% else %}
         {% set text = {
             "heading": "Content cannot be annotated",
             "details": "Unfortunately, the contents of this page cannot be
-            annotated with Via."
+            annotated with " + annotated_with + "."
         } %}
     {% endif %}
 
@@ -113,7 +112,9 @@ Thanks!
         {% if reason == "malicious" %}
             {{ bad_site_ahead() }}
         {% else %}
-            {{ how_to_access(request_access = (reason == "not-explicitly-allowed") ) }}
+            {% if display_how_to_access %}
+                {{ how_to_access(request_access = (reason == "not-explicitly-allowed") ) }}
+            {% endif %}
         {% endif %}
     </article>
 

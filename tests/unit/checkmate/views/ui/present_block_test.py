@@ -15,6 +15,22 @@ class TestPresentBlock:
             "blocked_url": params["url"],
             "domain_to_annotate": "bad.example.com",  # From "url"
             "reason": params["reason"],
+            # Default values:
+            "display_how_to_access": True,
+            "annotated_with": "Via",
+        }
+
+    def test_passes_params_for_lms(self, make_request, params):
+        params = dict(params)
+        params["blocked_for"] = "lms"
+        result = present_block(sentinel.context, make_request(params=params))
+
+        assert result == {
+            "blocked_url": params["url"],
+            "domain_to_annotate": "bad.example.com",  # From "url"
+            "reason": params["reason"],
+            "display_how_to_access": False,
+            "annotated_with": "Hypothesis",
         }
 
     def test_it_checks_param_signing(self, make_request, secure_link_service, params):

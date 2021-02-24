@@ -1,7 +1,7 @@
 import pytest
 
 from checkmate.exceptions import BadURLParameter, MalformedURL
-from checkmate.models import Detection, Reason, Source
+from checkmate.models import BlockedFor, Detection, Reason, Source
 from checkmate.views.api.check_url import check_url
 
 
@@ -54,7 +54,11 @@ class TestURLCheck:
             _scheme=pyramid_settings["public_scheme"],
             _port=pyramid_settings["public_port"],
             _host=pyramid_settings["public_host"],
-            _query={"url": bad_url, "reason": Reason.MALICIOUS.value},
+            _query={
+                "url": bad_url,
+                "reason": Reason.MALICIOUS.value,
+                "blocked_for": BlockedFor.GENERAL.value,
+            },
         )
 
     def test_it_returns_an_error_for_no_url(self, make_request):
