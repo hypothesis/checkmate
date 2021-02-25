@@ -86,6 +86,26 @@ class TestSecureLinkService:
 
         assert not service.is_secure(pyramid_request)
 
+    @pytest.mark.parametrize("scheme,port", [("http", "80"), ("https", "443")])
+    def test_default_ports_omited(self, scheme, port, service):
+        query = {"param_1": "value_1", "param_2": "value_2"}
+        result = service.route_url(
+            "present_block", _query=query, _scheme=scheme, _port=port
+        )
+
+        assert result.startswith(scheme)
+        assert f":{port}/" not in result
+
+    @pytest.mark.parametrize("scheme,port", [("http", "8080"), ("https", "85")])
+    def test_non_default_ports_present(self, scheme, port, service):
+        query = {"param_1": "value_1", "param_2": "value_2"}
+        result = service.route_url(
+            "present_block", _query=query, _scheme=scheme, _port=port
+        )
+
+        assert result.startswith(scheme)
+        assert f":{port}/" in result
+
     @pytest.fixture
     def pyramid_request(self, pyramid_request):
         pyramid_request.matched_route = Route("present_block", "/ui/block")
