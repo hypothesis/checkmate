@@ -22,26 +22,32 @@ class URLCheckerService:
             Source.ALLOW_LIST: AllowRules(db_session),
         }
 
-    def check_url(self, url, allow_all=False, fail_fast=True):
+    def check_url(self, url, allow_all=False, fail_fast=True, ignore_reasons=None):
         """Check for reasons to block a URL based on it's hashes.
 
         :param url: URL to check
         :param allow_all: Disable the allow list protection
         :param fail_fast: Stop at the first mandatory reason we get
+        :param ignore_reasons: Ignore this list of reasons
         :returns: A generator of Detection objects (most severe first)
         """
 
         url_hashes = list(hash_url(url))
-        detections = self._get_detections(url_hashes, allow_all, fail_fast)
+        detections = self._get_detections(
+            url_hashes, allow_all, fail_fast, ignore_reasons or []
+        )
 
         # Sort the detections by worst first
         return reversed(sorted(detections, key=attrgetter("severity")))
 
-    def _get_detections(self, url_hashes, allow_all, fail_fast):
+    def _get_detections(self, url_hashes, allow_all, fail_fast, ignore_reasons):
         detections = []
 
         for source, checker in self._get_checkers(allow_all):
             for reason in checker.check_url(url_hashes):
+                if reason in ignore_reasons:
+                    continue
+
                 detections.append(Detection(reason, source))
 
                 # We don't need to keep searching the database if we've already

@@ -20,7 +20,9 @@ class TestURLCheck:
         assert response.status_code == 204
 
         url_checker_service.check_url.assert_called_once_with(
-            "http://happy.example.com", allow_all=allow_all
+            "http://happy.example.com",
+            allow_all=allow_all,
+            ignore_reasons=[],
         )
 
     def test_a_bad_url(
@@ -61,8 +63,39 @@ class TestURLCheck:
             },
         )
 
+    def test_a_bad_url_ignored_reasons(
+        self, make_request, url_checker_service, secure_link_service, pyramid_settings
+    ):
+        bad_url = "http://sad.example.com"
+
+        request = make_request(
+            "/api/check",
+            {
+                "url": bad_url,
+                "ignore_reasons": ",".join(
+                    [Reason.MALICIOUS.value, Reason.MEDIA_IMAGE.value]
+                ),
+            },
+        )
+
+        check_url(request)
+
+        url_checker_service.check_url.assert_called_once_with(
+            "http://sad.example.com",
+            allow_all=None,
+            ignore_reasons=set([Reason.MEDIA_IMAGE, Reason.MALICIOUS]),
+        )
+
     def test_it_returns_an_error_for_no_url(self, make_request):
         request = make_request("/api/check")
+
+        with pytest.raises(BadURLParameter):
+            check_url(request)
+
+    def test_it_returns_an_error_for_unknown_ignore_reason(self, make_request):
+        request = make_request(
+            "/api/check", {"url": "example.com", "ignore_reasons": "whatever"}
+        )
 
         with pytest.raises(BadURLParameter):
             check_url(request)

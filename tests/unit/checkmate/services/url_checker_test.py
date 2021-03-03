@@ -52,6 +52,21 @@ class TestURLCheckerService:
             Detection(Reason.OTHER, Source.URL_HAUS),
         ]
 
+    def test_ignore_reasons(self, checker, URLHaus, CustomRules, AllowRules):
+        URLHaus.return_value.check_url.return_value = (Reason.OTHER,)
+        CustomRules.return_value.check_url.return_value = (Reason.HIGH_IO,)
+        AllowRules.return_value.check_url.return_value = (Reason.NOT_ALLOWED,)
+
+        results = checker.check_url(
+            "http://example.com",
+            fail_fast=True,
+            ignore_reasons=[Reason.OTHER, Reason.NOT_ALLOWED],
+        )
+
+        assert list(results) == [
+            Detection(Reason.HIGH_IO, Source.BLOCK_LIST),
+        ]
+
     def test_it_can_disable_the_allow_list(
         self, checker, URLHaus, CustomRules, AllowRules
     ):

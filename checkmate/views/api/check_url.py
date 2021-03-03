@@ -4,7 +4,7 @@ from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
 from checkmate.exceptions import BadURLParameter, MalformedURL
-from checkmate.models import BlockedFor, Permissions
+from checkmate.models import BlockedFor, Permissions, Reason
 from checkmate.services import SecureLinkService, URLCheckerService
 
 
@@ -17,11 +17,27 @@ def check_url(request):
     except KeyError as err:
         raise BadURLParameter("url", "Parameter 'url' is required") from err
 
+    ignore_reasons = request.GET.get("ignore_reasons", [])
+    if ignore_reasons:
+        try:
+            ignore_reasons = set(
+                Reason.parse(reason, default=None)
+                for reason in ignore_reasons.split(",")
+            )
+        except ValueError as err:
+            raise BadURLParameter(
+                "ignored_reasons", "Parameter 'ignored_reasons' contains unknown value"
+            ) from err
+
     url_checker = request.find_service(URLCheckerService)
 
     try:
         detections = list(
-            url_checker.check_url(url, allow_all=request.GET.get("allow_all"))
+            url_checker.check_url(
+                url,
+                allow_all=request.GET.get("allow_all"),
+                ignore_reasons=ignore_reasons,
+            )
         )
     except MalformedURL as err:
         raise BadURLParameter("url", "Parameter 'url' isn't valid") from err
