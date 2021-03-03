@@ -64,11 +64,11 @@ class Reason(Enum):
         value = value.strip() if value else value
         try:
             return cls(value)
-        except ValueError as ex:
+        except ValueError:
             if default:
                 return cls(default)
 
-            raise ValueError("Invalid value for Reason") from ex
+            raise
 
     def serialise(self):
         """Convert to a JSON API resource object."""
