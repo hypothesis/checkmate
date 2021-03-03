@@ -46,6 +46,13 @@ class TestReason:
     def test_it_can_parse(self, value, reason):
         assert Reason.parse(value) == reason
 
+    def test_parse_with_default(self):
+        assert Reason.parse(None, default=Reason.MALICIOUS) == Reason.MALICIOUS
+
+    def test_invalid_reason_no_default(self):
+        with pytest.raises(ValueError):
+            Reason.parse("wat", default=None)
+
     @pytest.mark.parametrize(
         "reason,severity",
         (
