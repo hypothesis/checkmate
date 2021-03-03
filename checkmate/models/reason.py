@@ -59,12 +59,16 @@ class Reason(Enum):
         return Severity.ADVISORY
 
     @classmethod
-    def parse(cls, value):
+    def parse(cls, value, default=OTHER):
         """Parse a value into an enum object."""
+        value = value.strip() if value else value
         try:
             return cls(value)
-        except ValueError:
-            return cls.OTHER
+        except ValueError as ex:
+            if default:
+                return cls(default)
+
+            raise ValueError("Invalid value for Reason") from ex
 
     def serialise(self):
         """Convert to a JSON API resource object."""
