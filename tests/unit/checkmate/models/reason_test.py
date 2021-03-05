@@ -57,7 +57,7 @@ class TestReason:
         "reason,severity",
         (
             (Reason.MALICIOUS, Severity.MANDATORY),
-            (Reason.PUBLISHER_BLOCKED, Severity.MANDATORY),
+            (Reason.PUBLISHER_BLOCKED, Severity.ADVISORY),
             (Reason.MEDIA_AUDIO, Severity.ADVISORY),
             (Reason.OTHER, Severity.ADVISORY),
         ),
