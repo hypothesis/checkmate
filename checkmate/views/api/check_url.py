@@ -48,11 +48,8 @@ def check_url(request):
 
     # Get unique reasons from the detections sorted by severity (decreasing)
     reasons = list(
-        reversed(
-            sorted(
-                set(detection.reason for detection in detections),
-                key=lambda reason: reason.severity,
-            )
+        sorted(
+            set(detection.reason for detection in detections),
         )
     )
 

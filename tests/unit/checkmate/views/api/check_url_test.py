@@ -41,6 +41,7 @@ class TestURLCheck:
 
         assert request.response.status_code == 200
         assert result == {
+            # pylint: disable=no-member
             "data": [
                 Reason.MALICIOUS.serialise(),
                 Reason.MEDIA_IMAGE.serialise(),
@@ -58,7 +59,7 @@ class TestURLCheck:
             _host=pyramid_settings["public_host"],
             _query={
                 "url": bad_url,
-                "reason": Reason.MALICIOUS.value,
+                "reason": Reason.MALICIOUS.value,  # pylint: disable=no-member
                 "blocked_for": BlockedFor.GENERAL.value,
             },
         )
@@ -73,7 +74,11 @@ class TestURLCheck:
             {
                 "url": bad_url,
                 "ignore_reasons": ",".join(
-                    [Reason.MALICIOUS.value, Reason.MEDIA_IMAGE.value]
+                    # pylint: disable=no-member
+                    [
+                        Reason.MALICIOUS.value,
+                        Reason.MEDIA_IMAGE.value,
+                    ]
                 ),
             },
         )

@@ -9,6 +9,8 @@ class TestCustomRule:
     def test_reasons(self):
         reasons = [Reason.HIGH_IO, Reason.MEDIA_IMAGE]
 
-        rule = factories.CustomRule(tags=[reason.value for reason in reasons])
+        rule = factories.CustomRule(
+            tags=[reason.value for reason in reasons]  # pylint: disable=no-member
+        )
 
         assert rule.reasons == reasons
