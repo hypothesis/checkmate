@@ -53,7 +53,7 @@ class Reason(Enum):
     def severity(self):
         """Get the severity of this reason."""
 
-        if self in (self.MALICIOUS, self.PUBLISHER_BLOCKED):
+        if self in (self.MALICIOUS,):
             return Severity.MANDATORY
 
         return Severity.ADVISORY
