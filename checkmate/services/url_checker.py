@@ -37,8 +37,8 @@ class URLCheckerService:
             url_hashes, allow_all, fail_fast, ignore_reasons or []
         )
 
-        # Sort the detections by worst first
-        return reversed(sorted(detections, key=attrgetter("severity")))
+        # Sort the detections by worst first (based on Reason order)
+        return sorted(detections, key=attrgetter("reason"))
 
     def _get_detections(self, url_hashes, allow_all, fail_fast, ignore_reasons):
         detections = []

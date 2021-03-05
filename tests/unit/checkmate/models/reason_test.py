@@ -66,7 +66,7 @@ class TestReason:
         assert reason.severity == severity
 
     def test_serialise(self):
-        assert Reason.MALICIOUS.serialise() == {
+        assert Reason.MALICIOUS.serialise() == {  # pylint: disable=no-member
             "type": "reason",
             "id": "malicious",
             "attributes": {

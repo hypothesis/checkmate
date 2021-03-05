@@ -34,8 +34,12 @@ class Severity(OrderedEnum):
     MANDATORY = "mandatory"
 
 
-class Reason(Enum):
-    """List of reasons a URL can be blocked."""
+class Reason(OrderedEnum):
+    """List of reasons a URL can be blocked.
+
+    The order of definition here is used (based on OrderedEnum) to sort
+    Detections when many are found.
+    """
 
     MALICIOUS = "malicious"  # Actively hostile content of some kind
     PUBLISHER_BLOCKED = "publisher-blocked"  # Content owner has asked us to block

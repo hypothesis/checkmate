@@ -47,8 +47,8 @@ class TestURLCheckerService:
         results = checker.check_url("http://example.com", fail_fast=True)
 
         assert list(results) == [
-            Detection(Reason.NOT_ALLOWED, Source.ALLOW_LIST),
             Detection(Reason.HIGH_IO, Source.BLOCK_LIST),
+            Detection(Reason.NOT_ALLOWED, Source.ALLOW_LIST),
             Detection(Reason.OTHER, Source.URL_HAUS),
         ]
 
