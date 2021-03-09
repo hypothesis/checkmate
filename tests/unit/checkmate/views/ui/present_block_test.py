@@ -13,7 +13,6 @@ class TestPresentBlock:
 
         assert result == {
             "blocked_url": params["url"],
-            "domain_to_annotate": "bad.example.com",  # From "url"
             "reason": params["reason"],
             # Default values:
             "display_how_to_access": True,
@@ -27,7 +26,6 @@ class TestPresentBlock:
 
         assert result == {
             "blocked_url": params["url"],
-            "domain_to_annotate": "bad.example.com",  # From "url"
             "reason": params["reason"],
             "display_how_to_access": False,
             "annotated_with": "Hypothesis",
