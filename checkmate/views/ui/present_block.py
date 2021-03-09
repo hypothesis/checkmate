@@ -1,6 +1,4 @@
 """User feedback for blocked pages."""
-from urllib.parse import urlparse
-
 from pyramid.exceptions import HTTPForbidden
 from pyramid.view import view_config
 
@@ -29,7 +27,6 @@ def present_block(_context, request):
 
     template_args = {
         "blocked_url": url_to_annotate,
-        "domain_to_annotate": urlparse(url_to_annotate).netloc,
         "reason": request.GET["reason"],
     }
 

@@ -7,7 +7,7 @@
 {% macro how_to_access(request_access=False) %}
     <h2>To annotate this page</h2>
 
-    <h3>Use our browser extension:</h3>
+    <p>Use our browser extension:</p>
 
     <ol>
         <li>
@@ -23,24 +23,10 @@
     </ol>
 
     {% if request_access %}
-        <h3>Or get in contact:</h3>
-
-        {% set email_subject %}Please allow access to '{{ domain_to_annotate | e }}'{% endset %}
-        {% set email_body -%}
-I'd like to access this page with {{annotated_with}}:
-
-* {{ blocked_url | e }}
-
-I'd like to be able to access this site because ...
-
-<Please give the reasons you'd like to access the site here>
-
-Thanks!
-        {%- endset %}
         <p>
-            <a href="mailto:via@hypothes.is?subject={{ email_subject | urlencode }}&body={{ email_body | urlencode }}" target="_blank"
-            >Email us</a>
-            to let us know you'd like to annotate the page with {{annotated_with}}.
+            Or <a href="https://web.hypothes.is/via-request/?subject={{ blocked_url | urlencode }}">
+                let us know you'd like to annotate the page with {{ annotated_with }}.
+            </a>
         </p>
     {% endif %}
 
