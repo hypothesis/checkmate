@@ -2,6 +2,7 @@ alembic
 celery
 google-auth-oauthlib
 gunicorn
+jsonschema
 jwt
 psycopg2
 pyramid
