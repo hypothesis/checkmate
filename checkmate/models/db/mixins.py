@@ -117,3 +117,25 @@ class BulkUpsertMixin:
         # never commit the transaction we are working on and it will get rolled
         # back
         mark_changed(session)
+
+
+class JSONAPIMixin:
+    """A mixin for models to add JSON:API related functions."""
+
+    def to_json_api(self):
+        """Create a JSON:API resource dict for this object."""
+
+        if not self.id:
+            raise ValueError(
+                "An ID is mandatory to serialise an object in JSON:API. Have you flushed the DB?"
+            )
+
+        return {
+            "type": self.__class__.__name__,
+            "id": self.id,
+            "attributes": {
+                key: getattr(self, key)
+                for key in self.__table__.columns.keys()
+                if key != "id"
+            },
+        }
