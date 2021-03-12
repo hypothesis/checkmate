@@ -18,7 +18,6 @@ help:
 	@echo "make clean             Delete development artefacts (cached files, "
 	@echo "                       dependencies, etc)"
 	@echo "make requirements      Compile all requirements files"
-	@echo "make allow-list        Create an SQL file for adding sites to the allow list"
 
 .PHONY: dev
 dev: python
@@ -108,9 +107,5 @@ web: python
 .PHONY: python
 python:
 	@./bin/install-python
-
-.PHONY: allow-list
-allow-list:
-	@tox -qe dev --run-command 'python bin/add_to_allow_list.py'
 
 DOCKER_TAG = dev
