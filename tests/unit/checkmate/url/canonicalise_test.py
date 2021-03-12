@@ -88,6 +88,11 @@ class TestCanonicalURL:
                 "https://www.tumblr.com/search/‘question?’/post_page/2",
                 "https://www.tumblr.com/search/%2018question?%2019/post_page/2",
             ),
+            # Chrome will fail with this one, we should not raise an unexpected exception
+            (
+                "https%3A%2F%2Fwww.google.com",
+                "http://https://www.google.com/",
+            ),
         ),
     )
     def test_canonicalise(self, url, canonical_url):

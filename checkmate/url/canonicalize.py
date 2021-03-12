@@ -163,7 +163,7 @@ class CanonicalURL:
         """Try and spot hostnames that are really encoded IP addresses."""
         try:
             return str(IPAddress(hostname))
-        except AddrFormatError:
+        except (AddrFormatError, ValueError):
             return None
 
     @classmethod
