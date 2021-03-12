@@ -1,3 +1,9 @@
+<style>
+    code {
+        word-break: break-all;
+    }
+</style>
+
 <h1>Hello {{ request.session.user.name }}</h1>
 
 {% set user = request.session.user %}
@@ -12,6 +18,11 @@
 
 <h2>Session</h2>
 <code>{{ request.session }}</code>
+
+<h2>Add to allow list</h2>
+
+
+<code>tox -qe dev --run-command "python bin/add_to_allow_list.py --session={{ session }} --route={{ request.route_url('add_to_allow_list') }}"</code>
 
 <hr>
 <a href="{{ request.route_url("logout") }}">Logout</a>
