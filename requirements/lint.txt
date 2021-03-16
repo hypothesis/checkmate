@@ -274,7 +274,7 @@ pyramid==1.10.5
     #   pyramid-sanity
     #   pyramid-services
     #   pyramid-tm
-pytest==6.1.2
+pytest==6.2.2
     # via -r requirements/tests.txt
 python-dateutil==2.8.1
     # via
