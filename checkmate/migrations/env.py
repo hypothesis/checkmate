@@ -1,5 +1,5 @@
 # We didn't write this, so we don't care
-# pylint: disable=fixme,no-member
+# pylint: disable=no-member
 
 import os
 from logging.config import fileConfig
