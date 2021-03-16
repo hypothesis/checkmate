@@ -36,7 +36,7 @@ click==7.1.2
     #   click-repl
 cryptography==3.2.1
     # via jwt
-google-auth-oauthlib==0.4.2
+google-auth-oauthlib==0.4.3
     # via -r requirements/requirements.in
 google-auth==1.24.0
     # via google-auth-oauthlib

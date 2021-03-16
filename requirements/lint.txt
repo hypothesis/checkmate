@@ -89,7 +89,7 @@ faker==4.17.1
     # via
     #   -r requirements/tests.txt
     #   factory-boy
-google-auth-oauthlib==0.4.2
+google-auth-oauthlib==0.4.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
