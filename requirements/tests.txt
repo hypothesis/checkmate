@@ -73,7 +73,7 @@ h-matchers==1.2.10
     # via -r requirements/tests.in
 h-pyramid-sentry==1.2.1
     # via -r requirements/requirements.txt
-httpretty==1.0.3
+httpretty==1.0.5
     # via -r requirements/tests.in
 hupper==1.10.2
     # via
