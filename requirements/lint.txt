@@ -33,7 +33,7 @@ cachetools==4.2.1
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   google-auth
-celery==5.0.2
+celery==5.0.5
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -58,6 +58,11 @@ click-didyoumean==0.0.3
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   celery
+click-plugins==1.1.1
+    # via
+    #   -r requirements/requirements.txt
+    #   -r requirements/tests.txt
+    #   celery
 click-repl==0.1.6
     # via
     #   -r requirements/requirements.txt
@@ -69,6 +74,7 @@ click==7.1.2
     #   -r requirements/tests.txt
     #   celery
     #   click-didyoumean
+    #   click-plugins
     #   click-repl
 coverage==5.3
     # via -r requirements/tests.txt
