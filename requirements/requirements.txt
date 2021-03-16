@@ -64,7 +64,7 @@ markupsafe==1.1.1
     #   pyramid-jinja2
 netaddr==0.8.0
     # via -r requirements/requirements.in
-newrelic==5.22.1.152
+newrelic==6.2.0.156
     # via -r requirements/requirements.in
 oauthlib==3.1.0
     # via requests-oauthlib
