@@ -139,7 +139,7 @@ jinja2==2.11.2
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid-jinja2
-jwt==1.1.0
+jwt==1.2.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
