@@ -2,7 +2,7 @@ from marshmallow import ValidationError
 from marshmallow_jsonapi import Schema, fields
 from pyramid.view import view_config
 
-from checkmate.models import Principals
+from checkmate.security import Permissions
 from checkmate.services import RuleService
 from checkmate.url import CanonicalURL, Domain
 
@@ -41,7 +41,7 @@ class AllowRuleSchema(Schema):
     route_name="add_to_allow_list",
     request_method="POST",
     jsonapi={"schema": AllowRuleSchema()},
-    effective_principals=[Principals.STAFF],
+    permission=Permissions.ADD_TO_ALLOW_LIST,
 )
 def add_to_allow_list(request):
     """Add a rule matching `url` to the allow list."""

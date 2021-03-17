@@ -6,8 +6,8 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import forget, remember
 from pyramid.view import view_config
 
-from checkmate.auth import GoogleAuthenticationPolicy
 from checkmate.exceptions import UserNotAuthenticated
+from checkmate.security import GoogleSecurityPolicy
 from checkmate.services import GoogleAuthService
 
 LOG = getLogger(__name__)
@@ -53,7 +53,7 @@ def login_callback(_context, request):
     return HTTPFound(
         location=request.route_url("admin_pages"),
         # This causes the users email to be stored as the authenticated user
-        headers=remember(request, user["email"], iface=GoogleAuthenticationPolicy),
+        headers=remember(request, user["email"], iface=GoogleSecurityPolicy),
     )
 
 

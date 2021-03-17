@@ -1,6 +1,5 @@
 """Data and domain models."""
 
-from checkmate.models.auth import Permissions, Principals
 from checkmate.models.blocked_for import BlockedFor
 from checkmate.models.db.allow_rule import AllowRule
 from checkmate.models.db.custom_rule import CustomRule
