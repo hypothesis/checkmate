@@ -40,6 +40,18 @@ class BadURLParameter(JSONAPIException):
         return data
 
 
+class ResourceConflict(JSONAPIException):
+    """The request cannot be completed as it conflicts with existing state."""
+
+    status_code = 409
+
+
+class MalformedJSONBody(JSONAPIException):
+    """The JSON body is malformed in some way."""
+
+    status_code = 400
+
+
 class MalformedURL(Exception):
     """The URL is malformed in some way."""
 
