@@ -1,4 +1,5 @@
 from checkmate.services.google_auth import GoogleAuthService
+from checkmate.services.rule import RuleService
 from checkmate.services.secure_link import SecureLinkService
 from checkmate.services.signature import SignatureService
 from checkmate.services.url_checker import URLCheckerService
@@ -17,4 +18,7 @@ def includeme(config):  # pragma: no cover
     )
     config.register_service_factory(
         "checkmate.services.google_auth.factory", iface=GoogleAuthService
+    )
+    config.register_service_factory(
+        "checkmate.services.rule.factory", iface=RuleService
     )
