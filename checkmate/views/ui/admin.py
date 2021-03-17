@@ -1,9 +1,9 @@
 from http.cookies import SimpleCookie
 
 from pyramid.httpexceptions import HTTPFound
-from pyramid.view import view_config, view_defaults
+from pyramid.view import forbidden_view_config, view_config, view_defaults
 
-from checkmate.models import Principals
+from checkmate.security import Permissions
 
 
 @view_defaults(route_name="admin_pages", request_method="GET")
@@ -13,7 +13,7 @@ class AdminPagesViews:
 
     @view_config(
         renderer="checkmate:templates/admin/pages.html.jinja2",
-        effective_principals=[Principals.STAFF],
+        permission=Permissions.ADMIN,
     )
     def get(self):
         cookie = SimpleCookie()
@@ -21,7 +21,7 @@ class AdminPagesViews:
 
         return {"session": cookie["session"].value}
 
-    @view_config()
+    @forbidden_view_config()
     def logged_out(self):
         return HTTPFound(location=self.request.route_url("login"))
 

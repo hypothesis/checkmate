@@ -4,7 +4,8 @@ from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
 from checkmate.exceptions import BadURLParameter, MalformedURL
-from checkmate.models import BlockedFor, Permissions, Reason
+from checkmate.models import BlockedFor, Reason
+from checkmate.security import Permissions
 from checkmate.services import SecureLinkService, URLCheckerService
 
 

@@ -264,7 +264,7 @@ pyramid-tm==2.4
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
-pyramid==1.10.5
+pyramid==2.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt

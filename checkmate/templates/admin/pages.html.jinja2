@@ -13,8 +13,8 @@
 {% endif %}
 <br>
 
-<h2>Effective Principals</h2>
-<code>{{ request.effective_principals }}</code>
+<h2>Permissions</h2>
+<code>{{ request.identity.permissions }}</code>
 
 <h2>Session</h2>
 <code>{{ request.session }}</code>

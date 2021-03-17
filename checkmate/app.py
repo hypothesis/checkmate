@@ -7,7 +7,7 @@ import pyramid.config
 import pyramid_tm
 from pyramid.session import SignedCookieSessionFactory
 
-from checkmate.auth import AuthenticationPolicy, AuthorizationPolicy
+from checkmate.security import SecurityPolicy
 
 logger = logging.getLogger(__name__)
 
@@ -143,8 +143,7 @@ class CheckmateConfigurator:
         )
         config.set_session_factory(session_factory)
 
-        config.set_authentication_policy(AuthenticationPolicy())
-        config.set_authorization_policy(AuthorizationPolicy())
+        config.set_security_policy(SecurityPolicy())
 
 
 def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover
