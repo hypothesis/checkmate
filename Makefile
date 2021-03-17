@@ -104,8 +104,5 @@ web: python
 python:
 	@./bin/install-python
 
-.PHONY: allow-list
-allow-list:
-	@tox -qe dev --run-command 'python bin/add_to_allow_list.py'
 
 DOCKER_TAG = dev

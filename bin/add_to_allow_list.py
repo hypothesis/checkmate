@@ -8,23 +8,18 @@ It will:
 
  * Read that file (as a CSV)
  * Spot rows which don't have a result yet
- * Check if we can allow them
- * Create an SQL file to add to the running server
+ * Check if we can allow them and add them to the DB if so
  * Create an updated CSV file with the results of the run
  """
 
 import csv
-import json
 import os
 from argparse import ArgumentParser
 from datetime import date
 
-from pkg_resources import resource_filename
-from pyramid.paster import bootstrap
+import requests
 
 from checkmate.models import Detection, Reason, Source
-from checkmate.services import URLCheckerService
-from checkmate.url import hash_for_rule
 
 parser = ArgumentParser("A script for adding to the allow list")
 parser.add_argument(
@@ -36,7 +31,8 @@ parser.add_argument(
 parser.add_argument(
     "-o", "--output_csv", default="allow_list.done.csv", help="Output CSV file"
 )
-parser.add_argument("-s", "--sql", default="allow_list.sql", help="Output SQL file")
+parser.add_argument("-s", "--session", required=True, help="Admin session cookie value")
+parser.add_argument("-r", "--route", required=True, help="Add rule end-point")
 
 
 class AllowListCSV:
@@ -94,57 +90,39 @@ class AllowListCSV:
 ALLOW_LIST_DETECTION = Detection(Reason.NOT_ALLOWED, Source.ALLOW_LIST)
 
 
-def check_rows(rows, checker):
-    """Check each row for detections and hash if none are found.
+class Checkmate:
+    def __init__(self, route, session):
+        self.route = route
+        self.session = session
 
-    This will skip existing rows with results from previous runs.
-    """
+    def allow_url(self, url):
+        response = requests.post(
+            self.route,
+            headers={"Cookie": f"session={self.session}"},
+            json={"data": {"type": "AllowRule", "attributes": {"url": url}}},
+        )
 
-    for row in rows:
-        # This has already been dealt with
-        if row.result:
-            continue
+        if response.ok:
+            attributes = response.json()["data"]["attributes"]
+            hex_hash = attributes["hash"]
+            rule = attributes["rule"]
 
-        # Don't fail fast, so we get all of the detections
-        reasons = list(checker.check_url(row.approved_url, fail_fast=False))
+            return True, f"Allowed as {rule} with hash {hex_hash}"
 
-        try:
-            # We expect a detection from not being on the allow list, so we'll
-            # remove it, which will trigger a ValueError if it wasn't there
-            reasons.remove(ALLOW_LIST_DETECTION)
-        except ValueError:
-            row.result = "Already allowed"
-            continue
+        if response.status_code == 409:
+            return False, response.json()["errors"][0]["detail"]
 
-        # After the expected allow list detection is gone, any remaining
-        # reasons are because the URL is blocked
-        if reasons:
-            row.result = f"Detections found: {reasons}"
-        else:
-            rule, hex_hash = hash_for_rule(row.approved_url)
-            row.result = f"Added to allow list as: '{rule}'"
+        if response.status_code == 404:
+            # If we ever sort out the permissiosns / principals stuff we'll get
+            # a nice 404 / 401 to be able to tell the difference
+            raise ConnectionError(
+                "Either your session has expired, or the route you have "
+                "provided is not correct"
+            )
 
-            yield rule, hex_hash
-
-
-def create_sql(handle, rule_hashes, tags):
-    """Write out the hashes into an SQL file for importing into Postgres."""
-
-    handle.write("INSERT INTO allow_rule (rule, hash, tags)\nVALUES\n")
-
-    tags = json.dumps(list(tags)).strip("[]")
-    tags = f"{{{tags}}}"
-
-    first = True
-    for rule, hex_hash in rule_hashes:
-        if first:
-            first = False
-        else:
-            handle.write(",\n")
-
-        handle.write(f"\t('{rule}', '{hex_hash}', '{tags}')")
-
-    handle.write(";\n")
+        raise ConnectionError(
+            f"Unexpected error when connecting to checkmate: {response}: {response.content}"
+        )
 
 
 def main():
@@ -153,28 +131,33 @@ def main():
     if not os.path.isfile(args.input_csv):
         raise EnvironmentError(f"Could not find expected file '{args.input_csv}'")
 
-    # Check all the rows
-
+    checkmate = Checkmate(route=args.route, session=args.session)
     rows = list(AllowListCSV.read(args.input_csv))
 
-    config_file = resource_filename("checkmate", "../conf/development.ini")
-    with bootstrap(config_file) as env:
-        request = env["request"]
-        checker = request.find_service(URLCheckerService)
+    changed = 0
 
-        with request.tm:
-            rule_hashes = list(check_rows(rows, checker))
+    for row in rows:
+        # This has already been dealt with
+        if row.result:
+            continue
 
-    # Create the output files
+        changed += 1
+        rule_accepted, row.result = checkmate.allow_url(row.approved_url)
 
-    with open(args.sql, "w") as handle:
-        create_sql(handle, rule_hashes=rule_hashes, tags=["manual"])
+        if rule_accepted:
+            print(f"Added row: {row}")
+        else:
+            print(f"Failed on row: {row}")
 
+    if not changed:
+        print("No rows were altered. No CSV created")
+        return
+
+    # Create the output CSV file
     with open(args.output_csv, "w") as handle:
         AllowListCSV.write(handle, rows=rows)
 
-    print(f"Created SQL file: {args.sql}")
-    print(f"Creating CSV file: {args.output_csv}")
+    print(f"Created CSV file: {args.output_csv}")
 
 
 if __name__ == "__main__":
