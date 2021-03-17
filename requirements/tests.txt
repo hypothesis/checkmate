@@ -62,7 +62,7 @@ cryptography==3.2.1
     # via
     #   -r requirements/requirements.txt
     #   jwt
-factory-boy==3.1.0
+factory-boy==3.2.0
     # via -r requirements/tests.in
 faker==4.17.1
     # via factory-boy
