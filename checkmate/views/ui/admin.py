@@ -1,4 +1,6 @@
 """User feedback for blocked pages."""
+from http.cookies import SimpleCookie
+
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
@@ -10,10 +12,13 @@ from checkmate.models import Principals
     renderer="checkmate:templates/admin/pages.html.jinja2",
     effective_principals=[Principals.STAFF],
 )
-def admin_pages(_context, _request):
+def admin_pages(_context, request):
     """Render an HTML version of a blocked URL with explanation."""
 
-    return {}
+    cookie = SimpleCookie()
+    cookie.load(request.headers["Cookie"])
+
+    return {"session": cookie["session"].value}
 
 
 @view_config(route_name="admin_pages")
