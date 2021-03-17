@@ -11,12 +11,20 @@ Instructions:
 
 import json
 import os
+import sys
 from contextlib import contextmanager
 
-from google.api_core.exceptions import ClientError, PermissionDenied
-from google.cloud.webrisk_v1.services.web_risk_service import WebRiskServiceClient
-from google.cloud.webrisk_v1.types.webrisk import SearchUrisRequest, ThreatType
-from google.oauth2 import service_account
+# pylint: disable=invalid-name,too-many-try-statements,redefined-outer-name
+
+try:
+    from google.api_core.exceptions import ClientError, PermissionDenied
+    from google.cloud.webrisk_v1.services.web_risk_service import WebRiskServiceClient
+    from google.cloud.webrisk_v1.types.webrisk import SearchUrisRequest, ThreatType
+    from google.oauth2 import service_account
+except ImportError as err:
+    print("You must install 'google-cloud-webrisk'")
+    sys.exit(1)
+
 from pyramid.paster import bootstrap
 
 from checkmate.models import AllowRule
@@ -63,10 +71,8 @@ class WebRiskAPI:
 @contextmanager
 def request_context():
     with bootstrap("conf/development.ini") as env:
-        request = env["request"]
-
-        with request.tm:
-            yield request
+        with env["request"].tm:
+            yield env["request"]
 
 
 if __name__ == "__main__":
@@ -102,6 +108,7 @@ if __name__ == "__main__":
     # Main loop
     with open("progress.ndjson", mode="a") as progress:
         with request_context() as request:
+            count = 0
             total = request.db.query(AllowRule).count()
 
             query = (
@@ -113,11 +120,7 @@ if __name__ == "__main__":
             for count, (rule_id, rule) in enumerate(query.limit(rules_per_run)):
                 url = f"https://{rule}"
 
-                if dry_run:
-                    threats = []
-                else:
-                    threats = web_risk_api.check_url(url)
-
+                threats = [] if dry_run else web_risk_api.check_url(url)
                 if threats:
                     print(f"Threats found for {url}\n\t{threats}")
 
@@ -138,7 +141,7 @@ if __name__ == "__main__":
 
                 completed += 1
 
-                if count % 100 == 0:
+                if not count % 100:
                     # Make sure the file is updated as we go
                     progress.flush()
 
@@ -146,4 +149,4 @@ if __name__ == "__main__":
                         f"Complete {completed}/{total} {100 * completed / total}% (this run: {count})"
                     )
 
-    print(f"Checked {count + 1} rules. Done.")
+            print(f"Checked {count + 1} rules. Done.")
