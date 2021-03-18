@@ -35,7 +35,7 @@ class TestSignatureService:
         assert service.check_nonce(service.get_nonce())
 
         # Check it notices if we change one char
-        last_char = "f" if nonce[:-1] != "f" else "e"
+        last_char = "f" if nonce[-1] != "f" else "e"
         assert not service.check_nonce(nonce[:-1] + last_char)
 
     @pytest.fixture
