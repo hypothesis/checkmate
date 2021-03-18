@@ -168,6 +168,16 @@ markupsafe==1.1.1
     #   jinja2
     #   mako
     #   pyramid-jinja2
+marshmallow-jsonapi==0.24.0
+    # via
+    #   -r requirements/requirements.txt
+    #   -r requirements/tests.txt
+marshmallow==3.10.0
+    # via
+    #   -r requirements/requirements.txt
+    #   -r requirements/tests.txt
+    #   marshmallow-jsonapi
+    #   webargs
 mccabe==0.6.1
     # via pylint
 netaddr==0.8.0
@@ -386,6 +396,10 @@ wcwidth==0.2.5
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   prompt-toolkit
+webargs==7.0.1
+    # via
+    #   -r requirements/requirements.txt
+    #   -r requirements/tests.txt
 webob==1.8.6
     # via
     #   -r requirements/requirements.txt
