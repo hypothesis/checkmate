@@ -3,16 +3,18 @@ celery
 google-auth-oauthlib
 gunicorn
 jwt
+marshmallow-jsonapi
+netaddr
+newrelic
 psycopg2
 pyramid
 pyramid_exclog
 pyramid-jinja2
 pyramid-services
 pyramid_tm
-netaddr
-newrelic
 requests
 sqlalchemy
+webargs
 zope.sqlalchemy
 
 h_pyramid_sentry
