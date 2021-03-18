@@ -3,7 +3,7 @@ Instructions:
 
  * Get a set of service account credentials here: https://console.cloud.google.com/apis/credentials?folder=&organizationId=&project=checkmate-302812
  * This should provide you with a JSON credentials file
- * Call this "credentials.json" and save it in "checkmate/bin"
+ * Call this "web_risk_credentials.json" and save it in "checkmate/bin"
  * Hack `requirements/dev.txt` and add `google-cloud-webrisk`
  * `tox -qe dev --run-command "python bin/google_web_risk_scan.py"`
 
@@ -76,7 +76,7 @@ def request_context():
 
 
 if __name__ == "__main__":
-    with open("bin/credentials.json") as handle:
+    with open("bin/web_risk_credentials.json") as handle:
         credentials = json.load(handle)
         web_risk_api = WebRiskAPI(credentials)
 
