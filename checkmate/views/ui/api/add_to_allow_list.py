@@ -3,6 +3,7 @@ from marshmallow_jsonapi import Schema, fields
 from pyramid.view import view_config
 from webargs.pyramidparser import use_kwargs
 
+from checkmate.models import Principals
 from checkmate.services import RuleService
 from checkmate.url import CanonicalURL, Domain
 
@@ -40,7 +41,12 @@ class AllowRuleSchema(Schema):
 _ALLOW_RULE_SCHEMA = AllowRuleSchema()
 
 
-@view_config(route_name="add_to_allow_list", request_method="POST", renderer="json")
+@view_config(
+    route_name="add_to_allow_list",
+    request_method="POST",
+    renderer="json",
+    effective_principals=[Principals.STAFF],
+)
 @use_kwargs(_ALLOW_RULE_SCHEMA)
 def add_to_allow_list(request, url):
     """Add a rule matching `url` to the allow list."""
