@@ -1,7 +1,9 @@
+import functools
 import os
 
 import httpretty
 import pytest
+from pyramid.testing import DummyRequest, testConfig
 
 from checkmate.db import create_engine
 
@@ -47,3 +49,14 @@ def httpretty_():
 
     httpretty.disable()
     httpretty.reset()
+
+
+@pytest.fixture
+def route_url():
+    request = DummyRequest(
+        environ={"SERVER_NAME": "localhost", "wsgi.url_scheme": "https"}
+    )
+
+    with testConfig(request=request) as config:
+        config.include("checkmate.routes")
+        yield functools.partial(request.route_url, _scheme="https")

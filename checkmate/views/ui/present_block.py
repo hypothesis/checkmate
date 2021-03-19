@@ -1,5 +1,5 @@
 """User feedback for blocked pages."""
-from pyramid.exceptions import HTTPForbidden
+from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.view import view_config
 
 from checkmate.models import BlockedFor
@@ -19,7 +19,7 @@ def present_block(_context, request):
     """Render an HTML version of a blocked URL with explanation."""
 
     if not request.find_service(SecureLinkService).is_secure(request):
-        raise HTTPForbidden()
+        raise HTTPUnauthorized()
 
     # At this point we know the contents of the args came from us, so we'll
     # assume that they are correct.
@@ -33,5 +33,5 @@ def present_block(_context, request):
     # Tweak the pages based on where they are going to be displayed
     blocked_for = BlockedFor.parse(request.GET.get("blocked_for"))
 
-    request.response.status = 400
+    request.response.status = 403
     return {**template_args, **blocked_for.extra_args}
