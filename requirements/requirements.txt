@@ -40,6 +40,8 @@ google-auth-oauthlib==0.4.3
     # via -r requirements/requirements.in
 google-auth==1.24.0
     # via google-auth-oauthlib
+greenlet==1.0.0
+    # via sqlalchemy
 gunicorn==20.0.4
     # via -r requirements/requirements.in
 h-pyramid-sentry==1.2.1
@@ -49,7 +51,9 @@ hupper==1.10.2
 idna==2.10
     # via requests
 importlib-metadata==3.1.0
-    # via kombu
+    # via
+    #   kombu
+    #   sqlalchemy
 importlib-resources==3.3.0
     # via netaddr
 jinja2==2.11.2
@@ -138,7 +142,7 @@ six==1.15.0
     #   cryptography
     #   google-auth
     #   python-dateutil
-sqlalchemy==1.3.20
+sqlalchemy==1.4.1
     # via
     #   -r requirements/requirements.in
     #   alembic
