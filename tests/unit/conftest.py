@@ -1,6 +1,5 @@
 # pylint: disable=no-self-use
 """A place to put fixture functions that are useful application-wide."""
-import functools
 from unittest.mock import MagicMock
 from urllib.parse import urlencode
 
@@ -14,21 +13,6 @@ from sqlalchemy.orm import sessionmaker
 from checkmate.routes import add_routes
 from tests import factories
 from tests.unit.services import *  # pylint: disable=wildcard-import,unused-wildcard-import
-
-
-def autopatcher(request, target, **kwargs):
-    """Patch and cleanup automatically. Wraps :py:func:`mock.patch`."""
-    options = {"autospec": True}
-    options.update(kwargs)
-    patcher = mock.patch(target, **options)
-    obj = patcher.start()
-    request.addfinalizer(patcher.stop)
-    return obj
-
-
-@pytest.fixture
-def patch(request):
-    return functools.partial(autopatcher, request)
 
 
 @pytest.fixture

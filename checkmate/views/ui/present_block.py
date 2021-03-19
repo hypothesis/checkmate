@@ -33,5 +33,5 @@ def present_block(_context, request):
     # Tweak the pages based on where they are going to be displayed
     blocked_for = BlockedFor.parse(request.GET.get("blocked_for"))
 
-    request.response.status = 400
+    request.response.status = 403
     return {**template_args, **blocked_for.extra_args}
