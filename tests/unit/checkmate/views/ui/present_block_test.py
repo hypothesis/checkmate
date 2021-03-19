@@ -1,7 +1,7 @@
 from unittest.mock import sentinel
 
 import pytest
-from pyramid.httpexceptions import HTTPForbidden
+from pyramid.httpexceptions import HTTPUnauthorized
 
 from checkmate.views.ui.present_block import present_block
 
@@ -35,7 +35,7 @@ class TestPresentBlock:
         secure_link_service.is_secure.return_value = False
         request = make_request(params=params)
 
-        with pytest.raises(HTTPForbidden):
+        with pytest.raises(HTTPUnauthorized):
             present_block(sentinel.context, request)
 
         secure_link_service.is_secure.assert_called_once_with(request)
