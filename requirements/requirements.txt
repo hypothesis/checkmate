@@ -18,8 +18,6 @@ certifi==2020.11.8
     # via
     #   requests
     #   sentry-sdk
-cffi==1.14.4
-    # via cryptography
 chardet==3.0.4
     # via requests
 click-didyoumean==0.0.3
@@ -34,8 +32,6 @@ click==7.1.2
     #   click-didyoumean
     #   click-plugins
     #   click-repl
-cryptography==3.2.1
-    # via jwt
 google-auth-oauthlib==0.4.3
     # via -r requirements/requirements.in
 google-auth==1.24.0
@@ -54,8 +50,6 @@ importlib-resources==3.3.0
     # via netaddr
 jinja2==2.11.2
     # via pyramid-jinja2
-jwt==1.2.0
-    # via -r requirements/requirements.in
 kombu==5.0.2
     # via celery
 mako==1.1.3
@@ -95,8 +89,8 @@ pyasn1==0.4.8
     # via
     #   pyasn1-modules
     #   rsa
-pycparser==2.20
-    # via cffi
+pyjwt==2.0.1
+    # via -r requirements/requirements.in
 pyramid-exclog==1.0
     # via -r requirements/requirements.in
 pyramid-jinja2==2.8
@@ -135,7 +129,6 @@ sentry-sdk==0.19.4
 six==1.15.0
     # via
     #   click-repl
-    #   cryptography
     #   google-auth
     #   python-dateutil
 sqlalchemy==1.3.20

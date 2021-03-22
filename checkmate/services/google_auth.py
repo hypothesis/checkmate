@@ -1,9 +1,9 @@
 import os
 from urllib.parse import parse_qsl, urlparse
 
+import jwt
 from google_auth_oauthlib.flow import Flow
-from jwt import JWT
-from jwt.exceptions import JWTDecodeError
+from jwt import InvalidTokenError
 from oauthlib.oauth2.rfc6749.errors import InvalidClientError, InvalidGrantError
 
 from checkmate.exceptions import BadOAuth2Config, UserNotAuthenticated
@@ -143,9 +143,9 @@ class GoogleAuthService:
         try:
             # Don't bother checking this came from Google, we know the request
             # came from Google by virtue of the state/nonce.
-            return JWT().decode(id_token, do_verify=False)
+            return jwt.decode(id_token, options=dict(verify_signature=False))
 
-        except JWTDecodeError as err:
+        except InvalidTokenError as err:
             # This could actually be because we have the wrong key... but we
             # can't tell the difference, and this is more likely
             raise UserNotAuthenticated(

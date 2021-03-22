@@ -2,7 +2,7 @@ from unittest.mock import sentinel
 
 import pytest
 from h_matchers import Any
-from jwt.exceptions import JWTDecodeError
+from jwt import InvalidTokenError
 from oauthlib.oauth2.rfc6749.errors import InvalidClientError, InvalidGrantError
 
 from checkmate.exceptions import BadOAuth2Config, UserNotAuthenticated
@@ -89,20 +89,20 @@ class TestGoogleAuthService:
         with pytest.raises(UserNotAuthenticated):
             service.login_url()
 
-    def test_exchange_auth_code_works(self, service, flow, JWT):
+    def test_exchange_auth_code_works(self, service, flow, jwt):
         redirect_url = "http://example.com?state=state_value"
 
         user_details, credentials = service.exchange_auth_code(redirect_url)
 
         flow.fetch_token.assert_called_once_with(authorization_response=redirect_url)
-        JWT.return_value.decode.assert_called_once_with(
-            flow.credentials.id_token, do_verify=False
+        jwt.decode.assert_called_once_with(
+            flow.credentials.id_token, options=dict(verify_signature=False)
         )
 
         # We extract and check the state/nonce
         service._signature_service.check_nonce.assert_called_once_with("state_value")
 
-        assert user_details == JWT.return_value.decode.return_value
+        assert user_details == jwt.decode.return_value
         assert credentials == {
             "token": flow.credentials.token,
             "refresh_token": flow.credentials.refresh_token,
@@ -134,8 +134,8 @@ class TestGoogleAuthService:
         with pytest.raises(BadOAuth2Config):
             service.exchange_auth_code("http://example.com?state=state_value")
 
-    def test_exchange_auth_code_raises_with_a_bad_jwt(self, service, JWT):
-        JWT.return_value.decode.side_effect = JWTDecodeError
+    def test_exchange_auth_code_raises_with_a_bad_jwt(self, service, jwt):
+        jwt.decode.side_effect = InvalidTokenError
 
         with pytest.raises(UserNotAuthenticated):
             service.exchange_auth_code("http://example.com?state=state_value")
@@ -164,8 +164,8 @@ class TestGoogleAuthService:
         return patch("checkmate.services.google_auth.os")
 
     @pytest.fixture(autouse=True)
-    def JWT(self, patch):
-        return patch("checkmate.services.google_auth.JWT")
+    def jwt(self, patch):
+        return patch("checkmate.services.google_auth.jwt")
 
     @pytest.fixture(autouse=True)
     def Flow(self, patch):
