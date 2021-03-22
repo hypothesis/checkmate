@@ -43,11 +43,6 @@ certifi==2020.11.8
     #   -r requirements/tests.txt
     #   requests
     #   sentry-sdk
-cffi==1.14.4
-    # via
-    #   -r requirements/requirements.txt
-    #   -r requirements/tests.txt
-    #   cryptography
 chardet==3.0.4
     # via
     #   -r requirements/requirements.txt
@@ -78,11 +73,6 @@ click==7.1.2
     #   click-repl
 coverage==5.5
     # via -r requirements/tests.txt
-cryptography==3.2.1
-    # via
-    #   -r requirements/requirements.txt
-    #   -r requirements/tests.txt
-    #   jwt
 factory-boy==3.2.0
     # via -r requirements/tests.txt
 faker==4.17.1
@@ -145,10 +135,6 @@ jinja2==2.11.2
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid-jinja2
-jwt==1.2.0
-    # via
-    #   -r requirements/requirements.txt
-    #   -r requirements/tests.txt
 kombu==5.0.2
     # via
     #   -r requirements/requirements.txt
@@ -241,13 +227,12 @@ pyasn1==0.4.8
     #   -r requirements/tests.txt
     #   pyasn1-modules
     #   rsa
-pycparser==2.20
+pydocstyle==6.0.0
+    # via -r requirements/lint.in
+pyjwt==2.0.1
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
-    #   cffi
-pydocstyle==6.0.0
-    # via -r requirements/lint.in
 pylint==2.7.2
     # via -r requirements/lint.in
 pyparsing==2.4.7
@@ -331,7 +316,6 @@ six==1.15.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   click-repl
-    #   cryptography
     #   google-auth
     #   packaging
     #   python-dateutil

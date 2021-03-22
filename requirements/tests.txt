@@ -29,10 +29,6 @@ certifi==2020.11.8
     #   -r requirements/requirements.txt
     #   requests
     #   sentry-sdk
-cffi==1.14.4
-    # via
-    #   -r requirements/requirements.txt
-    #   cryptography
 chardet==3.0.4
     # via
     #   -r requirements/requirements.txt
@@ -58,10 +54,6 @@ click==7.1.2
     #   click-repl
 coverage==5.5
     # via -r requirements/tests.in
-cryptography==3.2.1
-    # via
-    #   -r requirements/requirements.txt
-    #   jwt
 factory-boy==3.2.0
     # via -r requirements/tests.in
 faker==4.17.1
@@ -104,8 +96,6 @@ jinja2==2.11.2
     # via
     #   -r requirements/requirements.txt
     #   pyramid-jinja2
-jwt==1.2.0
-    # via -r requirements/requirements.txt
 kombu==5.0.2
     # via
     #   -r requirements/requirements.txt
@@ -169,10 +159,8 @@ pyasn1==0.4.8
     #   -r requirements/requirements.txt
     #   pyasn1-modules
     #   rsa
-pycparser==2.20
-    # via
-    #   -r requirements/requirements.txt
-    #   cffi
+pyjwt==2.0.1
+    # via -r requirements/requirements.txt
 pyparsing==2.4.7
     # via packaging
 pyramid-exclog==1.0
@@ -229,7 +217,6 @@ six==1.15.0
     # via
     #   -r requirements/requirements.txt
     #   click-repl
-    #   cryptography
     #   google-auth
     #   packaging
     #   python-dateutil

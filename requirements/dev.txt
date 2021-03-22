@@ -35,7 +35,6 @@ certifi==2020.11.8
     #   sentry-sdk
 cffi==1.14.4
     # via
-    #   -r requirements/requirements.txt
     #   bcrypt
     #   cryptography
     #   pynacl
@@ -63,10 +62,7 @@ click==7.1.2
     #   click-plugins
     #   click-repl
 cryptography==3.2.1
-    # via
-    #   -r requirements/requirements.txt
-    #   jwt
-    #   paramiko
+    # via paramiko
 decorator==4.4.2
     # via
     #   ipython
@@ -129,8 +125,6 @@ jinja2==2.11.2
     #   pyramid-jinja2
 jsonschema==3.2.0
     # via docker-compose
-jwt==1.2.0
-    # via -r requirements/requirements.txt
 kombu==5.0.2
     # via
     #   -r requirements/requirements.txt
@@ -200,11 +194,11 @@ pyasn1==0.4.8
     #   pyasn1-modules
     #   rsa
 pycparser==2.20
-    # via
-    #   -r requirements/requirements.txt
-    #   cffi
+    # via cffi
 pygments==2.7.2
     # via ipython
+pyjwt==2.0.1
+    # via -r requirements/requirements.txt
 pynacl==1.4.0
     # via paramiko
 pyramid-exclog==1.0
