@@ -87,6 +87,10 @@ google-auth==1.24.0
     # via
     #   -r requirements/requirements.txt
     #   google-auth-oauthlib
+greenlet==1.0.0
+    # via
+    #   -r requirements/requirements.txt
+    #   sqlalchemy
 gunicorn==20.0.4
     # via -r requirements/requirements.txt
 h-pyramid-sentry==1.2.1
@@ -104,6 +108,7 @@ importlib-metadata==3.1.0
     #   -r requirements/requirements.txt
     #   jsonschema
     #   kombu
+    #   sqlalchemy
 importlib-resources==3.3.0
     # via
     #   -r requirements/requirements.txt
@@ -274,7 +279,7 @@ six==1.15.0
     #   python-dateutil
     #   traitlets
     #   websocket-client
-sqlalchemy==1.3.20
+sqlalchemy==1.4.2
     # via
     #   -r requirements/requirements.txt
     #   alembic
