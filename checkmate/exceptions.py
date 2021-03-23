@@ -13,13 +13,18 @@ class JSONAPIException(Exception):
     status_code = 500
 
     def __init__(self, message):
-        self.message = message
+        self._message = message
 
         super().__init__(message)
 
-    def serialise(self):
+    @property
+    def messages(self):
+        return [{"id": self.__class__.__name__, "detail": self._message}]
+
+    def normalized_messages(self):
         """Serialise to a JSON API error resource object."""
-        return {"id": self.__class__.__name__, "detail": self.message}
+
+        return {"errors": self.messages}
 
 
 class BadURLParameter(JSONAPIException):
@@ -31,13 +36,12 @@ class BadURLParameter(JSONAPIException):
         self.param = param
         super().__init__(message)
 
-    def serialise(self):
-        """Serialise to a JSON API error resource object."""
+    @property
+    def messages(self):
+        messages = super().messages
+        messages[0]["source"] = {"parameter": self.param}
 
-        data = super().serialise()
-        data["source"] = {"parameter": self.param}
-
-        return data
+        return messages
 
 
 class ResourceConflict(JSONAPIException):
