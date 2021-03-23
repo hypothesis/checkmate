@@ -1,7 +1,6 @@
 from marshmallow import ValidationError
 from marshmallow_jsonapi import Schema, fields
 from pyramid.view import view_config
-from webargs.pyramidparser import use_kwargs
 
 from checkmate.models import Principals
 from checkmate.services import RuleService
@@ -38,18 +37,15 @@ class AllowRuleSchema(Schema):
         strict = True
 
 
-_ALLOW_RULE_SCHEMA = AllowRuleSchema()
-
-
 @view_config(
     route_name="add_to_allow_list",
     request_method="POST",
-    renderer="json",
+    json_api={"schema": AllowRuleSchema()},
     effective_principals=[Principals.STAFF],
 )
-@use_kwargs(_ALLOW_RULE_SCHEMA)
-def add_to_allow_list(request, url):
+def add_to_allow_list(request):
     """Add a rule matching `url` to the allow list."""
-    rule = request.find_service(RuleService).add_to_allow_list(url)
 
-    return _ALLOW_RULE_SCHEMA.dump(rule)
+    return request.find_service(RuleService).add_to_allow_list(
+        request.json_api.attributes["url"]
+    )
