@@ -13,7 +13,7 @@ from checkmate.models import Principals
     effective_principals=[Principals.STAFF],
 )
 def admin_pages(_context, request):
-    """Render an HTML version of a blocked URL with explanation."""
+    """Render the admin page."""
 
     cookie = SimpleCookie()
     cookie.load(request.headers["Cookie"])
