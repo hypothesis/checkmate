@@ -14,7 +14,6 @@ pyramid-services
 pyramid_tm
 requests
 sqlalchemy
-webargs
 zope.sqlalchemy
 
 h_pyramid_sentry
