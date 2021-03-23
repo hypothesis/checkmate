@@ -3,6 +3,7 @@ import os
 from unittest import mock
 
 import pytest
+from pyramid.testing import DummyRequest, testConfig
 
 from checkmate.db import create_engine
 
@@ -32,6 +33,17 @@ def pyramid_settings():
         "public_scheme": "http",
         "public_port": "9099",
     }
+
+
+@pytest.fixture
+def route_url():
+    request = DummyRequest(
+        environ={"SERVER_NAME": "localhost", "wsgi.url_scheme": "https"}
+    )
+
+    with testConfig(request=request) as config:
+        config.include("checkmate.routes")
+        yield functools.partial(request.route_url, _scheme="https")
 
 
 def autopatcher(request, target, **kwargs):
