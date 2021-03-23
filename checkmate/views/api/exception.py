@@ -10,7 +10,7 @@ def api_error(exc, request):
     """Handle JSON API compatible exceptions."""
     request.response.status_code = exc.status_code
 
-    return {"errors": [exc.serialise()]}
+    return exc.normalized_messages()
 
 
 @forbidden_view_config(path_info="^/api/.*$", renderer="json")
