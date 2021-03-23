@@ -56,6 +56,7 @@ class CheckmateConfigurator:
             config.include("pyramid_jinja2")
             config.scan("checkmate.views")
             config.include("checkmate.routes")
+            config.include("checkmate.views.derivers")
 
             self.add_setting_from_env("public_scheme", default="https")
             self.add_setting_from_env("public_port", default="443")
