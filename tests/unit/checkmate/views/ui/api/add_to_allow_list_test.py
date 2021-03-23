@@ -1,37 +1,16 @@
-import json
-
 import pytest
-from pyramid.httpexceptions import HTTPUnprocessableEntity
+from marshmallow import ValidationError
 
-from checkmate.views.ui.api.add_to_allow_list import add_to_allow_list
-from tests import factories
+from checkmate.views.derivers.json_api import JSONAPIBody
+from checkmate.views.ui.api.add_to_allow_list import AllowRuleSchema, add_to_allow_list
 
 DELETE = ...
 
 
-@pytest.mark.usefixtures("rule_service", "session")
-class TestAddToAllowList:
-    @pytest.mark.parametrize(
-        "url", ("http://example.com", "//example.com", "example.com")
-    )
-    def test_it_handles_a_valid_request(self, pyramid_request, rule, url):
-        self.set_json_body(pyramid_request, self.valid_body(url))
-
-        # pylint:disable=no-value-for-parameter
-        response = add_to_allow_list(pyramid_request)
-
-        assert response == {
-            "data": {
-                "id": rule.id,
-                "type": "AllowRule",
-                "attributes": {
-                    "force": rule.force,
-                    "hash": rule.hash,
-                    "rule": rule.rule,
-                    "tags": rule.tags,
-                },
-            }
-        }
+class TestAllowRuleSchema:
+    # These tests are probably over the top, but this is the first time we've
+    # used marshmallow_jsonapi, so this is partly asserting that it works as
+    # we would expect.
 
     @pytest.mark.parametrize(
         "path,value",
@@ -56,10 +35,19 @@ class TestAddToAllowList:
     def test_it_rejects_degenerate_submissions(self, pyramid_request, path, value):
         body = self.valid_body()
         self.set_path(body, path, value)
-        self.set_json_body(pyramid_request, body)
 
-        with pytest.raises(HTTPUnprocessableEntity):
-            add_to_allow_list(pyramid_request)  # pylint:disable=no-value-for-parameter
+        with pytest.raises(ValidationError):
+            AllowRuleSchema().load(body)
+
+    @pytest.mark.parametrize(
+        "url", ("http://example.com", "//example.com", "example.com")
+    )
+    def test_it_accepts_a_valid_request(self, pyramid_request, url):
+        AllowRuleSchema().load(self.valid_body(url))
+
+    @classmethod
+    def valid_body(cls, url="http://example.com"):
+        return {"data": {"type": "AllowRule", "attributes": {"url": url}}}
 
     @classmethod
     def set_path(cls, data, path, value):
@@ -72,22 +60,15 @@ class TestAddToAllowList:
         else:
             target[path[-1]] = value
 
-    @classmethod
-    def valid_body(cls, url="http://example.com"):
-        return {"data": {"type": "AllowRule", "attributes": {"url": url}}}
 
-    @classmethod
-    def set_json_body(cls, request, body):
-        request.body = json.dumps(body).encode("utf-8")
-        request.content_type = "application/json"
-        request.charset = "utf-8"
+@pytest.mark.usefixtures("rule_service", "session")
+class TestAddToAllowList:
+    def test_it(self, pyramid_request, rule_service):
+        pyramid_request.json_api = JSONAPIBody(
+            "AllowRule", {"url": "http://example.com"}
+        )
 
-    @pytest.fixture
-    def rule_service(self, rule_service, rule):
-        rule_service.add_to_allow_list.return_value = rule
+        response = add_to_allow_list(pyramid_request)
 
-        return rule_service
-
-    @pytest.fixture
-    def rule(self):
-        return factories.AllowRule.build(id=1234567)
+        rule_service.add_to_allow_list.assert_called_once_with("http://example.com")
+        assert response == rule_service.add_to_allow_list.return_value
