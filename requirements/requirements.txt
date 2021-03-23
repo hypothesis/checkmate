@@ -66,9 +66,7 @@ markupsafe==1.1.1
 marshmallow-jsonapi==0.24.0
     # via -r requirements/requirements.in
 marshmallow==3.10.0
-    # via
-    #   marshmallow-jsonapi
-    #   webargs
+    # via marshmallow-jsonapi
 netaddr==0.8.0
     # via -r requirements/requirements.in
 newrelic==6.2.0.156
@@ -158,8 +156,6 @@ vine==5.0.0
     #   celery
 wcwidth==0.2.5
     # via prompt-toolkit
-webargs==7.0.1
-    # via -r requirements/requirements.in
 webob==1.8.6
     # via pyramid
 wired==0.3
