@@ -29,8 +29,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: .tox
-        key: ${{ runner.os }}-tox-${{ hashFiles('tox.ini', 'requirements*', 'setup.py', 'setup.cfg') }}
+        key: ${{ runner.os }}-tox-${{ secrets.CACHE_VERSION }}-${{ hashFiles('tox.ini', 'requirements*', 'setup.py', 'setup.cfg') }}
         restore-keys: |
-          ${{ runner.os }}-tox-
+          ${{ runner.os }}-tox-${{ secrets.CACHE_VERSION }}-
     - name: Run tox
       run: tox --parallel auto -e lint,checkformatting,tests,functests
