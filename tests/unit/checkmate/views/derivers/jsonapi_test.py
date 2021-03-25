@@ -18,12 +18,12 @@ from pyramid.response import Response
 from pytest import param
 
 from checkmate.exceptions import MalformedJSONBody, ResourceConflict
-from checkmate.views.derivers.json_api import (
+from checkmate.views.derivers.jsonapi import (
     JSONAPIBody,
     JSONAPIRequest,
     JSONAPIResponse,
     JSONAPIViewWrapper,
-    json_api_view_deriver,
+    jsonapi_view_deriver,
 )
 
 
@@ -138,7 +138,7 @@ class TestJSONAPIResponse:
                 ResourceConflict("message"),
                 409,
                 {"errors": [{"detail": "message", "id": "ResourceConflict"}]},
-                id="json_api_error",
+                id="jsonapi_error",
             ),
             param(
                 ValidationError(field_name=SCHEMA, message="content-irrelevant"),
@@ -253,7 +253,7 @@ class TestJSONAPIRequest:
 
     @pytest.fixture(autouse=True)
     def JSONAPIBody(self, patch):
-        return patch("checkmate.views.derivers.json_api.JSONAPIBody")
+        return patch("checkmate.views.derivers.jsonapi.JSONAPIBody")
 
 
 class TestJSONAPIViewWrapper:
@@ -261,17 +261,6 @@ class TestJSONAPIViewWrapper:
         wrapper(sentinel.context, pyramid_request)
 
         view.assert_called_once_with(sentinel.context, pyramid_request)
-
-    def test_it_requires_the_schema_to_be_a_jsonapi_schema(self, view):
-        # We check specifically for `marshmallow_jsonapi` schema. A common
-        # mistake might be to use regular marshmallow schema
-        # pylint: disable=import-outside-toplevel
-        from marshmallow import Schema as PlainSchema
-
-        schema = PlainSchema()
-
-        with pytest.raises(ValueError):
-            JSONAPIViewWrapper(view, schema)
 
     @pytest.mark.parametrize(
         "method,status_code",
@@ -295,7 +284,7 @@ class TestJSONAPIViewWrapper:
         wrapper(sentinel.context, pyramid_request)
 
         JSONAPIRequest.parse.assert_called_once_with(pyramid_request, schema)
-        assert pyramid_request.json_api == JSONAPIRequest.parse.return_value
+        assert pyramid_request.jsonapi == JSONAPIRequest.parse.return_value
 
     def test_it_transparently_passes_response_objects(self, view, wrapper_caller):
         view.return_value = Response()
@@ -304,7 +293,7 @@ class TestJSONAPIViewWrapper:
 
         assert wrapped_response is view.return_value
 
-    def test_it_serialises_json_api_response_objects(
+    def test_it_serialises_jsonapi_response_objects(
         self, view, wrapper_caller, pyramid_request
     ):
         class CustomResponse(JSONAPIResponse):
@@ -313,8 +302,8 @@ class TestJSONAPIViewWrapper:
 
                 return "custom_response"
 
-        json_api_response = CustomResponse({})
-        view.return_value = json_api_response
+        jsonapi_response = CustomResponse({})
+        view.return_value = jsonapi_response
 
         wrapped_response = wrapper_caller()
 
@@ -353,8 +342,8 @@ class TestJSONAPIViewWrapper:
 
     @pytest.fixture
     def view(self):
-        def view(context, request):  # pragma: no cover
-            ...
+        def view(context, request):
+            """Spec for the mock view created below."""
 
         return create_autospec(view, spec_set=True)
 
@@ -371,14 +360,14 @@ class TestJSONAPIViewWrapper:
 
     @pytest.fixture(autouse=True)
     def JSONAPIRequest(self, patch):
-        return patch("checkmate.views.derivers.json_api.JSONAPIRequest")
+        return patch("checkmate.views.derivers.jsonapi.JSONAPIRequest")
 
 
 class TestJSONAPIViewDeriver:
     def test_it_wraps_the_view_with_options(self, info, JSONAPIViewWrapper):
-        info.options["json_api"] = {"schema": sentinel.schema}
+        info.options["jsonapi"] = {"schema": sentinel.schema}
 
-        result = json_api_view_deriver(sentinel.view, info)
+        result = jsonapi_view_deriver(sentinel.view, info)
 
         JSONAPIViewWrapper.assert_called_once_with(
             sentinel.view, schema=sentinel.schema
@@ -387,7 +376,7 @@ class TestJSONAPIViewDeriver:
         assert result == JSONAPIViewWrapper.return_value
 
     def test_it_does_nothing_without_options(self, info):
-        result = json_api_view_deriver(sentinel.view, info)
+        result = jsonapi_view_deriver(sentinel.view, info)
 
         assert result == sentinel.view
 
@@ -400,4 +389,4 @@ class TestJSONAPIViewDeriver:
 
     @pytest.fixture(autouse=True)
     def JSONAPIViewWrapper(self, patch):
-        return patch("checkmate.views.derivers.json_api.JSONAPIViewWrapper")
+        return patch("checkmate.views.derivers.jsonapi.JSONAPIViewWrapper")
