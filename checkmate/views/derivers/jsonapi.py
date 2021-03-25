@@ -1,21 +1,21 @@
 """A view deriver which adds JSON:API processing to a view.
 
 Any argument which is accepted by `JSONAPIViewWrapper` (aside from view) can be
-passed in a view decorator by using the `json_api` argument. e.g.
+passed in a view decorator by using the `jsonapi` argument. e.g.
 
     @view_config(
         request_method="POST",
-        json_api={"schema": MyCustomSchema()},
+        jsonapi={"schema": MyCustomSchema()},
     )
     def my_view(context, request):
-        value = request.json_api.attributes['key']
+        value = request.jsonapi.attributes['key']
         ...
 
 Using this wrapper will:
 
  * Validate JSON:API spec requirements such as Accept and Content-Type
  * Parse a JSON:API body against the provided schema for POST and PATCH
- * Set the results of this parsing as `json_api` on the request object
+ * Set the results of this parsing as `jsonapi` on the request object
    as a `JSONAPIBody` object
  * Wrap any return value and convert it into a valid JSON:API response
    using the provided schema
@@ -32,7 +32,6 @@ To exercise more control, you can return:
 from json import JSONDecodeError
 
 from marshmallow import ValidationError
-from marshmallow_jsonapi import Schema
 from pyramid.httpexceptions import (
     HTTPClientError,
     HTTPMethodNotAllowed,
@@ -56,13 +55,7 @@ class JSONAPIViewWrapper:
         :param view: Pyramid view to wrap
         :param schema: `marshmallow_jsonapi.Schema` instance to validate
             requests and format responses
-
-        :raise ValueError: If the provided schema is not a
-            `marshmallow_jsonapi.Schema` instance
         """
-        if not isinstance(schema, Schema):
-            raise ValueError("Schema must be a `marshmallow_jsonapi.Schema`")
-
         self._view = view
         self._schema = schema
 
@@ -81,7 +74,7 @@ class JSONAPIViewWrapper:
         except Exception as exc:
             try:
                 return JSONAPIResponse.from_exception(exc).make_response(
-                    request.response
+                    exc if isinstance(exc, Response) else request.response
                 )
             except NotImplementedError:
                 # An exception which we can't translate...
@@ -92,8 +85,8 @@ class JSONAPIViewWrapper:
 
     def _handle_call(self, context, request):
         # Parse the request and make the result (if any) available to the
-        # view as `json_api`
-        request.json_api = JSONAPIRequest.parse(request, self._schema)
+        # view as `jsonapi`
+        request.jsonapi = JSONAPIRequest.parse(request, self._schema)
 
         # Default the status code to the ones used by JSON:API.
         # This is done before calling the view so the view can change the
@@ -365,10 +358,10 @@ class JSONAPIResponse:
             response.headers["Location"] = link_self
 
 
-def json_api_view_deriver(view, info):
+def jsonapi_view_deriver(view, info):
     """Wrap the view if required with a JSON:API conversion layer."""
 
-    options = info.options.get("json_api")
+    options = info.options.get("jsonapi")
     if options:
         return JSONAPIViewWrapper(view, **options)
 
@@ -377,4 +370,4 @@ def json_api_view_deriver(view, info):
 
 # Tell Pyramid to allow the options as a @view_config() argument.
 # (Pyramid throws an error if a @view_config() receives an unknown argument).
-json_api_view_deriver.options = ["json_api"]
+jsonapi_view_deriver.options = ["jsonapi"]

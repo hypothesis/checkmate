@@ -1,7 +1,7 @@
 import pytest
 from marshmallow import ValidationError
 
-from checkmate.views.derivers.json_api import JSONAPIBody
+from checkmate.views.derivers.jsonapi import JSONAPIBody
 from checkmate.views.ui.api.add_to_allow_list import AllowRuleSchema, add_to_allow_list
 
 DELETE = ...
@@ -64,7 +64,7 @@ class TestAllowRuleSchema:
 @pytest.mark.usefixtures("rule_service", "session")
 class TestAddToAllowList:
     def test_it(self, pyramid_request, rule_service):
-        pyramid_request.json_api = JSONAPIBody(
+        pyramid_request.jsonapi = JSONAPIBody(
             "AllowRule", {"url": "http://example.com"}
         )
 

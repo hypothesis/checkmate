@@ -40,12 +40,12 @@ class AllowRuleSchema(Schema):
 @view_config(
     route_name="add_to_allow_list",
     request_method="POST",
-    json_api={"schema": AllowRuleSchema()},
+    jsonapi={"schema": AllowRuleSchema()},
     effective_principals=[Principals.STAFF],
 )
 def add_to_allow_list(request):
     """Add a rule matching `url` to the allow list."""
 
     return request.find_service(RuleService).add_to_allow_list(
-        request.json_api.attributes["url"]
+        request.jsonapi.attributes["url"]
     )
