@@ -64,7 +64,7 @@ google-auth==1.24.0
     # via
     #   -r requirements/requirements.txt
     #   google-auth-oauthlib
-gunicorn==20.0.4
+gunicorn==20.1.0
     # via -r requirements/requirements.txt
 h-matchers==1.2.10
     # via -r requirements/tests.in
