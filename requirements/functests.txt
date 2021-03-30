@@ -52,7 +52,7 @@ click==7.1.2
     #   click-didyoumean
     #   click-plugins
     #   click-repl
-google-auth-oauthlib==0.4.3
+google-auth-oauthlib==0.4.4
     # via -r requirements/requirements.txt
 google-auth==1.24.0
     # via
