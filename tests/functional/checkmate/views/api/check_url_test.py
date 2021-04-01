@@ -1,7 +1,5 @@
-import webtest
 from h_matchers import Any
 
-from checkmate.app import create_app
 from checkmate.models import BlockedFor
 
 

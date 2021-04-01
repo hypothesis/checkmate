@@ -24,6 +24,11 @@ disable=bad-continuation,
         too-few-public-methods,
         unused-argument,
 
+        # We use Black to format our code automatically, so we don't need
+        # PyLint to check formatting for us.
+        bad-continuation,
+        line-too-long,
+
 [REPORTS]
 output-format=colorized
 score=no
