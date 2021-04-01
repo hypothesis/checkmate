@@ -55,7 +55,7 @@ class TestBlocklistParser:
             ("example.com too many parts", None),
         ),
     )
-    def test_line_parsing(self, tmp_path, line, reason):
+    def test_line_parsing(self, line, reason):
         rules = BlocklistParser.parse_lines([line])
 
         if reason:

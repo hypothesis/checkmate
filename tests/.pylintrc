@@ -11,18 +11,13 @@ load-plugins=pylint.extensions.bad_builtin,
              pylint.extensions.redefined_variable_type,
 
 [MESSAGES CONTROL]
-disable=bad-continuation,
-        invalid-name,
-        missing-function-docstring,
-        missing-module-docstring,
-        missing-class-docstring,
+disable=invalid-name,
+        missing-docstring,
         missing-type-doc,
         missing-return-type-doc,
         no-self-use,
-        no-value-for-parameter,
         redefined-outer-name,
         too-few-public-methods,
-        unused-argument,
         too-many-arguments,
 
         # We use Black to format our code automatically, so we don't need

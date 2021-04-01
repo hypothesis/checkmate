@@ -64,9 +64,7 @@ class TestURLCheck:
             },
         )
 
-    def test_a_bad_url_ignored_reasons(
-        self, make_request, url_checker_service, secure_link_service, pyramid_settings
-    ):
+    def test_a_bad_url_ignored_reasons(self, make_request, url_checker_service):
         bad_url = "http://sad.example.com"
 
         request = make_request(

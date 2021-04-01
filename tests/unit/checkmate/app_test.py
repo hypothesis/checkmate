@@ -99,7 +99,7 @@ class TestCheckmateConfigurator:
         config.scan.assert_not_called()
 
     @pytest.mark.usefixtures("with_clear_environ")
-    def test_load_api_keys_empty(self, config):
+    def test_load_api_keys_empty(self):
         # pylint: disable=protected-access
         api_keys = CheckmateConfigurator._get_api_keys_from_env()
         assert list(api_keys) == []
