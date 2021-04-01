@@ -26,7 +26,7 @@ def db_engine():
 def pyramid_settings():
     return {
         "database_url": _TEST_DATABASE_URL,
-        "secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
+        "checkmate_secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
         "google_client_id": "google_client_id",
         "google_client_secret": "google_client_secret",
         "public_host": "localhost",

@@ -23,6 +23,6 @@ class TestAPIAuth:
 
     @pytest.fixture
     def secure_link_service(self, pyramid_settings, route_url):
-        signature_service = SignatureService(pyramid_settings["secret"])
+        signature_service = SignatureService(pyramid_settings["checkmate_secret"])
         secure_link_service = SecureLinkService(signature_service, route_url)
         return secure_link_service
