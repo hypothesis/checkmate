@@ -19,7 +19,7 @@ class TestAPIAuth:
             _query={"url": "example.com", "reason": "not-explicitly-allowed"},
         )
 
-        res = app.get(url, status=403)
+        app.get(url, status=403)
 
     @pytest.fixture
     def secure_link_service(self, pyramid_settings, route_url):
