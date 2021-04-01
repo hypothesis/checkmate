@@ -54,9 +54,7 @@ def httpretty_():
 
 @pytest.fixture
 def route_url():
-    request = DummyRequest(
-        environ={"SERVER_NAME": "localhost", "wsgi.url_scheme": "https"}
-    )
+    request = DummyRequest(environ={"SERVER_NAME": "localhost"})
 
     with testConfig(request=request) as config:
         config.include("checkmate.routes")
