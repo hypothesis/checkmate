@@ -57,9 +57,7 @@ class TestSecureLinkService:
             ]
         )
 
-    def test_is_secure_disallows_different_tokens(
-        self, service, pyramid_request, signature_service
-    ):
+    def test_is_secure_disallows_different_tokens(self, service, pyramid_request):
         pyramid_request.GET.update(
             {service.TOKEN_ARG: "unexpected_token", service.VERSION_ARG: "1"}
         )

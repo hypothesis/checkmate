@@ -23,7 +23,7 @@ def clean_database(db_engine):
 
 
 @pytest.fixture
-def app(pyramid_app, db_engine):
+def app(pyramid_app, db_engine):  # pylint:disable=unused-argument
     # This extra_environ is necessary to get webtest to use https and port
     # 443 when you give it a path rather than a full URL `app.get("/foo/bar")`.
     # We need it to use SSL because the admin pages use secure cookies
@@ -34,7 +34,12 @@ def app(pyramid_app, db_engine):
 
 
 @pytest.fixture
-def logged_in(app, route_url, signature_service, mock_google_auth_service):
+def logged_in(
+    app,
+    route_url,
+    signature_service,
+    mock_google_auth_service,  # pylint:disable=unused-argument
+):
     """Make `app` be logged in to the admin pages with a session cookie."""
     # Google redirects the browser to our login callback URL with a state
     # param, and the login callback URL's response includes a session cookie in

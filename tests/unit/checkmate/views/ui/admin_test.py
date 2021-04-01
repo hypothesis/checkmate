@@ -10,7 +10,7 @@ from checkmate.views.ui.admin import (
 
 
 class TestAdminPages:
-    def test_it(self, pyramid_request, session):
+    def test_it(self, pyramid_request):
         pyramid_request.headers["Cookie"] = "session=session_value"
 
         response = admin_pages(sentinel.context, pyramid_request)

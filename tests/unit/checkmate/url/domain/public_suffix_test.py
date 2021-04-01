@@ -18,9 +18,8 @@ class TestPublicSuffix:
 
         assert PublicSuffix.is_suffix(suffix.raw, icann_only) == is_suffix
 
-    @pytest.mark.parametrize("icann_only", (True, False))
     @pytest.mark.parametrize("prefix", ("www.", ""))
-    def test_has_suffix(self, prefix, suffix, icann_only):
+    def test_has_suffix(self, prefix, suffix):
         domain = DomainCore(f"{prefix}{suffix.raw}")
 
         # Anything that has an icann suffix at all has a suffix. There's no
@@ -45,7 +44,7 @@ class TestPublicSuffix:
         // ===BEGIN PRIVATE DOMAINS===
         example.com
         *.example.net
-        
+
         !exception.example.net
         // ===END PRIVATE DOMAINS===
         """

@@ -83,7 +83,8 @@ class TestGoogleAuthService:
             prompt="select_account" if force_login else None,
         )
 
-    def test_login_url_verifies_the_state(self, service, flow):
+    @pytest.mark.usefixtures("flow")
+    def test_login_url_verifies_the_state(self, service):
         service._signature_service.check_nonce.return_value = False
 
         with pytest.raises(UserNotAuthenticated):
@@ -113,7 +114,7 @@ class TestGoogleAuthService:
             "scopes": flow.credentials.scopes,
         }
 
-    def test_exchange_auth_code_checks_for_returned_errors(self, service, flow):
+    def test_exchange_auth_code_checks_for_returned_errors(self, service):
         with pytest.raises(UserNotAuthenticated):
             service.exchange_auth_code("http://example.com?error=oh_dear")
 

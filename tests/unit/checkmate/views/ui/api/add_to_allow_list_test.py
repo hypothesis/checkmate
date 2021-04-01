@@ -17,6 +17,7 @@ class TestAddToAllowList:
     def test_it_handles_a_valid_request(self, pyramid_request, rule, url):
         self.set_json_body(pyramid_request, self.valid_body(url))
 
+        # pylint:disable=no-value-for-parameter
         response = add_to_allow_list(pyramid_request)
 
         assert response == {
@@ -58,7 +59,7 @@ class TestAddToAllowList:
         self.set_json_body(pyramid_request, body)
 
         with pytest.raises(HTTPUnprocessableEntity):
-            add_to_allow_list(pyramid_request)
+            add_to_allow_list(pyramid_request)  # pylint:disable=no-value-for-parameter
 
     @classmethod
     def set_path(cls, data, path, value):

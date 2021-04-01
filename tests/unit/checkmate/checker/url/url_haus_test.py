@@ -82,7 +82,10 @@ class TestURLHaus:
         # Ensure we exhaust the generator we are given like URLHausRule would
         # and grab the result
 
-        def exhaust(session, values):
+        def exhaust(
+            session,  # pylint:disable=unused-argument
+            values,
+        ):
             URLHausRule.updated_values = list(values)
             return URLHausRule.bulk_upsert.return_value
 

@@ -67,9 +67,7 @@ class TestURLCheckerService:
             Detection(Reason.HIGH_IO, Source.BLOCK_LIST),
         ]
 
-    def test_it_can_disable_the_allow_list(
-        self, checker, URLHaus, CustomRules, AllowRules
-    ):
+    def test_it_can_disable_the_allow_list(self, checker, AllowRules):
         AllowRules.return_value.check_url.return_value = (Reason.NOT_ALLOWED,)
 
         checker.check_url("http://example.com", allow_all=True, fail_fast=False)
