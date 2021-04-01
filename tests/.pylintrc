@@ -23,6 +23,7 @@ disable=bad-continuation,
         redefined-outer-name,
         too-few-public-methods,
         unused-argument,
+        too-many-arguments,
 
         # We use Black to format our code automatically, so we don't need
         # PyLint to check formatting for us.
