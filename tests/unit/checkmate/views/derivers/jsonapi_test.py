@@ -309,9 +309,7 @@ class TestJSONAPIViewWrapper:
 
         assert wrapped_response == "custom_response"
 
-    def test_it_wraps_and_serializes_other_objects(
-        self, view, wrapper_caller, pyramid_request
-    ):
+    def test_it_wraps_and_serializes_other_objects(self, view, pyramid_request):
         class TestObject:
             key = "value"
 
@@ -342,7 +340,7 @@ class TestJSONAPIViewWrapper:
 
     @pytest.fixture
     def view(self):
-        def view(context, request):
+        def view(context, request):  # pylint: disable=unused-argument
             """Spec for the mock view created below."""
 
         return create_autospec(view, spec_set=True)

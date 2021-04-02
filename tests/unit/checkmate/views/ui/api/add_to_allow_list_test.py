@@ -32,7 +32,7 @@ class TestAllowRuleSchema:
             # (["data", "extras"], "not allowed"),
         ),
     )
-    def test_it_rejects_degenerate_submissions(self, pyramid_request, path, value):
+    def test_it_rejects_degenerate_submissions(self, path, value):
         body = self.valid_body()
         self.set_path(body, path, value)
 
@@ -42,7 +42,7 @@ class TestAllowRuleSchema:
     @pytest.mark.parametrize(
         "url", ("http://example.com", "//example.com", "example.com")
     )
-    def test_it_accepts_a_valid_request(self, pyramid_request, url):
+    def test_it_accepts_a_valid_request(self, url):
         AllowRuleSchema().load(self.valid_body(url))
 
     @classmethod
