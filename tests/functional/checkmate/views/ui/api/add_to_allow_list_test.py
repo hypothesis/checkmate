@@ -12,7 +12,7 @@ class TestAddToAllowList:
 
     @pytest.mark.usefixtures("logged_in")
     def test_a_request_with_a_session_cookie_succeeds(self, app, json_body):
-        response = app.post_json("/ui/api/rule", json_body, status=200)
+        response = app.post_json("/ui/api/rule", json_body, status=201)
 
         assert response.json == {
             "data": {
