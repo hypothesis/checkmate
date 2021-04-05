@@ -41,10 +41,7 @@ class EnhancedDummyRequest(DummyRequest):  # pylint:disable=too-many-ancestors
 
     @property
     def json_body(self):
-        try:
-            return self._json
-        except AttributeError:
-            return json.loads(self.body)
+        return json.loads(self.body)
 
     @property
     def json(self):
