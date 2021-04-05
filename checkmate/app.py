@@ -44,6 +44,19 @@ class CheckmateConfigurator:
 
         return value
 
+    @classmethod
+    def add_api_keys_from_env(cls, param_name, config):
+        keys = config.registry.settings.get(param_name, {})
+
+        for name, api_key in os.environ.items():
+            match = API_KEY_RE.match(name)
+            if match:
+                username = match.group("user").lower()
+                logger.info("Loaded api_key value for %s", username)
+                keys[api_key] = username
+
+        config.add_settings({param_name: keys})
+
     def _configure_checkmate(self, config):
         if self.celery_worker:
             self.add_setting_from_env("checkmate_blocklist_url")
@@ -116,7 +129,7 @@ class CheckmateConfigurator:
         self.add_setting_from_env("google_client_secret")
 
         # API keys used by APIHTTPAuth
-        config.add_settings({"api_keys": dict(self._get_api_keys_from_env())})
+        self.add_api_keys_from_env("api_keys", config)
 
         # Setup a cookie based session to store our authentication details in
         session_factory = SignedCookieSessionFactory(
@@ -131,15 +144,6 @@ class CheckmateConfigurator:
 
         config.set_authentication_policy(AuthenticationPolicy())
         config.set_authorization_policy(AuthorizationPolicy())
-
-    @classmethod
-    def _get_api_keys_from_env(cls):
-        for name, api_key in os.environ.items():
-            match = API_KEY_RE.match(name)
-            if match:
-                username = match.group("user").lower()
-                logger.info("Loaded api_key value for %s", username)
-                yield api_key, username
 
 
 def create_app(_=None, celery_worker=False, **settings):  # pragma: no cover
