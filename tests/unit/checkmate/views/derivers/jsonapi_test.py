@@ -186,12 +186,12 @@ class TestJSONAPIRequest:
     )
     def test_it_allows_valid_accepts(self, accept_header, pyramid_request):
         if accept_header:
-            pyramid_request.environ["HTTP_ACCEPT"] = accept_header
+            pyramid_request.accept = accept_header
 
         JSONAPIRequest.parse(pyramid_request, body_schema=None)
 
     def test_it_rejects_accept_with_media_queries(self, pyramid_request):
-        pyramid_request.environ["HTTP_ACCEPT"] = (
+        pyramid_request.accept = (
             "application/vnd.api+json; this-is-bad=if-they-all-have-it, "
             "application/vnd.api+json; i-have-it=too"
         )
@@ -208,19 +208,24 @@ class TestJSONAPIRequest:
         ),
     )
     def test_it_allows_valid_content_types(self, pyramid_request, content_type):
-        pyramid_request.content_type = content_type
+        pyramid_request.content_type = pyramid_request.headers[
+            "Content-Type"
+        ] = content_type
 
         JSONAPIRequest.parse(pyramid_request, body_schema=None)
 
-    @pytest.mark.parametrize(
-        "content_type",
-        (
-            "text/html",
-            "application/vnd.api+json; no-media-params=are-allowed",
-        ),
-    )
-    def test_it_rejects_invalid_content_types(self, pyramid_request, content_type):
-        pyramid_request.content_type = content_type
+    def test_it_rejects_invalid_content_types(self, pyramid_request):
+        pyramid_request.content_type = pyramid_request.headers[
+            "Content-Type"
+        ] = "text/html"
+
+        with pytest.raises(HTTPUnsupportedMediaType):
+            JSONAPIRequest.parse(pyramid_request, body_schema=None)
+
+    def test_it_rejects_content_types_with_media_type_params(self, pyramid_request):
+        pyramid_request.headers[
+            "Content-Type"
+        ] = "application/vnd.api+json; no-media-params=are-allowed"
 
         with pytest.raises(HTTPUnsupportedMediaType):
             JSONAPIRequest.parse(pyramid_request, body_schema=None)
@@ -388,3 +393,11 @@ class TestJSONAPIViewDeriver:
     @pytest.fixture(autouse=True)
     def JSONAPIViewWrapper(self, patch):
         return patch("checkmate.views.derivers.jsonapi.JSONAPIViewWrapper")
+
+
+@pytest.fixture
+def pyramid_request(pyramid_request):
+    pyramid_request.content_type = pyramid_request.headers[
+        "Content-Type"
+    ] = "application/vnd.api+json"
+    return pyramid_request

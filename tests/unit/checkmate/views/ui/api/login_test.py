@@ -42,20 +42,20 @@ class TestLogin:
         )
 
 
-@pytest.mark.usefixtures("google_auth_service", "session")
+@pytest.mark.usefixtures("google_auth_service")
 class TestLoginCallback:
     def test_it_sets_up_the_session(
-        self, pyramid_request, google_auth_service, session, auth_policy
+        self, pyramid_request, google_auth_service, auth_policy
     ):
-        session["some_noise"] = "which_should_be_cleared_out"
+        pyramid_request.session["some_noise"] = "which_should_be_cleared_out"
         user = {"email": "staff@hypothes.is", "user_other": "user_value"}
 
         google_auth_service.exchange_auth_code.return_value = user, sentinel.credentials
 
         response = login_callback(sentinel.context, pyramid_request)
 
-        assert session == {"user": user}
-        assert response.location == "http://localhost/ui/admin"
+        assert pyramid_request.session == {"user": user}
+        assert response.location == "http://example.com/ui/admin"
         auth_policy.remember.assert_called_once_with(
             pyramid_request, "staff@hypothes.is", iface=GoogleAuthenticationPolicy
         )
@@ -68,19 +68,19 @@ class TestLoginCallback:
 
         response = login_callback(sentinel.context, pyramid_request)
 
-        assert response.location == "http://localhost/ui/admin/login_failure"
+        assert response.location == "http://example.com/ui/admin/login_failure"
         assert "Remember-Header" not in list(response.headers)
 
 
-@pytest.mark.usefixtures("session", "auth_policy")
+@pytest.mark.usefixtures("auth_policy")
 class TestLogout:
-    def test_it_clears_the_session_and_redirects(self, pyramid_request, session):
-        session["some_noise"] = "which_should_be_cleared_out"
+    def test_it_clears_the_session_and_redirects(self, pyramid_request):
+        pyramid_request.session["some_noise"] = "which_should_be_cleared_out"
 
         response = logout(sentinel.context, pyramid_request)
 
-        assert session == {}
-        assert response.location == "http://localhost/ui/api/login"
+        assert pyramid_request.session == {}
+        assert response.location == "http://example.com/ui/api/login"
         assert "Forget-Header" in list(response.headers)
 
     def test_it_redirects_with_a_login_hint_if_possible(

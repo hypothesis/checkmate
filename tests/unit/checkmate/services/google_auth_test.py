@@ -185,4 +185,4 @@ class TestFactory:
         assert result._signature_service == signature_service
         assert result._client_id == sentinel.google_client_id
         assert result._client_secret == sentinel.google_client_secret
-        assert result._redirect_uri == "http://localhost/ui/api/login_callback"
+        assert result._redirect_uri == "http://example.com/ui/api/login_callback"

@@ -61,7 +61,7 @@ class TestAllowRuleSchema:
             target[path[-1]] = value
 
 
-@pytest.mark.usefixtures("rule_service", "session")
+@pytest.mark.usefixtures("rule_service")
 class TestAddToAllowList:
     def test_it(self, pyramid_request, rule_service):
         pyramid_request.jsonapi = JSONAPIBody(
