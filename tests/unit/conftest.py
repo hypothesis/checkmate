@@ -1,12 +1,11 @@
 # pylint: disable=no-self-use
 """A place to put fixture functions that are useful application-wide."""
-from unittest.mock import MagicMock
-from urllib.parse import urlencode
+import json
 
 import sqlalchemy
 from pyramid import testing
-from pyramid.request import Request, apply_request_extensions
-from pyramid.testing import DummySession
+from pyramid.request import apply_request_extensions
+from pyramid.testing import DummyRequest
 from sqlalchemy.orm import sessionmaker
 
 from checkmate.routes import add_routes
@@ -18,41 +17,49 @@ from tests.unit.services import *  # pylint: disable=wildcard-import,unused-wild
 def pyramid_config(pyramid_settings):
     with testing.testConfig(settings=pyramid_settings) as config:
         config.include("pyramid_services")
+        config.include("pyramid_tm")
+
         add_routes(config)
+
         yield config
 
 
-@pytest.fixture
-def pyramid_request(pyramid_config, db_session):
-    return _make_request("/dummy", pyramid_config, db_session)
+class EnhancedDummyRequest(DummyRequest):  # pylint:disable=too-many-ancestors
+    """A subclass that adds some missing features to DummyRequest.
+
+    Real Request objects have a `json_body` property and a `json` property
+    that's an alias for `json_body`. DummyRequest is missing both.
+    EnhancedDummyRequest adds the missing `json` and `json_body` properties.
+
+    By default reading `json` or `json_body` will raise JSONDecodeError, which
+    is what reading a real Request's `json` or `json_body` does if the request
+    doesn't have a JSON body.
+
+    Tests can set pyramid_request.body to a JSON string, then reading `json` or
+    `json_body` will return json.loads(body).
+    """
+
+    @property
+    def json_body(self):
+        try:
+            return self._json
+        except AttributeError:
+            return json.loads(self.body)
+
+    @property
+    def json(self):
+        return self.json_body
 
 
 @pytest.fixture
-def make_request(pyramid_config, db_session):
-    def make_request(path="/irrelevant", params=None):
-        if params:  # pragma: no cover
-            path += "?" + urlencode(params)
-
-        return _make_request(path, pyramid_config, db_session)
-
-    return make_request
-
-
-@pytest.fixture
-def session(pyramid_request):
-    session = DummySession()
-    pyramid_request.session = session
-    return session
-
-
-def _make_request(path, pyramid_config, db_session):
-    pyramid_request = Request.blank(path)
-    pyramid_request.registry = pyramid_config.registry
-    pyramid_request.tm = MagicMock()
-    pyramid_request.db = db_session
-
+def pyramid_request(
+    db_session,
+    pyramid_config,  # pylint:disable=unused-argument
+):
+    pyramid_request = EnhancedDummyRequest(
+        db=db_session, environ={"HTTP_HOST": "example.com"}
+    )
     apply_request_extensions(pyramid_request)
-
     return pyramid_request
 
 

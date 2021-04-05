@@ -23,7 +23,7 @@ class TestAdminPagesLoggedOut:
         response = admin_pages_logged_out(sentinel.context, pyramid_request)
 
         assert isinstance(response, HTTPFound)
-        assert response.location == "http://localhost/ui/api/login"
+        assert response.location == "http://example.com/ui/api/login"
 
 
 class TestAdminLoginFailure:
