@@ -28,6 +28,7 @@ def pyramid_settings():
     return {
         "database_url": _TEST_DATABASE_URL,
         "checkmate_secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
+        "api_keys": {"dev_api_key": "dev"},
         "google_client_id": "google_client_id",
         "google_client_secret": "google_client_secret",
         "public_host": "localhost",
