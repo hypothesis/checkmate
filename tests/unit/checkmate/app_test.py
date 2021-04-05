@@ -99,17 +99,16 @@ class TestCheckmateConfigurator:
         config.scan.assert_not_called()
 
     @pytest.mark.usefixtures("with_clear_environ")
-    def test_load_api_keys_empty(self):
-        # pylint: disable=protected-access
-        api_keys = CheckmateConfigurator._get_api_keys_from_env()
-        assert list(api_keys) == []
+    def test_add_api_keys_from_env_empty(self, config):
+        CheckmateConfigurator.add_api_keys_from_env("api_keys", config)
 
-    def test_load_api_keys(self, monkeypatch):
-        # pylint: disable=protected-access
+        config.add_settings.assert_called_once_with({"api_keys": {}})
+
+    def test_add_api_keys_from_env(self, config, monkeypatch):
         monkeypatch.setenv("CHECKMATE_API_KEY_USER_1", "api-key")
-        api_keys = CheckmateConfigurator._get_api_keys_from_env()
+        CheckmateConfigurator.add_api_keys_from_env("api_keys", config)
 
-        assert list(api_keys) == [("api-key", "user_1")]
+        config.add_settings.assert_called_once_with({"api_keys": {"api-key": "user_1"}})
 
     @pytest.mark.usefixtures("with_clear_environ")
     @pytest.mark.parametrize("setting", list(CELERY_SETTINGS.keys()))
