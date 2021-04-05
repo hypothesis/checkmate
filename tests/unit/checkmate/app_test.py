@@ -99,16 +99,22 @@ class TestCheckmateConfigurator:
         config.scan.assert_not_called()
 
     @pytest.mark.usefixtures("with_clear_environ")
-    def test_add_api_keys_from_env_empty(self, config):
-        CheckmateConfigurator.add_api_keys_from_env("api_keys", config)
+    def test_it_sets_api_keys_blank_if_not_specified(self, config):
+        config.registry.settings.update(APP_SETTINGS)
 
-        config.add_settings.assert_called_once_with({"api_keys": {}})
+        CheckmateConfigurator(config)
 
-    def test_add_api_keys_from_env(self, config, monkeypatch):
+        config.add_settings.assert_has_calls([call({"api_keys": {}})], any_order=True)
+
+    def test_it_adds_api_keys_from_env(self, config, monkeypatch):
+        config.registry.settings.update(APP_SETTINGS)
         monkeypatch.setenv("CHECKMATE_API_KEY_USER_1", "api-key")
-        CheckmateConfigurator.add_api_keys_from_env("api_keys", config)
 
-        config.add_settings.assert_called_once_with({"api_keys": {"api-key": "user_1"}})
+        CheckmateConfigurator(config)
+
+        config.add_settings.assert_has_calls(
+            [call({"api_keys": {"api-key": "user_1"}})], any_order=True
+        )
 
     @pytest.mark.usefixtures("with_clear_environ")
     @pytest.mark.parametrize("setting", list(CELERY_SETTINGS.keys()))

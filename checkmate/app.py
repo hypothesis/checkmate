@@ -44,9 +44,8 @@ class CheckmateConfigurator:
 
         return value
 
-    @classmethod
-    def add_api_keys_from_env(cls, param_name, config):
-        keys = config.registry.settings.get(param_name, {})
+    def add_api_keys_from_env(self, param_name):
+        keys = self.config.registry.settings.get(param_name, {})
 
         for name, api_key in os.environ.items():
             match = API_KEY_RE.match(name)
@@ -55,7 +54,9 @@ class CheckmateConfigurator:
                 logger.info("Loaded api_key value for %s", username)
                 keys[api_key] = username
 
-        config.add_settings({param_name: keys})
+        self.config.add_settings({param_name: keys})
+
+        return keys
 
     def _configure_checkmate(self, config):
         if self.celery_worker:
@@ -129,7 +130,7 @@ class CheckmateConfigurator:
         self.add_setting_from_env("google_client_secret")
 
         # API keys used by APIHTTPAuth
-        self.add_api_keys_from_env("api_keys", config)
+        self.add_api_keys_from_env("api_keys")
 
         # Setup a cookie based session to store our authentication details in
         session_factory = SignedCookieSessionFactory(
