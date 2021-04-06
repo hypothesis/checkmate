@@ -1,5 +1,3 @@
-from unittest.mock import sentinel
-
 import pytest
 from pyramid.httpexceptions import HTTPFound
 
@@ -27,7 +25,7 @@ class TestAdminPagesViews:
 
 class TestAdminLoginFailure:
     def test_it_returns_unauthorized(self, pyramid_request):
-        response = admin_login_failure(sentinel.context, pyramid_request)
+        response = admin_login_failure(pyramid_request)
 
         assert response == {}
         assert pyramid_request.response.status_code == 401
