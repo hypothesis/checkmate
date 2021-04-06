@@ -1,4 +1,3 @@
-"""User feedback for blocked pages."""
 from http.cookies import SimpleCookie
 
 from pyramid.httpexceptions import HTTPFound
