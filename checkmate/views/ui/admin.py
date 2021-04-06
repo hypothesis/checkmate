@@ -30,7 +30,7 @@ class AdminPagesViews:
     route_name="admin_login_failure",
     renderer="checkmate:templates/admin/login_failure.html.jinja2",
 )
-def admin_login_failure(_context, request):
+def admin_login_failure(request):
     """Render a page when the user has failed to login."""
 
     request.response.status_code = 401  # Not authorized
