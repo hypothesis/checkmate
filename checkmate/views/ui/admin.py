@@ -2,28 +2,29 @@
 from http.cookies import SimpleCookie
 
 from pyramid.httpexceptions import HTTPFound
-from pyramid.view import view_config
+from pyramid.view import view_config, view_defaults
 
 from checkmate.models import Principals
 
 
-@view_config(
-    route_name="admin_pages",
-    renderer="checkmate:templates/admin/pages.html.jinja2",
-    effective_principals=[Principals.STAFF],
-)
-def admin_pages(_context, request):
-    """Render the admin page."""
+@view_defaults(route_name="admin_pages", request_method="GET")
+class AdminPagesViews:
+    def __init__(self, request):
+        self.request = request
 
-    cookie = SimpleCookie()
-    cookie.load(request.headers["Cookie"])
+    @view_config(
+        renderer="checkmate:templates/admin/pages.html.jinja2",
+        effective_principals=[Principals.STAFF],
+    )
+    def get(self):
+        cookie = SimpleCookie()
+        cookie.load(self.request.headers["Cookie"])
 
-    return {"session": cookie["session"].value}
+        return {"session": cookie["session"].value}
 
-
-@view_config(route_name="admin_pages")
-def admin_pages_logged_out(_context, request):
-    return HTTPFound(location=request.route_url("login"))
+    @view_config()
+    def logged_out(self):
+        return HTTPFound(location=self.request.route_url("login"))
 
 
 @view_config(
