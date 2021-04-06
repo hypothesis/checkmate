@@ -7,14 +7,14 @@ from checkmate.views.ui.admin import AdminPagesViews, admin_login_failure
 
 
 class TestAdminPagesViews:
-    def test_admin_pages(self, pyramid_request, views):
+    def test_get(self, pyramid_request, views):
         pyramid_request.headers["Cookie"] = "session=session_value"
 
         response = views.get()
 
         assert response == {"session": "session_value"}
 
-    def test_admin_pages_logged_out_redirects_to_login(self, views):
+    def test_logged_out_redirects_to_login(self, views):
         response = views.logged_out()
 
         assert isinstance(response, HTTPFound)
