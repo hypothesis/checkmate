@@ -1,7 +1,7 @@
 import pytest
-from pyramid.httpexceptions import HTTPFound
 
 from checkmate.views.ui.admin import AdminPagesViews, admin_login_failure
+from tests.unit.matchers import temporary_redirect_to
 
 
 class TestAdminPagesViews:
@@ -12,11 +12,10 @@ class TestAdminPagesViews:
 
         assert response == {"session": "session_value"}
 
-    def test_logged_out_redirects_to_login(self, views):
+    def test_logged_out_redirects_to_login(self, pyramid_request, views):
         response = views.logged_out()
 
-        assert isinstance(response, HTTPFound)
-        assert response.location == "http://example.com/ui/api/login"
+        assert response == temporary_redirect_to(pyramid_request.route_url("login"))
 
     @pytest.fixture
     def views(self, pyramid_request):
