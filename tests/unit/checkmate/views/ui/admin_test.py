@@ -1,29 +1,28 @@
 from unittest.mock import sentinel
 
+import pytest
 from pyramid.httpexceptions import HTTPFound
 
-from checkmate.views.ui.admin import (
-    admin_login_failure,
-    admin_pages,
-    admin_pages_logged_out,
-)
+from checkmate.views.ui.admin import AdminPagesViews, admin_login_failure
 
 
-class TestAdminPages:
-    def test_it(self, pyramid_request):
+class TestAdminPagesViews:
+    def test_admin_pages(self, pyramid_request, views):
         pyramid_request.headers["Cookie"] = "session=session_value"
 
-        response = admin_pages(sentinel.context, pyramid_request)
+        response = views.get()
 
         assert response == {"session": "session_value"}
 
-
-class TestAdminPagesLoggedOut:
-    def test_it_redirects_to_login(self, pyramid_request):
-        response = admin_pages_logged_out(sentinel.context, pyramid_request)
+    def test_admin_pages_logged_out_redirects_to_login(self, views):
+        response = views.logged_out()
 
         assert isinstance(response, HTTPFound)
         assert response.location == "http://example.com/ui/api/login"
+
+    @pytest.fixture
+    def views(self, pyramid_request):
+        return AdminPagesViews(pyramid_request)
 
 
 class TestAdminLoginFailure:
