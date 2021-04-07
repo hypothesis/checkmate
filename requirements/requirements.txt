@@ -126,7 +126,7 @@ requests==2.25.1
     #   requests-oauthlib
 rsa==4.7
     # via google-auth
-sentry-sdk==0.19.4
+sentry-sdk==1.0.0
     # via h-pyramid-sentry
 six==1.15.0
     # via
