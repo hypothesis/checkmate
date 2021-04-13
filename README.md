@@ -96,7 +96,7 @@ Installing Checkmate in a development environment
 * [pyenv](https://github.com/pyenv/pyenv)
   Follow the instructions in the pyenv README to install it.
   The Homebrew method works best on macOS.
-  
+
 ### Clone the git repo
 
     git clone https://github.com/hypothesis/checkmate.git
@@ -107,6 +107,11 @@ installation process:
 
     cd checkmate
 
+Some functionality involves calls to external services (eg. Google login for the
+admin pages) which requires API keys. To download these keys run:
+
+    make devdata
+
 ### Start the development server
 
     make dev
@@ -114,8 +119,29 @@ installation process:
 The first time you run `make dev` it might take a while to start because it'll
 need to install the application dependencies and build the assets.
 
-This will start the app on http://localhost:9099
+This will start the app on http://localhost:9099.
 
-**That's it!** You’ve finished setting up your Checkmate development environment. 
+**That's it!** You’ve finished setting up your Checkmate development environment.
 Run `make help` to see all the commands that are available for running the tests,
 linting, code formatting, etc.
+
+
+Using Checkmate in a development environment
+--------------------------------------------
+
+### Authenticating requests
+
+To authenticate requests to the dev server you must specify an API key via
+HTTP Basic Authentication. Set the username field to the API key and leave the
+password blank. In the local development environment a default `dev_api_key` API
+key is accepted:
+
+
+```sh
+curl http://dev_api_key@localhost:9099/api/check?url=http://example.com/
+```
+
+### Accessing the admin pages
+
+To access the admin UI for Checkmate, visit http://localhost:9099/ui/admin.
+You will need to login using an @hypothes.is Google account.
