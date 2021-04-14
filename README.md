@@ -107,6 +107,8 @@ installation process:
 
     cd checkmate
 
+### Create the development data and settings
+
 Some functionality involves calls to external services (eg. Google login for the
 admin pages) which requires API keys. To download these keys run:
 
