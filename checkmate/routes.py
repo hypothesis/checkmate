@@ -14,11 +14,6 @@ def add_routes(config):
 
     config.add_route("present_block", "/ui/block")
     config.add_route("admin_pages", "/ui/admin")
-    config.add_route("admin_login_failure", "/ui/admin/login_failure")
-
-    config.add_route("login", "/ui/api/login")
-    config.add_route("login_callback", "/ui/api/login_callback")
-    config.add_route("logout", "/ui/api/logout")
 
     config.add_route("add_to_allow_list", "/ui/api/rule", request_method="POST")
 

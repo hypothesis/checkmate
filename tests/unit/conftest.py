@@ -19,6 +19,8 @@ def pyramid_config(pyramid_settings):
         config.include("pyramid_services")
         config.include("pyramid_tm")
 
+        config.include("pyramid_googleauth")
+
         add_routes(config)
 
         yield config

@@ -9,7 +9,7 @@ class TestAdminPages:
     ):
         response = app.get("/ui/admin")
 
-        assert response == temporary_redirect_to(route_url("login"))
+        assert response == temporary_redirect_to(route_url("pyramid_googleauth.login"))
 
     @pytest.mark.usefixtures("logged_in")
     def test_if_you_are_logged_in_it_passes_your_cookie_to_the_template(self, app):
@@ -21,4 +21,4 @@ class TestAdminPages:
 
 class TestAdminLoginFailure:
     def test_it(self, app):
-        app.get("/ui/admin/login_failure", status=401)
+        app.get("/googleauth/login/failure", status=401)

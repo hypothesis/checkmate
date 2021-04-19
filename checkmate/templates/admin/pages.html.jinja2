@@ -25,4 +25,4 @@
 <code>tox -qe dev --run-command "python bin/add_to_allow_list.py --session={{ session }} --route={{ request.route_url('add_to_allow_list') }}"</code>
 
 <hr>
-<a href="{{ request.route_url("logout") }}">Logout</a>
+<a href="{{ request.route_url("pyramid_googleauth.logout") }}">Logout</a>

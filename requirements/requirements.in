@@ -1,8 +1,7 @@
 alembic
 celery
-google-auth-oauthlib
+pyramid-googleauth
 gunicorn
-PyJWT
 marshmallow-jsonapi
 netaddr
 newrelic

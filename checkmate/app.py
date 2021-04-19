@@ -33,9 +33,11 @@ class CheckmateConfigurator:
 
         return bool(self.config.registry.settings.get("dev"))
 
-    def add_setting_from_env(self, param_name, default=None):
+    def add_setting_from_env(self, param_name, default=None, env_var_name=None):
+        env_var_name = env_var_name.upper() if env_var_name else param_name.upper()
+
         value = self.config.registry.settings.get(param_name) or os.environ.get(
-            param_name.upper()
+            env_var_name
         )
         if value is None and default is None:
             raise ValueError(f"Param {param_name} must be provided.")
@@ -122,15 +124,28 @@ class CheckmateConfigurator:
         config.include("h_pyramid_sentry")
 
     def _configure_auth(self, config):
-        # This is used here, but also by the Signature service
+        # Same value for both signature service and pyramid_googleauth
         checkmate_secret = self.add_setting_from_env("checkmate_secret")
+        checkmate_secret = self.add_setting_from_env(
+            "pyramid_googleauth.secret", env_var_name="checkmate_secret"
+        )
 
         # Add values expected by the Google Auth service
-        self.add_setting_from_env("google_client_id")
-        self.add_setting_from_env("google_client_secret")
+        self.add_setting_from_env(
+            "pyramid_googleauth.google_client_id", env_var_name="google_client_id"
+        )
+        self.add_setting_from_env(
+            "pyramid_googleauth.google_client_secret",
+            env_var_name="google_client_secret",
+        )
 
         # API keys used by APIHTTPAuth
         self.add_api_keys_from_env("api_keys")
+
+        config.include("pyramid_googleauth")
+        config.add_settings(
+            {"pyramid_googleauth.login_success_redirect_url": "/ui/admin"}
+        )
 
         # Setup a cookie based session to store our authentication details in
         session_factory = SignedCookieSessionFactory(
