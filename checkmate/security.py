@@ -1,11 +1,9 @@
 from enum import Enum
 from typing import List, NamedTuple
 
-from pyramid.authentication import (
-    SessionAuthenticationHelper,
-    extract_http_basic_credentials,
-)
+from pyramid.authentication import extract_http_basic_credentials
 from pyramid.security import Allowed, Denied
+from pyramid_googleauth import GoogleSecurityPolicy
 
 
 class Permissions(Enum):
@@ -55,17 +53,7 @@ class CascadingSecurityPolicy:
         )
 
 
-class SecurityPolicy(CascadingSecurityPolicy):
-    def __init__(self):
-        super().__init__(
-            subpolicies=[HTTPBasicAuthSecurityPolicy(), GoogleSecurityPolicy()]
-        )
-
-
-class GoogleSecurityPolicy:
-    def __init__(self):
-        self._session_authentication_helper = SessionAuthenticationHelper()
-
+class CheckmateGoogleSecurityPolicy(GoogleSecurityPolicy):
     def identity(self, request):
         userid = self.authenticated_userid(request)
 
@@ -76,17 +64,15 @@ class GoogleSecurityPolicy:
 
         return Identity("", [])
 
-    def authenticated_userid(self, request):
-        return self._session_authentication_helper.authenticated_userid(request)
-
     def permits(self, request, context, permission):
         return _permits(self, request, context, permission)
 
-    def remember(self, request, userid, **kwargs):
-        return self._session_authentication_helper.remember(request, userid, **kwargs)
 
-    def forget(self, request, **kwargs):
-        return self._session_authentication_helper.forget(request, **kwargs)
+class SecurityPolicy(CascadingSecurityPolicy):
+    def __init__(self):
+        super().__init__(
+            subpolicies=[HTTPBasicAuthSecurityPolicy(), CheckmateGoogleSecurityPolicy()]
+        )
 
 
 class HTTPBasicAuthSecurityPolicy:

@@ -29,8 +29,11 @@ def pyramid_settings():
         "database_url": _TEST_DATABASE_URL,
         "checkmate_secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
         "api_keys": {"dev_api_key": "dev"},
-        "google_client_id": "google_client_id",
-        "google_client_secret": "google_client_secret",
+        "pyramid_googleauth.secret": os.environ.get(
+            "CHECKMATE_SECRET", "not-very-secret"
+        ),
+        "pyramid_googleauth.google_client_id": "google_client_id",
+        "pyramid_googleauth.google_client_secret": "google_client_secret",
         "public_host": "localhost",
         "public_scheme": "http",
         "public_port": "9099",
@@ -54,11 +57,14 @@ def httpretty_():
 
 
 @pytest.fixture
-def route_url():
+def route_url(pyramid_settings):
     request = DummyRequest(environ={"SERVER_NAME": "localhost"})
 
-    with testConfig(request=request) as config:
+    with testConfig(request=request, settings=pyramid_settings) as config:
+        config.include("pyramid_services")
         config.include("checkmate.routes")
+        config.include("pyramid_googleauth")
+
         yield functools.partial(request.route_url, _scheme="https")
 
 

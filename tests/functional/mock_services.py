@@ -13,7 +13,9 @@ import pytest
 
 @pytest.fixture
 def mock_google_auth_service(patch):
-    MockGoogleAuthService = patch("checkmate.services.google_auth.GoogleAuthService")
+    MockGoogleAuthService = patch(
+        "pyramid_googleauth.services.google_auth.GoogleAuthService"
+    )
     mock_google_auth_service = MockGoogleAuthService.return_value
     mock_google_auth_service.exchange_auth_code.return_value = (
         {"email": "user@hypothes.is"},

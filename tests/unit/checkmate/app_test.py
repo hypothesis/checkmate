@@ -13,8 +13,6 @@ CELERY_SETTINGS = {
 REQUIRED_APP_SETTINGS = {
     "database_url": "app_db",
     "checkmate_secret": "not_a_secret",
-    "google_client_id": "some_long_hex_string",
-    "google_client_secret": "another_not_secret",
     "public_host": "localhost",
 }
 
@@ -23,7 +21,18 @@ OPTIONAL_APP_SETTINGS = {
     "public_port": "9099",
 }
 
-APP_SETTINGS = {**REQUIRED_APP_SETTINGS, **OPTIONAL_APP_SETTINGS}
+DIFFERENT_ENVVAR_NAME_APP_SETTINGS = {
+    "pyramid_googleauth.secret": "not_a_secret",
+    "pyramid_googleauth.google_client_id": "some_long_hex_string",
+    "pyramid_googleauth.google_client_secret": "another_not_secret",
+}
+
+
+APP_SETTINGS = {
+    **REQUIRED_APP_SETTINGS,
+    **OPTIONAL_APP_SETTINGS,
+    **DIFFERENT_ENVVAR_NAME_APP_SETTINGS,
+}
 
 
 class TestCheckmateConfigurator:
@@ -63,12 +72,15 @@ class TestCheckmateConfigurator:
     @pytest.mark.parametrize("setting", list(OPTIONAL_APP_SETTINGS.keys()))
     def test_takes_default_value_setting(self, config, setting):
         config.registry.settings.update(REQUIRED_APP_SETTINGS)
+        config.registry.settings.update(DIFFERENT_ENVVAR_NAME_APP_SETTINGS)
         CheckmateConfigurator(config, celery_worker=False)
 
         config.add_settings.assert_has_calls([call({setting: ANY})])
 
-    @pytest.mark.parametrize("setting", (APP_SETTINGS.keys()))
-    def test_it_reads_from_os(self, config, setting, os):
+    @pytest.mark.parametrize(
+        "setting", ({**REQUIRED_APP_SETTINGS, **OPTIONAL_APP_SETTINGS}.keys())
+    )
+    def test_it_reads_from_os_same_name(self, config, setting, os):
         config.registry.settings.update(APP_SETTINGS)
         config.registry.settings.pop(setting)
 

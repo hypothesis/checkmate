@@ -10,4 +10,4 @@ class TestRoot:
         response = root(sentinel.context, pyramid_request)
 
         assert isinstance(response, HTTPFound)
-        assert response.location == "http://example.com/ui/api/login"
+        assert response.location == "http://example.com/googleauth/login"

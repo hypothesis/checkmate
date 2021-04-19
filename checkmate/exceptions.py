@@ -1,10 +1,5 @@
 """Application specific exceptions."""
 
-# It's ok for exception hierarchies to get quite lanky
-# pylint: disable=too-many-ancestors
-
-from pyramid.httpexceptions import HTTPServerError, HTTPUnauthorized
-
 
 class JSONAPIException(Exception):
     """A base exception for JSON API compatible errors."""
@@ -66,13 +61,3 @@ class StageException(Exception):
 
 class StageRetryableException(StageException):
     """A stage within a checker pipeline failed temporarily."""
-
-
-class BadOAuth2Config(HTTPServerError):
-    """Something is wrong with the OAuth2 configuration of our app."""
-
-
-class UserNotAuthenticated(HTTPUnauthorized):
-    """A user has failed authentication."""
-
-    # This is not the same as a service to service authentication failure

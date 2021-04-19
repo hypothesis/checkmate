@@ -6,7 +6,7 @@ from pyramid.security import Allowed, Denied
 
 from checkmate.security import (
     CascadingSecurityPolicy,
-    GoogleSecurityPolicy,
+    CheckmateGoogleSecurityPolicy,
     HTTPBasicAuthSecurityPolicy,
     Identity,
     Permissions,
@@ -169,36 +169,30 @@ class TestCascadingSecurityPolicy:
         return create_autospec(SubPolicy2, spec_set=True, instance=True)
 
 
-class TestGoogleSecurityPolicy:
+class TestCheckmateGoogleSecurityPolicy:
     @pytest.mark.parametrize(
         "userid,expected_identity",
         [
             (
                 "testuser@hypothes.is",
                 Identity(
-                    "testuser@hypothes.is",
-                    [Permissions.ADMIN, Permissions.ADD_TO_ALLOW_LIST],
+                    userid="testuser@hypothes.is",
+                    permissions=[Permissions.ADMIN, Permissions.ADD_TO_ALLOW_LIST],
                 ),
             ),
-            (
-                "testuser@example.com",
-                Identity(
-                    "",
-                    [],
-                ),
-            ),
+            ("testuser@example.com", Identity(userid="", permissions=[])),
         ],
     )
     def test_identity(self, policy, pyramid_request, userid, expected_identity):
-        pyramid_request.session["auth.userid"] = userid
+        pyramid_request.session["googleauth.userid"] = userid
 
         assert policy.identity(pyramid_request) == expected_identity
 
     def test_identity_when_no_user_is_logged_in(self, policy, pyramid_request):
-        assert policy.identity(pyramid_request) == Identity("", [])
+        assert policy.identity(pyramid_request) == Identity(userid="", permissions=[])
 
     def test_authenticated_userid(self, policy, pyramid_request):
-        pyramid_request.session["auth.userid"] = "testuser@hypothes.is"
+        pyramid_request.session["googleauth.userid"] = "testuser@hypothes.is"
 
         assert policy.authenticated_userid(pyramid_request) == "testuser@hypothes.is"
 
@@ -206,26 +200,20 @@ class TestGoogleSecurityPolicy:
         "permission,expected_result",
         [
             (Permissions.ADMIN, Allowed("allowed")),
-            (Permissions.CHECK_URL, Denied("denied")),
+            ("some-other-permission", Denied("denied")),
         ],
     )
     def test_permits(self, policy, pyramid_request, permission, expected_result):
-        pyramid_request.session["auth.userid"] = "testuser@hypothes.is"
+        pyramid_request.session["googleauth.userid"] = "testuser@hypothes.is"
 
         assert (
             policy.permits(pyramid_request, sentinel.context, permission)
             == expected_result
         )
 
-    def test_remember(self, policy, pyramid_request):
-        assert policy.remember(pyramid_request, "testuser@hypothes.is") == []
-
-    def test_forget(self, policy, pyramid_request):
-        assert policy.forget(pyramid_request) == []
-
     @pytest.fixture
     def policy(self):
-        return GoogleSecurityPolicy()
+        return CheckmateGoogleSecurityPolicy()
 
 
 class TestHTTPBasicAuthSecurityPolicy:

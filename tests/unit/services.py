@@ -2,12 +2,7 @@ from unittest import mock
 
 import pytest
 
-from checkmate.services import (
-    GoogleAuthService,
-    RuleService,
-    SignatureService,
-    URLCheckerService,
-)
+from checkmate.services import RuleService, SignatureService, URLCheckerService
 from checkmate.services.secure_link import SecureLinkService
 
 
@@ -37,11 +32,6 @@ def secure_link_service(mock_service):
 @pytest.fixture
 def url_checker_service(mock_service):
     return mock_service(URLCheckerService)
-
-
-@pytest.fixture
-def google_auth_service(mock_service):
-    return mock_service(GoogleAuthService)
 
 
 @pytest.fixture

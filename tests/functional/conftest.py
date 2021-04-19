@@ -48,7 +48,8 @@ def logged_in(
     # `app.cookiejar`. Webtest will automatically send the cookie in subsequent
     # requests made with `app`.
     app.get(
-        route_url("login_callback"), params={"state": signature_service.get_nonce()}
+        route_url("pyramid_googleauth.login.callback"),
+        params={"state": signature_service.get_nonce()},
     )
 
 
