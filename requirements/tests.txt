@@ -72,7 +72,7 @@ gunicorn==20.1.0
     # via -r requirements/requirements.txt
 h-matchers==1.2.11
     # via -r requirements/tests.in
-h_pyramid_sentry==1.2.3
+h-pyramid-sentry==1.2.3
     # via -r requirements/requirements.txt
 httpretty==1.0.5
     # via -r requirements/tests.in
@@ -227,7 +227,7 @@ six==1.15.0
     #   webtest
 soupsieve==2.0.1
     # via beautifulsoup4
-sqlalchemy==1.4.9
+sqlalchemy==1.4.10
     # via
     #   -r requirements/requirements.txt
     #   alembic

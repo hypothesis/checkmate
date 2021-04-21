@@ -40,7 +40,7 @@ greenlet==1.0.0
     # via sqlalchemy
 gunicorn==20.1.0
     # via -r requirements/requirements.in
-h_pyramid_sentry==1.2.3
+h-pyramid-sentry==1.2.3
     # via -r requirements/requirements.in
 hupper==1.10.2
     # via pyramid
@@ -133,7 +133,7 @@ six==1.15.0
     #   click-repl
     #   google-auth
     #   python-dateutil
-sqlalchemy==1.4.9
+sqlalchemy==1.4.10
     # via
     #   -r requirements/requirements.in
     #   alembic

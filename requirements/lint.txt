@@ -99,7 +99,7 @@ gunicorn==20.1.0
     #   -r requirements/tests.txt
 h-matchers==1.2.11
     # via -r requirements/tests.txt
-h_pyramid_sentry==1.2.3
+h-pyramid-sentry==1.2.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -331,7 +331,7 @@ soupsieve==2.0.1
     # via
     #   -r requirements/tests.txt
     #   beautifulsoup4
-sqlalchemy==1.4.9
+sqlalchemy==1.4.10
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
