@@ -3,7 +3,7 @@
 from celery.utils.log import get_task_logger
 from requests import RequestException
 
-from checkmate.async.celery import app
+from checkmate.celery_async.celery import app
 from checkmate.checker.url import CustomRules, URLHaus
 from checkmate.exceptions import StageRetryableException
 

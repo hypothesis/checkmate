@@ -11,7 +11,7 @@ from kombu import Exchange, Queue
 from pyramid.scripting import prepare
 
 from checkmate.app import create_app
-from checkmate.async.policy import RETRY_POLICY_QUICK
+from checkmate.celery_async.policy import RETRY_POLICY_QUICK
 
 LOG = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ app.conf.update(
     # What options should we have when sending messages to the queue?
     broker_transport_options=RETRY_POLICY_QUICK,
     # Tell celery where our tasks are defined
-    imports=("checkmate.async.tasks",),
+    imports=("checkmate.celery_async.tasks",),
     # Acknowledge tasks after the task has executed, rather than just before
     task_acks_late=True,
     # Don't store any results, we only use this for scheduling
