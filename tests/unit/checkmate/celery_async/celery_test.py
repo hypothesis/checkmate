@@ -1,6 +1,6 @@
 from celery import Celery
 
-from checkmate.async.celery import app
+from checkmate.celery_async.celery import app
 
 
 class TestApp:

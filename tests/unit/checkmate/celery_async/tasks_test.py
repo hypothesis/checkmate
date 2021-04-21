@@ -5,7 +5,11 @@ import pytest
 from requests import RequestException
 
 from checkmate.app import CheckmateConfigurator
-from checkmate.async.tasks import initialize_urlhaus, sync_blocklist, sync_urlhaus
+from checkmate.celery_async.tasks import (
+    initialize_urlhaus,
+    sync_blocklist,
+    sync_urlhaus,
+)
 
 
 @pytest.mark.usefixtures("CustomRules")
@@ -66,17 +70,17 @@ def pyramid_config(pyramid_config):
 
 @pytest.fixture()
 def CustomRules(patch):
-    return patch("checkmate.async.tasks.CustomRules")
+    return patch("checkmate.celery_async.tasks.CustomRules")
 
 
 @pytest.fixture()
 def URLHaus(patch):
-    return patch("checkmate.async.tasks.URLHaus")
+    return patch("checkmate.celery_async.tasks.URLHaus")
 
 
 @pytest.fixture(autouse=True)
 def app(patch, pyramid_request):
-    app = patch("checkmate.async.tasks.app")
+    app = patch("checkmate.celery_async.tasks.app")
 
     @contextmanager
     def request_context():
