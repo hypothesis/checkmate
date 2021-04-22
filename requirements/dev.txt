@@ -277,7 +277,7 @@ six==1.15.0
     #   python-dateutil
     #   traitlets
     #   websocket-client
-sqlalchemy==1.4.10
+sqlalchemy==1.4.11
     # via
     #   -r requirements/requirements.txt
     #   alembic
