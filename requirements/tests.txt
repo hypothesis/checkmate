@@ -84,17 +84,6 @@ idna==2.10
     # via
     #   -r requirements/requirements.txt
     #   requests
-importlib-metadata==3.1.0
-    # via
-    #   -r requirements/requirements.txt
-    #   kombu
-    #   pluggy
-    #   pytest
-    #   sqlalchemy
-importlib-resources==3.3.0
-    # via
-    #   -r requirements/requirements.txt
-    #   netaddr
 iniconfig==1.1.1
     # via pytest
 jinja2==2.11.2
@@ -276,11 +265,6 @@ wired==0.3
     # via
     #   -r requirements/requirements.txt
     #   pyramid-services
-zipp==3.4.0
-    # via
-    #   -r requirements/requirements.txt
-    #   importlib-metadata
-    #   importlib-resources
 zope.deprecation==4.4.0
     # via
     #   -r requirements/requirements.txt
