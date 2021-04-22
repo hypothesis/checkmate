@@ -46,12 +46,6 @@ hupper==1.10.2
     # via pyramid
 idna==2.10
     # via requests
-importlib-metadata==3.1.0
-    # via
-    #   kombu
-    #   sqlalchemy
-importlib-resources==3.3.0
-    # via netaddr
 jinja2==2.11.2
     # via pyramid-jinja2
 kombu==5.0.2
@@ -160,10 +154,6 @@ webob==1.8.6
     # via pyramid
 wired==0.3
     # via pyramid-services
-zipp==3.4.0
-    # via
-    #   importlib-metadata
-    #   importlib-resources
 zope.deprecation==4.4.0
     # via
     #   pyramid
