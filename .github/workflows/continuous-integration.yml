@@ -24,6 +24,7 @@ jobs:
 
   backend:
     name: Backend
+    needs: metadata
     runs-on: ubuntu-latest
     env:
       TOX_PARALLEL_NO_SPINNER: 1
