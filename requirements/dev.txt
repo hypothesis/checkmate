@@ -268,7 +268,7 @@ six==1.15.0
     #   pynacl
     #   python-dateutil
     #   websocket-client
-sqlalchemy==1.4.11
+sqlalchemy==1.4.12
     # via
     #   -r requirements/requirements.txt
     #   alembic
