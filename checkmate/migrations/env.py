@@ -1,13 +1,15 @@
 # We didn't write this, so we don't care
-# pylint: disable=no-member
+# pylint: disable=no-member,unused-import
 
 import os
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import MetaData, engine_from_config, pool
+from sqlalchemy import engine_from_config, pool
 
-from checkmate.db import NAMING_CONVENTIONS
+# Import all model modules here in order to populate the metadata
+from checkmate import models
+from checkmate.db import BASE
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -19,9 +21,7 @@ fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = MetaData(naming_convention=NAMING_CONVENTIONS)
+target_metadata = BASE.metadata
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
