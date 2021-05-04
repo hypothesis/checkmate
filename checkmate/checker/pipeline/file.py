@@ -46,7 +46,7 @@ class UnzipFile(Stage):
         self.check_file(source)
 
         try:
-            zip_file = ZipFile(source)
+            zip_file = ZipFile(source)  # pylint: disable=consider-using-with
         except BadZipFile as err:
             raise StageException(f"Cannot parse zip file '{source}'") from err
 
