@@ -176,7 +176,7 @@ pyramid==2.0
     #   pyramid-sanity
     #   pyramid-services
     #   pyramid-tm
-pytest==6.2.3
+pytest==6.2.4
     # via -r requirements/functests.in
 python-dateutil==2.8.1
     # via
