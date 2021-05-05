@@ -12,10 +12,7 @@ load-plugins=pylint.extensions.bad_builtin,
 
 [MESSAGES CONTROL]
 enable=
-    bad-inline-option,
-    deprecated-pragma,
-    useless-suppression,
-    use-symbolic-message-instead
+    all
 
 disable=
     # Docstrings are encouraged but we don't want to enforce that everything
@@ -41,6 +38,11 @@ disable=
     line-too-long,
 
     too-few-public-methods,
+
+    # Enable tuning in the code itself
+    suppressed-message,
+    locally-disabled,
+
 
 [REPORTS]
 output-format=colorized
