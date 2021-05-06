@@ -15,8 +15,6 @@ help:
 	@echo "make functests         Run the functional tests"
 	@echo "make sure              Make sure that the formatter, linter, tests, etc all pass"
 	@echo "make docker            Make the app's Docker image"
-	@echo "make clean             Delete development artefacts (cached files, "
-	@echo "                       dependencies, etc)"
 	@echo "make allow-list        Create an SQL file for adding sites to the allow list"
 
 .PHONY: dev
@@ -89,12 +87,6 @@ run-docker:
 	    -e "CHECKMATE_BLOCKLIST_URL=https://hypothesis-via.s3-us-west-1.amazonaws.com/via-blocklist.txt" \
 	    -p 9099:9099 \
 	    --name checkmate hypothesis/checkmate:$(DOCKER_TAG)
-
-.PHONY: clean
-clean:
-	@find . -type f -name "*.py[co]" -delete
-	@find . -type d -name "__pycache__" -delete
-	@find . -type f -name "*.gz" -delete
 
 .PHONY: web
 web: python
