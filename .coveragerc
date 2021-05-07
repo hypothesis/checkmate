@@ -5,7 +5,6 @@ source =
     checkmate
     tests/unit
 omit =
-    checkmate/scripts*
     checkmate/migrations/*
     checkmate/pshell.py
 

@@ -33,7 +33,7 @@ services: python
 .PHONY: db
 db: args?=upgrade head
 db: python
-	@tox -qqe dev --run-command 'initdb conf/development.ini'  # See setup.py for what initdb is.
+	@tox -qqe dev --run-command 'python bin/initialize_db.py conf/development.ini'
 	@tox -qe dev  --run-command 'alembic -c conf/alembic.ini $(args)'
 
 .PHONY: shell
@@ -46,9 +46,7 @@ sql: python
 
 .PHONY: devdata
 devdata: python
-	# See setup.py for what devdata and devdata-remote are.
-	@tox -qe dev --run-command 'devdata-remote'
-	@tox -qe dev --run-command 'devdata conf/development.ini'
+	@tox -qe dev --run-command 'python bin/update_dev_data.py conf/development.ini'
 
 .PHONY: lint
 lint: python
