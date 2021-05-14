@@ -70,7 +70,7 @@ h-matchers==1.2.11
     # via -r requirements/functests.in
 h-pyramid-sentry==1.2.3
     # via -r requirements/requirements.txt
-httpretty==1.1.0
+httpretty==1.1.1
     # via -r requirements/functests.in
 hupper==1.10.2
     # via
