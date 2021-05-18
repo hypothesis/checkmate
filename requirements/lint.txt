@@ -218,7 +218,7 @@ pyasn1==0.4.8
     #   -r requirements/tests.txt
     #   pyasn1-modules
     #   rsa
-pydocstyle==6.0.0
+pydocstyle==6.1.1
     # via -r requirements/lint.in
 pyjwt==2.0.1
     # via
