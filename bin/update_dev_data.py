@@ -6,7 +6,7 @@ import subprocess
 import sys
 from tempfile import TemporaryDirectory
 
-from pkg_resources import resource_filename
+import importlib_resources
 from pyramid.paster import bootstrap
 
 from checkmate.checker.url.custom_rules import CustomRules
@@ -31,7 +31,7 @@ def update_remote_dev_data():
         # Copy devdata env file into place.
         shutil.copyfile(
             os.path.join(git_dir, "checkmate", "devdata.env"),
-            resource_filename("checkmate", "../.devdata.env"),
+            importlib_resources.files("checkmate") / "../.devdata.env",
         )
 
 
