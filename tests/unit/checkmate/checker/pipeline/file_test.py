@@ -1,9 +1,9 @@
 import os
 from unittest.mock import sentinel
 
+import importlib_resources
 import pytest
 from h_matchers import Any
-from pkg_resources import resource_filename
 
 from checkmate.checker.pipeline import ReadCSVFile, ReadTextFile, UnzipFile
 from checkmate.exceptions import StageException
@@ -56,7 +56,10 @@ class TestReadCSVFile:
 
 
 class TestUnzipFile:
-    ZIP_FILE = resource_filename(__name__, "fixture.zip")
+    ZIP_FILE = str(
+        importlib_resources.files("tests.unit.checkmate.checker.pipeline")
+        / "fixture.zip"
+    )
 
     def test_it_unzips_and_creates_a_file(self, tmpdir):
         result = UnzipFile("target.txt")(tmpdir, source=self.ZIP_FILE)

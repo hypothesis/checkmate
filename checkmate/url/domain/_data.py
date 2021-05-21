@@ -1,6 +1,9 @@
-from pkg_resources import resource_stream
+import importlib_resources
 
 
 def load_data(filename):
-    with resource_stream("checkmate", filename) as handle:
-        return [line.strip().decode("utf-8") for line in handle]
+    file_ref = importlib_resources.files("checkmate") / filename
+
+    with importlib_resources.as_file(file_ref):
+        with open(file_ref) as handle:
+            return [line.strip() for line in handle]

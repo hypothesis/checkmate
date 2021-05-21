@@ -1,9 +1,9 @@
 from unittest.mock import sentinel
 
+import importlib_resources
 import pytest
 from h_matchers import Any
 from httpretty import httprettified, httpretty
-from pkg_resources import resource_string
 
 from checkmate.checker.url import URLHaus
 from checkmate.models import Reason
@@ -73,7 +73,9 @@ class TestURLHaus:
         ]
 
     def read_fixture(self, name):
-        return resource_string(__name__, f"fixture/{name}")
+        return importlib_resources.read_binary(
+            "tests.unit.checkmate.checker.url.fixture", name
+        )
 
     @pytest.fixture(autouse=True)
     def URLHausRule(self, patch):
