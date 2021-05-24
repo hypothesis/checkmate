@@ -6,7 +6,7 @@
 #
 alembic==1.6.2
     # via -r requirements/requirements.txt
-amqp==5.0.2
+amqp==5.0.6
     # via
     #   -r requirements/requirements.txt
     #   kombu
@@ -16,7 +16,7 @@ backcall==0.2.0
     # via ipython
 bcrypt==3.2.0
     # via paramiko
-billiard==3.6.3.0
+billiard==3.6.4.0
     # via
     #   -r requirements/requirements.txt
     #   celery
@@ -24,7 +24,7 @@ cachetools==4.2.1
     # via
     #   -r requirements/requirements.txt
     #   google-auth
-celery==5.0.5
+celery==5.1.0
     # via -r requirements/requirements.txt
 certifi==2020.11.8
     # via
@@ -118,7 +118,7 @@ jinja2==2.11.2
     #   pyramid-jinja2
 jsonschema==3.2.0
     # via docker-compose
-kombu==5.0.2
+kombu==5.1.0
     # via
     #   -r requirements/requirements.txt
     #   celery
@@ -310,6 +310,7 @@ vine==5.0.0
     #   -r requirements/requirements.txt
     #   amqp
     #   celery
+    #   kombu
 wcwidth==0.2.5
     # via
     #   -r requirements/requirements.txt
