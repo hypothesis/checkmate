@@ -6,7 +6,7 @@
 #
 alembic==1.6.3
     # via -r requirements/requirements.txt
-amqp==5.0.2
+amqp==5.0.6
     # via
     #   -r requirements/requirements.txt
     #   kombu
@@ -14,7 +14,7 @@ attrs==20.3.0
     # via pytest
 beautifulsoup4==4.9.3
     # via webtest
-billiard==3.6.3.0
+billiard==3.6.4.0
     # via
     #   -r requirements/requirements.txt
     #   celery
@@ -22,7 +22,7 @@ cachetools==4.2.1
     # via
     #   -r requirements/requirements.txt
     #   google-auth
-celery==5.0.5
+celery==5.1.0
     # via -r requirements/requirements.txt
 certifi==2020.11.8
     # via
@@ -86,7 +86,7 @@ jinja2==2.11.2
     # via
     #   -r requirements/requirements.txt
     #   pyramid-jinja2
-kombu==5.0.2
+kombu==5.1.0
     # via
     #   -r requirements/requirements.txt
     #   celery
@@ -245,6 +245,7 @@ vine==5.0.0
     #   -r requirements/requirements.txt
     #   amqp
     #   celery
+    #   kombu
 waitress==1.4.4
     # via webtest
 wcwidth==0.2.5
