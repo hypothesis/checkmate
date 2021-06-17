@@ -203,7 +203,7 @@ pynacl==1.4.0
     # via paramiko
 pyramid-exclog==1.0
     # via -r requirements/requirements.txt
-pyramid-googleauth==1.0.1
+pyramid-googleauth==1.0.2
     # via -r requirements/requirements.txt
 pyramid-ipython==0.2
     # via -r requirements/dev.in
