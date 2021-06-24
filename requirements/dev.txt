@@ -40,6 +40,13 @@ chardet==3.0.4
     # via
     #   -r requirements/requirements.txt
     #   requests
+click==7.1.2
+    # via
+    #   -r requirements/requirements.txt
+    #   celery
+    #   click-didyoumean
+    #   click-plugins
+    #   click-repl
 click-didyoumean==0.0.3
     # via
     #   -r requirements/requirements.txt
@@ -52,13 +59,6 @@ click-repl==0.1.6
     # via
     #   -r requirements/requirements.txt
     #   celery
-click==7.1.2
-    # via
-    #   -r requirements/requirements.txt
-    #   celery
-    #   click-didyoumean
-    #   click-plugins
-    #   click-repl
 cryptography==3.4.7
     # via paramiko
 decorator==5.0.7
@@ -67,10 +67,10 @@ decorator==5.0.7
     #   ipython
 distro==1.5.0
     # via docker-compose
-docker-compose==1.29.2
-    # via -r requirements/dev.in
 docker[ssh]==5.0.0
     # via docker-compose
+docker-compose==1.29.2
+    # via -r requirements/dev.in
 dockerpty==0.4.1
     # via docker-compose
 docopt==0.6.2
@@ -79,14 +79,14 @@ factory-boy==3.2.0
     # via -r requirements/dev.in
 faker==8.1.0
     # via factory-boy
-google-auth-oauthlib==0.4.4
-    # via
-    #   -r requirements/requirements.txt
-    #   pyramid-googleauth
 google-auth==1.24.0
     # via
     #   -r requirements/requirements.txt
     #   google-auth-oauthlib
+google-auth-oauthlib==0.4.4
+    # via
+    #   -r requirements/requirements.txt
+    #   pyramid-googleauth
 greenlet==1.0.0
     # via
     #   -r requirements/requirements.txt
@@ -107,13 +107,13 @@ importlib-resources==5.1.4
     # via -r requirements/requirements.txt
 ipdb==0.13.9
     # via -r requirements/dev.in
-ipython-genutils==0.2.0
-    # via traitlets
 ipython==7.24.1
     # via
     #   -r requirements/dev.in
     #   ipdb
     #   pyramid-ipython
+ipython-genutils==0.2.0
+    # via traitlets
 jedi==0.18.0
     # via ipython
 jinja2==2.11.2
@@ -136,17 +136,17 @@ markupsafe==1.1.1
     #   jinja2
     #   mako
     #   pyramid-jinja2
-marshmallow-jsonapi==0.24.0
-    # via -r requirements/requirements.txt
 marshmallow==3.10.0
     # via
     #   -r requirements/requirements.txt
     #   marshmallow-jsonapi
+marshmallow-jsonapi==0.24.0
+    # via -r requirements/requirements.txt
 matplotlib-inline==0.1.2
     # via ipython
 netaddr==0.8.0
     # via -r requirements/requirements.txt
-newrelic==6.4.2.159
+newrelic==6.4.3.160
     # via -r requirements/requirements.txt
 oauthlib==3.1.0
     # via
@@ -164,14 +164,14 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-plaster-pastedeploy==0.7
-    # via
-    #   -r requirements/requirements.txt
-    #   pyramid
 plaster==1.0
     # via
     #   -r requirements/requirements.txt
     #   plaster-pastedeploy
+    #   pyramid
+plaster-pastedeploy==0.7
+    # via
+    #   -r requirements/requirements.txt
     #   pyramid
 prompt-toolkit==3.0.8
     # via
@@ -182,15 +182,15 @@ psycopg2==2.9.1
     # via -r requirements/requirements.txt
 ptyprocess==0.7.0
     # via pexpect
-pyasn1-modules==0.2.8
-    # via
-    #   -r requirements/requirements.txt
-    #   google-auth
 pyasn1==0.4.8
     # via
     #   -r requirements/requirements.txt
     #   pyasn1-modules
     #   rsa
+pyasn1-modules==0.2.8
+    # via
+    #   -r requirements/requirements.txt
+    #   google-auth
 pycparser==2.20
     # via cffi
 pygments==2.8.1
@@ -201,6 +201,17 @@ pyjwt==2.0.1
     #   pyramid-googleauth
 pynacl==1.4.0
     # via paramiko
+pyramid==2.0
+    # via
+    #   -r requirements/requirements.txt
+    #   h-pyramid-sentry
+    #   pyramid-exclog
+    #   pyramid-googleauth
+    #   pyramid-ipython
+    #   pyramid-jinja2
+    #   pyramid-sanity
+    #   pyramid-services
+    #   pyramid-tm
 pyramid-exclog==1.0
     # via -r requirements/requirements.txt
 pyramid-googleauth==1.0.2
@@ -215,17 +226,6 @@ pyramid-services==2.2
     # via -r requirements/requirements.txt
 pyramid-tm==2.4
     # via -r requirements/requirements.txt
-pyramid==2.0
-    # via
-    #   -r requirements/requirements.txt
-    #   h-pyramid-sentry
-    #   pyramid-exclog
-    #   pyramid-googleauth
-    #   pyramid-ipython
-    #   pyramid-jinja2
-    #   pyramid-sanity
-    #   pyramid-services
-    #   pyramid-tm
 pyrsistent==0.17.3
     # via jsonschema
 python-dateutil==2.8.1
@@ -245,16 +245,16 @@ pytz==2020.4
     #   celery
 pyyaml==5.4.1
     # via docker-compose
-requests-oauthlib==1.3.0
-    # via
-    #   -r requirements/requirements.txt
-    #   google-auth-oauthlib
 requests==2.25.1
     # via
     #   -r requirements/requirements.txt
     #   docker
     #   docker-compose
     #   requests-oauthlib
+requests-oauthlib==1.3.0
+    # via
+    #   -r requirements/requirements.txt
+    #   google-auth-oauthlib
 rsa==4.7
     # via
     #   -r requirements/requirements.txt
