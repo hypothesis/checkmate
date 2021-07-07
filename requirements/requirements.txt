@@ -46,7 +46,7 @@ hupper==1.10.2
     # via pyramid
 idna==2.10
     # via requests
-importlib_resources==5.2.0
+importlib-resources==5.2.0
     # via -r requirements/requirements.in
 jinja2==2.11.2
     # via pyramid-jinja2
@@ -65,7 +65,7 @@ marshmallow-jsonapi==0.24.0
     # via -r requirements/requirements.in
 netaddr==0.8.0
     # via -r requirements/requirements.in
-newrelic==6.4.3.160
+newrelic==6.4.4.161
     # via -r requirements/requirements.in
 oauthlib==3.1.0
     # via requests-oauthlib
