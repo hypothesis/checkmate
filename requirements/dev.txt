@@ -103,7 +103,7 @@ idna==2.10
     # via
     #   -r requirements/requirements.txt
     #   requests
-importlib_resources==5.2.0
+importlib-resources==5.2.0
     # via -r requirements/requirements.txt
 ipdb==0.13.9
     # via -r requirements/dev.in
@@ -146,7 +146,7 @@ matplotlib-inline==0.1.2
     # via ipython
 netaddr==0.8.0
     # via -r requirements/requirements.txt
-newrelic==6.4.3.160
+newrelic==6.4.4.161
     # via -r requirements/requirements.txt
 oauthlib==3.1.0
     # via
