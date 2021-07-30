@@ -80,7 +80,7 @@ idna==2.10
     # via
     #   -r requirements/requirements.txt
     #   requests
-importlib_resources==5.2.1
+importlib-resources==5.2.1
     # via -r requirements/requirements.txt
 iniconfig==1.1.1
     # via pytest
@@ -110,7 +110,7 @@ marshmallow-jsonapi==0.24.0
     # via -r requirements/requirements.txt
 netaddr==0.8.0
     # via -r requirements/requirements.txt
-newrelic==6.4.4.161
+newrelic==6.6.0.162
     # via -r requirements/requirements.txt
 oauthlib==3.1.0
     # via
