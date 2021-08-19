@@ -103,7 +103,7 @@ idna==2.10
     # via
     #   -r requirements/requirements.txt
     #   requests
-importlib_resources==5.2.2
+importlib-resources==5.2.2
     # via -r requirements/requirements.txt
 ipdb==0.13.9
     # via -r requirements/dev.in
@@ -274,7 +274,7 @@ six==1.15.0
     #   pynacl
     #   python-dateutil
     #   websocket-client
-sqlalchemy==1.4.22
+sqlalchemy==1.4.23
     # via
     #   -r requirements/requirements.txt
     #   alembic

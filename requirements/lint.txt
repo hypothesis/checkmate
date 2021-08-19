@@ -116,7 +116,7 @@ idna==2.10
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   requests
-importlib_resources==5.2.2
+importlib-resources==5.2.2
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -323,7 +323,7 @@ soupsieve==2.0.1
     # via
     #   -r requirements/tests.txt
     #   beautifulsoup4
-sqlalchemy==1.4.22
+sqlalchemy==1.4.23
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
