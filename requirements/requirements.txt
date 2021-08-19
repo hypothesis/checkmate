@@ -46,7 +46,7 @@ hupper==1.10.2
     # via pyramid
 idna==2.10
     # via requests
-importlib_resources==5.2.2
+importlib-resources==5.2.2
     # via -r requirements/requirements.in
 jinja2==2.11.2
     # via pyramid-jinja2
@@ -132,7 +132,7 @@ six==1.15.0
     #   click-repl
     #   google-auth
     #   python-dateutil
-sqlalchemy==1.4.22
+sqlalchemy==1.4.23
     # via
     #   -r requirements/requirements.in
     #   alembic
