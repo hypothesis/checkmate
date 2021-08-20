@@ -316,7 +316,6 @@ six==1.15.0
     #   google-auth
     #   packaging
     #   python-dateutil
-    #   webtest
 snowballstemmer==2.1.0
     # via pydocstyle
 soupsieve==2.0.1
@@ -382,7 +381,7 @@ webob==1.8.6
     #   -r requirements/tests.txt
     #   pyramid
     #   webtest
-webtest==2.0.35
+webtest==3.0.0
     # via -r requirements/tests.txt
 wired==0.3
     # via

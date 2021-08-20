@@ -222,7 +222,6 @@ six==1.15.0
     #   google-auth
     #   packaging
     #   python-dateutil
-    #   webtest
 soupsieve==2.0.1
     # via beautifulsoup4
 sqlalchemy==1.4.23
@@ -269,7 +268,7 @@ webob==1.8.6
     #   -r requirements/requirements.txt
     #   pyramid
     #   webtest
-webtest==2.0.35
+webtest==3.0.0
     # via -r requirements/tests.in
 wired==0.3
     # via
