@@ -81,9 +81,5 @@ class Reason(OrderedEnum):
         return {
             "type": "reason",
             "id": self.value,
-            "attributes": {
-                # pylint: disable=no-member
-                # pylint is just confused... not sure why
-                "severity": self.severity.value
-            },
+            "attributes": {"severity": self.severity.value},
         }
