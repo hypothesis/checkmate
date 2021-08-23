@@ -66,7 +66,7 @@ class AllowListCSV:
 
     @classmethod
     def read(cls, filename):
-        with open(filename) as handle:
+        with open(filename, encoding="utf8") as handle:
             reader = csv.reader(handle)
 
             # What are you on about Pylint?
@@ -154,7 +154,7 @@ def main():
         return
 
     # Create the output CSV file
-    with open(args.output_csv, "w") as handle:
+    with open(args.output_csv, "w", encoding="utf8") as handle:
         AllowListCSV.write(handle, rows=rows)
 
     print(f"Created CSV file: {args.output_csv}")

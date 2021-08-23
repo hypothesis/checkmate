@@ -19,7 +19,7 @@ class TestDownload:
         result = Download(url)(tmpdir)
 
         assert os.path.isfile(result)
-        with open(result) as handle:
+        with open(result, encoding="utf8") as handle:
             content = handle.read()
 
         assert content == "some content"

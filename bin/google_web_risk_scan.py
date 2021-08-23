@@ -76,7 +76,7 @@ def request_context():
 
 
 if __name__ == "__main__":
-    with open("bin/web_risk_credentials.json") as handle:
+    with open("bin/web_risk_credentials.json", encoding="utf8") as handle:
         credentials = json.load(handle)
         web_risk_api = WebRiskAPI(credentials)
 
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     if os.path.isfile("progress.ndjson"):
         threats = 0
 
-        with open("progress.ndjson") as progress:
+        with open("progress.ndjson", encoding="utf8") as progress:
             last_line = None
             for line in progress:
                 if line.startswith('["NOK",'):
@@ -106,7 +106,7 @@ if __name__ == "__main__":
             print(f"{threats} threat(s) found so far")
 
     # Main loop
-    with open("progress.ndjson", mode="a") as progress:
+    with open("progress.ndjson", mode="a", encoding="utf8") as progress:
         with request_context() as request:
             count = 0
             total = request.db.query(AllowRule).count()

@@ -24,7 +24,7 @@ class TestStage:
         assert os.path.exists(temp_file.name)
 
         # Has the content
-        with open(temp_file.name) as handle:
+        with open(temp_file.name, encoding="utf8") as handle:
             content = handle.read()
 
         assert content == "content"

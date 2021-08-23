@@ -22,9 +22,7 @@ class Stage:
     def temp_file(working_dir, suffix=None):
         """Get a temporary file."""
 
-        return NamedTemporaryFile(  # pylint: disable=consider-using-with
-            dir=working_dir, delete=False, suffix=suffix
-        )
+        return NamedTemporaryFile(dir=working_dir, delete=False, suffix=suffix)
 
     @staticmethod
     def check_file(filename):

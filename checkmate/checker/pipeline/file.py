@@ -22,7 +22,7 @@ class ReadTextFile(Stage):
 
         self.check_file(source)
 
-        with open(source) as handle:
+        with open(source, encoding="utf8") as handle:
             yield from handle
 
 
