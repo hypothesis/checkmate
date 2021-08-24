@@ -63,4 +63,4 @@ jobs:
           ${{ runner.os }}-tox-${{ secrets.CACHE_VERSION }}-
 
     - name: Run tox
-      run: tox --parallel auto -e lint,checkformatting,tests,functests
+      run: tox --parallel auto -e lint,checkformatting,tests,coverage,functests
