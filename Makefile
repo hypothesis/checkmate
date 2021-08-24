@@ -11,7 +11,8 @@ help:
 	@echo "make lint              Run the code linter(s) and print any warnings"
 	@echo "make format            Correctly format the code"
 	@echo "make checkformatting   Crash if the code isn't correctly formatted"
-	@echo "make test              Run the unit tests and produce a coverage report"
+	@echo "make test              Run the unit tests"
+	@echo "make coverage          Print the unit test coverage report"
 	@echo "make functests         Run the functional tests"
 	@echo "make sure              Make sure that the formatter, linter, tests, etc all pass"
 	@echo "make docker            Make the app's Docker image"
@@ -63,6 +64,10 @@ checkformatting: python
 .PHONY: test
 test: python
 	@tox -q
+
+.PHONY: coverage
+coverage: python
+	@tox -qe coverage
 
 .PHONY: functests
 functests: python
