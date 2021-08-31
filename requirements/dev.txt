@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements/dev.in
 #
-alembic==1.6.5
+alembic==1.7.1
     # via -r requirements/requirements.txt
 amqp==5.0.6
     # via
@@ -104,7 +104,9 @@ idna==2.10
     #   -r requirements/requirements.txt
     #   requests
 importlib-resources==5.2.2
-    # via -r requirements/requirements.txt
+    # via
+    #   -r requirements/requirements.txt
+    #   alembic
 ipdb==0.13.9
     # via -r requirements/dev.in
 ipython==7.26.0
@@ -229,16 +231,9 @@ pyramid-tm==2.4
 pyrsistent==0.17.3
     # via jsonschema
 python-dateutil==2.8.1
-    # via
-    #   -r requirements/requirements.txt
-    #   alembic
-    #   faker
+    # via faker
 python-dotenv==0.17.0
     # via docker-compose
-python-editor==1.0.4
-    # via
-    #   -r requirements/requirements.txt
-    #   alembic
 pytz==2020.4
     # via
     #   -r requirements/requirements.txt
