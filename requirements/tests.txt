@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements/tests.in
 #
-alembic==1.6.5
+alembic==1.7.1
     # via -r requirements/requirements.txt
 amqp==5.0.6
     # via
@@ -87,7 +87,9 @@ idna==2.10
     #   -r requirements/requirements.txt
     #   requests
 importlib-resources==5.2.2
-    # via -r requirements/requirements.txt
+    # via
+    #   -r requirements/requirements.txt
+    #   alembic
 iniconfig==1.1.1
     # via pytest
 jinja2==2.11.2
@@ -187,14 +189,7 @@ pyramid-tm==2.4
 pytest==6.2.5
     # via -r requirements/tests.in
 python-dateutil==2.8.1
-    # via
-    #   -r requirements/requirements.txt
-    #   alembic
-    #   faker
-python-editor==1.0.4
-    # via
-    #   -r requirements/requirements.txt
-    #   alembic
+    # via faker
 pytz==2020.4
     # via
     #   -r requirements/requirements.txt
