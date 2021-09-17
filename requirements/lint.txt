@@ -166,7 +166,7 @@ netaddr==0.8.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
-newrelic==6.8.1.164
+newrelic==6.10.0.165
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
