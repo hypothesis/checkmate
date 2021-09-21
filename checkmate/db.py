@@ -24,7 +24,7 @@ class BaseClass:
     """Functions common to all SQLAlchemy models."""
 
     def __repr__(self):
-        return "{class_}({kwargs})".format(
+        return "{class_}({kwargs})".format(  # pylint:disable=consider-using-f-string
             class_=self.__class__.__name__,
             kwargs=", ".join(
                 f"{kwarg}={repr(getattr(self, kwarg))}"

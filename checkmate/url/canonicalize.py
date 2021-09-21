@@ -186,7 +186,7 @@ class CanonicalURL:
             # In the URL, percent-escape all characters that are <= ASCII 32,
             # >= 127, #, or %. The escapes should use uppercase hex characters.
             if char_code <= 32 or char_code >= 127 or char in "#%":
-                parts.append("%{:02X}".format(char_code))
+                parts.append(f"%{char_code:02X}")
             else:
                 parts.append(char)
 
