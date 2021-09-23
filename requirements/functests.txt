@@ -112,7 +112,7 @@ marshmallow-jsonapi==0.24.0
     # via -r requirements/requirements.txt
 netaddr==0.8.0
     # via -r requirements/requirements.txt
-newrelic==6.10.0.165
+newrelic==7.0.0.166
     # via -r requirements/requirements.txt
 oauthlib==3.1.0
     # via
