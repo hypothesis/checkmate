@@ -348,7 +348,7 @@ typing-extensions==3.10.0.2
     # via
     #   astroid
     #   pylint
-urllib3==1.26.2
+urllib3==1.26.5
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt

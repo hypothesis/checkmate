@@ -140,7 +140,7 @@ transaction==3.0.0
     #   zope.sqlalchemy
 translationstring==1.4
     # via pyramid
-urllib3==1.26.2
+urllib3==1.26.5
     # via
     #   requests
     #   sentry-sdk
