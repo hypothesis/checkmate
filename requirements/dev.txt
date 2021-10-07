@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements/dev.in
 #
-alembic==1.7.3
+alembic==1.7.4
     # via -r requirements/requirements.txt
 amqp==5.0.6
     # via
@@ -103,6 +103,10 @@ idna==2.10
     # via
     #   -r requirements/requirements.txt
     #   requests
+importlib-metadata==4.8.1
+    # via
+    #   -r requirements/requirements.txt
+    #   alembic
 importlib-resources==5.2.2
     # via
     #   -r requirements/requirements.txt
@@ -329,6 +333,7 @@ wired==0.3
 zipp==3.4.1
     # via
     #   -r requirements/requirements.txt
+    #   importlib-metadata
     #   importlib-resources
 zope.deprecation==4.4.0
     # via

@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements/requirements.in
 #
-alembic==1.7.3
+alembic==1.7.4
     # via -r requirements/requirements.in
 amqp==5.0.6
     # via kombu
@@ -46,6 +46,8 @@ hupper==1.10.2
     # via pyramid
 idna==2.10
     # via requests
+importlib-metadata==4.8.1
+    # via alembic
 importlib-resources==5.2.2
     # via
     #   -r requirements/requirements.in
@@ -158,7 +160,9 @@ webob==1.8.6
 wired==0.3
     # via pyramid-services
 zipp==3.4.1
-    # via importlib-resources
+    # via
+    #   importlib-metadata
+    #   importlib-resources
 zope.deprecation==4.4.0
     # via
     #   pyramid

@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements/lint.in
 #
-alembic==1.7.3
+alembic==1.7.4
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -116,6 +116,11 @@ idna==2.10
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   requests
+importlib-metadata==4.8.1
+    # via
+    #   -r requirements/requirements.txt
+    #   -r requirements/tests.txt
+    #   alembic
 importlib-resources==5.2.2
     # via
     #   -r requirements/requirements.txt
@@ -394,6 +399,7 @@ zipp==3.4.1
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
+    #   importlib-metadata
     #   importlib-resources
 zope.deprecation==4.4.0
     # via
