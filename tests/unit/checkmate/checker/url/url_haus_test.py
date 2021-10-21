@@ -73,9 +73,9 @@ class TestURLHaus:
         ]
 
     def read_fixture(self, name):
-        return importlib_resources.read_binary(
-            "tests.unit.checkmate.checker.url.fixture", name
-        )
+        return (
+            importlib_resources.files("tests.unit.checkmate.checker.url.fixture") / name
+        ).read_bytes()
 
     @pytest.fixture(autouse=True)
     def URLHausRule(self, patch):
