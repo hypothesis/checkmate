@@ -75,7 +75,7 @@ dockerpty==0.4.1
     # via docker-compose
 docopt==0.6.2
     # via docker-compose
-factory-boy==3.2.0
+factory-boy==3.2.1
     # via -r requirements/dev.in
 faker==8.1.0
     # via factory-boy
