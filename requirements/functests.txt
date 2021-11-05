@@ -84,7 +84,7 @@ importlib-metadata==4.8.1
     # via
     #   -r requirements/requirements.txt
     #   alembic
-importlib_resources==5.4.0
+importlib-resources==5.4.0
     # via
     #   -r requirements/requirements.txt
     #   alembic
@@ -116,7 +116,7 @@ marshmallow-jsonapi==0.24.0
     # via -r requirements/requirements.txt
 netaddr==0.8.0
     # via -r requirements/requirements.txt
-newrelic==7.2.2.169
+newrelic==7.2.3.170
     # via -r requirements/requirements.txt
 oauthlib==3.1.0
     # via
