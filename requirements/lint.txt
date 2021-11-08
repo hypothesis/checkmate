@@ -33,7 +33,7 @@ cachetools==4.2.1
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   google-auth
-celery==5.1.2
+celery==5.2.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -48,7 +48,7 @@ charset-normalizer==2.0.1
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   requests
-click==7.1.2
+click==8.0.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -66,7 +66,7 @@ click-plugins==1.1.1
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   celery
-click-repl==0.1.6
+click-repl==0.2.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -121,7 +121,7 @@ importlib-metadata==4.8.1
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   alembic
-importlib_resources==5.4.0
+importlib-resources==5.4.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -137,7 +137,7 @@ jinja2==2.11.3
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid-jinja2
-kombu==5.1.0
+kombu==5.2.1
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
