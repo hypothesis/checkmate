@@ -24,7 +24,7 @@ cachetools==4.2.1
     # via
     #   -r requirements/requirements.txt
     #   google-auth
-celery==5.1.2
+celery==5.2.0
     # via -r requirements/requirements.txt
 certifi==2020.11.8
     # via
@@ -40,7 +40,7 @@ charset-normalizer==2.0.1
     # via
     #   -r requirements/requirements.txt
     #   requests
-click==7.1.2
+click==8.0.3
     # via
     #   -r requirements/requirements.txt
     #   celery
@@ -55,7 +55,7 @@ click-plugins==1.1.1
     # via
     #   -r requirements/requirements.txt
     #   celery
-click-repl==0.1.6
+click-repl==0.2.0
     # via
     #   -r requirements/requirements.txt
     #   celery
@@ -107,7 +107,7 @@ importlib-metadata==4.8.1
     # via
     #   -r requirements/requirements.txt
     #   alembic
-importlib_resources==5.4.0
+importlib-resources==5.4.0
     # via
     #   -r requirements/requirements.txt
     #   alembic
@@ -128,7 +128,7 @@ jinja2==2.11.3
     #   pyramid-jinja2
 jsonschema==3.2.0
     # via docker-compose
-kombu==5.1.0
+kombu==5.2.1
     # via
     #   -r requirements/requirements.txt
     #   celery
