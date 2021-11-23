@@ -22,7 +22,7 @@ cachetools==4.2.1
     # via
     #   -r requirements/requirements.txt
     #   google-auth
-celery==5.2.0
+celery==5.2.1
     # via -r requirements/requirements.txt
 certifi==2020.11.8
     # via
@@ -94,7 +94,7 @@ jinja2==2.11.3
     # via
     #   -r requirements/requirements.txt
     #   pyramid-jinja2
-kombu==5.2.1
+kombu==5.2.2
     # via
     #   -r requirements/requirements.txt
     #   celery
