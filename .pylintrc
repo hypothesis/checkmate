@@ -43,6 +43,10 @@ disable=
     suppressed-message,
     locally-disabled,
 
+good-names=
+    # request.db
+    db
+
 
 [REPORTS]
 output-format=colorized
