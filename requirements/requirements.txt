@@ -117,7 +117,7 @@ pyramid-tm==2.4
     # via -r requirements/requirements.in
 pytz==2020.4
     # via celery
-requests==2.26.0
+requests==2.27.0
     # via
     #   -r requirements/requirements.in
     #   requests-oauthlib

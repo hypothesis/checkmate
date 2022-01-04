@@ -244,7 +244,7 @@ pytz==2020.4
     #   celery
 pyyaml==5.4.1
     # via docker-compose
-requests==2.26.0
+requests==2.27.0
     # via
     #   -r requirements/requirements.txt
     #   docker
