@@ -8,7 +8,7 @@ alembic==1.7.5
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
-amqp==5.0.6
+amqp==5.0.9
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -33,7 +33,7 @@ cachetools==4.2.1
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   google-auth
-celery==5.2.1
+celery==5.2.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -137,7 +137,7 @@ jinja2==2.11.3
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid-jinja2
-kombu==5.2.2
+kombu==5.2.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -284,7 +284,7 @@ python-dateutil==2.8.1
     # via
     #   -r requirements/tests.txt
     #   faker
-pytz==2020.4
+pytz==2021.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
