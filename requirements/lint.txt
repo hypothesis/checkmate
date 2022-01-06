@@ -211,7 +211,7 @@ prompt-toolkit==3.0.8
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   click-repl
-psycopg2==2.9.2
+psycopg2==2.9.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
