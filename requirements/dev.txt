@@ -10,6 +10,8 @@ amqp==5.0.9
     # via
     #   -r requirements/requirements.txt
     #   kombu
+asttokens==2.0.5
+    # via stack-data
 attrs==20.3.0
     # via jsonschema
 backcall==0.2.0
@@ -20,6 +22,8 @@ billiard==3.6.4.0
     # via
     #   -r requirements/requirements.txt
     #   celery
+black==21.12b0
+    # via ipython
 cachetools==4.2.1
     # via
     #   -r requirements/requirements.txt
@@ -43,6 +47,7 @@ charset-normalizer==2.0.1
 click==8.0.3
     # via
     #   -r requirements/requirements.txt
+    #   black
     #   celery
     #   click-didyoumean
     #   click-plugins
@@ -75,6 +80,8 @@ dockerpty==0.4.1
     # via docker-compose
 docopt==0.6.2
     # via docker-compose
+executing==0.8.2
+    # via stack-data
 factory-boy==3.2.1
     # via -r requirements/dev.in
 faker==8.1.0
@@ -113,7 +120,7 @@ importlib-resources==5.4.0
     #   alembic
 ipdb==0.13.9
     # via -r requirements/dev.in
-ipython==7.31.0
+ipython==8.0.0
     # via
     #   -r requirements/dev.in
     #   ipdb
@@ -150,6 +157,8 @@ marshmallow-jsonapi==0.24.0
     # via -r requirements/requirements.txt
 matplotlib-inline==0.1.2
     # via ipython
+mypy-extensions==0.4.3
+    # via black
 netaddr==0.8.0
     # via -r requirements/requirements.txt
 newrelic==7.2.4.171
@@ -166,6 +175,8 @@ pastedeploy==2.1.1
     # via
     #   -r requirements/requirements.txt
     #   plaster-pastedeploy
+pathspec==0.9.0
+    # via black
 pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
@@ -179,6 +190,8 @@ plaster-pastedeploy==0.7
     # via
     #   -r requirements/requirements.txt
     #   pyramid
+platformdirs==2.4.1
+    # via black
 prompt-toolkit==3.0.8
     # via
     #   -r requirements/requirements.txt
@@ -188,6 +201,8 @@ psycopg2==2.9.3
     # via -r requirements/requirements.txt
 ptyprocess==0.7.0
     # via pexpect
+pure-eval==0.2.1
+    # via stack-data
 pyasn1==0.4.8
     # via
     #   -r requirements/requirements.txt
@@ -265,6 +280,7 @@ sentry-sdk==1.0.0
 six==1.15.0
     # via
     #   -r requirements/requirements.txt
+    #   asttokens
     #   bcrypt
     #   click-repl
     #   dockerpty
@@ -278,6 +294,8 @@ sqlalchemy==1.4.29
     #   -r requirements/requirements.txt
     #   alembic
     #   zope.sqlalchemy
+stack-data==0.1.3
+    # via ipython
 supervisor==4.2.4
     # via -r requirements/dev.in
 text-unidecode==1.3
@@ -286,6 +304,8 @@ texttable==1.6.3
     # via docker-compose
 toml==0.10.2
     # via ipdb
+tomli==1.2.3
+    # via black
 traitlets==5.0.5
     # via
     #   ipython
@@ -299,6 +319,8 @@ translationstring==1.4
     # via
     #   -r requirements/requirements.txt
     #   pyramid
+typing-extensions==4.0.1
+    # via black
 urllib3==1.26.5
     # via
     #   -r requirements/requirements.txt
