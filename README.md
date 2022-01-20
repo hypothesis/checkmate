@@ -1,7 +1,58 @@
 Checkmate
-=====
+=========
 
 A service for checking URLs are safe.
+
+Installing Checkmate in a development environment
+-------------------------------------------------
+
+### You will need
+
+* [Git](https://git-scm.com/)
+
+* [pyenv](https://github.com/pyenv/pyenv)
+  Follow the instructions in the pyenv README to install it.
+  The Homebrew method works best on macOS.
+
+* [Docker](https://docs.docker.com/install/).
+  Follow the [instructions on the Docker website](https://docs.docker.com/install/)
+  to install Docker.
+
+### Clone the Git repo
+
+    git clone https://github.com/hypothesis/checkmate.git
+
+This will download the code into a `checkmate` directory in your current working
+directory. You need to be in the `checkmate` directory from the remainder of the
+installation process:
+
+    cd checkmate
+
+### Run the services with Docker Compose
+
+Start the services that Checkmate requires using Docker Compose:
+
+    make services
+
+### Create the development data and settings
+
+Create the database contents and environment variable settings needed to get
+Checkmate working:
+
+    make devdata
+
+### Start the development server
+
+    make dev
+
+The first time you run `make dev` it might take a while to start because it'll
+need to install the application dependencies and build the assets.
+
+This will start the app on http://localhost:9099.
+
+**That's it!** You’ve finished setting up your Checkmate development environment.
+Run `make help` to see all the commands that are available for running the tests,
+linting, code formatting, etc.
 
 API
 ---
@@ -84,49 +135,6 @@ Environment variables:
 For details of changing the blocklist see:
 
  * https://stackoverflow.com/c/hypothesis/questions/102/250
-
-
-Installing Checkmate in a development environment
-------------------------------------------------
-
-### You will need
-
-* [Git](https://git-scm.com/)
-
-* [pyenv](https://github.com/pyenv/pyenv)
-  Follow the instructions in the pyenv README to install it.
-  The Homebrew method works best on macOS.
-
-### Clone the git repo
-
-    git clone https://github.com/hypothesis/checkmate.git
-
-This will download the code into a `checkmate` directory in your current working
-directory. You need to be in the `checkmate` directory from the remainder of the
-installation process:
-
-    cd checkmate
-
-### Create the development data and settings
-
-Some functionality involves calls to external services (eg. Google login for the
-admin pages) which requires API keys. To download these keys run:
-
-    make devdata
-
-### Start the development server
-
-    make dev
-
-The first time you run `make dev` it might take a while to start because it'll
-need to install the application dependencies and build the assets.
-
-This will start the app on http://localhost:9099.
-
-**That's it!** You’ve finished setting up your Checkmate development environment.
-Run `make help` to see all the commands that are available for running the tests,
-linting, code formatting, etc.
-
 
 Using Checkmate in a development environment
 --------------------------------------------
