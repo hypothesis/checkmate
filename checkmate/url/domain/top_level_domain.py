@@ -65,7 +65,7 @@ class TopLevelDomain:
             line.lower()
             for line in load_data("resource/data/valid_top_level_domains.txt")
         )
-        cls.VALID_TLD_SUFFIX = re.compile(fr"\.(?:{'|'.join(cls.TLDS)})$")
+        cls.VALID_TLD_SUFFIX = re.compile(rf"\.(?:{'|'.join(cls.TLDS)})$")
 
 
 TopLevelDomain._load()  # pylint: disable=protected-access
