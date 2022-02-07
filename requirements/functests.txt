@@ -184,7 +184,7 @@ pyramid-services==2.2
     # via -r requirements/requirements.txt
 pyramid-tm==2.4
     # via -r requirements/requirements.txt
-pytest==6.2.5
+pytest==7.0.0
     # via -r requirements/functests.in
 pytz==2021.3
     # via
@@ -218,7 +218,7 @@ sqlalchemy==1.4.31
     #   -r requirements/requirements.txt
     #   alembic
     #   zope.sqlalchemy
-toml==0.10.2
+tomli==2.0.0
     # via pytest
 transaction==3.0.0
     # via
