@@ -182,7 +182,7 @@ pyramid-sanity==1.0.2
     # via -r requirements/requirements.txt
 pyramid-services==2.2
     # via -r requirements/requirements.txt
-pyramid-tm==2.4
+pyramid-tm==2.5
     # via -r requirements/requirements.txt
 pytest==7.0.1
     # via -r requirements/functests.in
