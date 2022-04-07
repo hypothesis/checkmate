@@ -213,7 +213,7 @@ six==1.15.0
     #   google-auth
 soupsieve==2.1
     # via beautifulsoup4
-sqlalchemy==1.4.34
+sqlalchemy==1.4.35
     # via
     #   -r requirements/requirements.txt
     #   alembic
