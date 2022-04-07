@@ -156,7 +156,7 @@ matplotlib-inline==0.1.2
     # via ipython
 netaddr==0.8.0
     # via -r requirements/requirements.txt
-newrelic==7.8.0.174
+newrelic==7.10.0.175
     # via -r requirements/requirements.txt
 oauthlib==3.1.0
     # via
