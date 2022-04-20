@@ -1,6 +1,6 @@
 import pytest
 
-from checkmate.exceptions import BadURLParameter, MalformedURL
+from checkmate.exceptions import BadURL, BadURLParameter
 from checkmate.models import BlockedFor, Detection, Reason, Source
 from checkmate.views.api.check_url import check_url
 
@@ -101,7 +101,7 @@ class TestURLCheck:
         self, pyramid_request, url_checker_service
     ):
         pyramid_request.params["url"] = "http://example.com]"
-        url_checker_service.check_url.side_effect = MalformedURL()
+        url_checker_service.check_url.side_effect = BadURL()
 
         with pytest.raises(BadURLParameter):
             check_url(pyramid_request)
