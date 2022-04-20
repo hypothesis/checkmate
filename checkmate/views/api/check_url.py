@@ -3,7 +3,7 @@
 from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
-from checkmate.exceptions import BadURLParameter, MalformedURL
+from checkmate.exceptions import BadURL, BadURLParameter
 from checkmate.models import BlockedFor, Reason
 from checkmate.security import Permissions
 from checkmate.services import SecureLinkService, URLCheckerService
@@ -40,7 +40,7 @@ def check_url(request):
                 ignore_reasons=ignore_reasons,
             )
         )
-    except MalformedURL as err:
+    except BadURL as err:
         raise BadURLParameter("url", "Parameter 'url' isn't valid") from err
 
     if not detections:

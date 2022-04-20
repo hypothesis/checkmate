@@ -1,5 +1,8 @@
 """Application specific exceptions."""
 
+# pylint: disable=unused-import
+from checkmatelib.exceptions import BadURL
+
 
 class JSONAPIException(Exception):
     """A base exception for JSON API compatible errors."""
@@ -49,10 +52,6 @@ class MalformedJSONBody(JSONAPIException):
     """The JSON body is malformed in some way."""
 
     status_code = 400
-
-
-class MalformedURL(Exception):
-    """The URL is malformed in some way."""
 
 
 class StageException(Exception):
