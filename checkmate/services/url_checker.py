@@ -1,8 +1,9 @@
 from operator import attrgetter
 
+from checkmatelib.url import hash_url
+
 from checkmate.checker.url import AllowRules, CustomRules, URLHaus
 from checkmate.models import Detection, Severity, Source
-from checkmate.url import hash_url
 
 
 class URLCheckerService:

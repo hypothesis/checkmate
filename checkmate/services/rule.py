@@ -1,7 +1,8 @@
+from checkmatelib.url import hash_for_rule
+
 from checkmate.exceptions import ResourceConflict
 from checkmate.models import AllowRule, Detection, Reason, Source
 from checkmate.services.url_checker import URLCheckerService
-from checkmate.url import hash_for_rule
 
 
 class RuleService:

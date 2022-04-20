@@ -1,11 +1,11 @@
 from unittest.mock import sentinel
 
 import pytest
+from checkmatelib.url import hash_url
 
 from checkmate.models import Reason, Source
 from checkmate.models.detection import Detection
 from checkmate.services.url_checker import URLCheckerService, factory
-from checkmate.url import hash_url
 
 
 class TestURLCheckerService:

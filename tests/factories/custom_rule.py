@@ -1,9 +1,9 @@
 import factory
+from checkmatelib.url import hash_for_rule
 from factory import Faker
 from factory.alchemy import SQLAlchemyModelFactory
 
 from checkmate import models
-from checkmate.url import hash_for_rule
 
 REASONS = list(models.Reason)
 
