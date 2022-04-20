@@ -1,10 +1,10 @@
+from checkmatelib.url import CanonicalURL, Domain
 from marshmallow import ValidationError
 from marshmallow_jsonapi import Schema, fields
 from pyramid.view import view_config
 
 from checkmate.security import Permissions
 from checkmate.services import RuleService
-from checkmate.url import CanonicalURL, Domain
 
 
 def _check_public_url(instance):

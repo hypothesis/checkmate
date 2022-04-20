@@ -3,10 +3,10 @@ import re
 from logging import getLogger
 
 import requests
+from checkmatelib.url import hash_for_rule
 
 from checkmate.checker.url._hashed_url_checker import HashedURLChecker
 from checkmate.models import CustomRule, Reason
-from checkmate.url import hash_for_rule
 
 
 class CustomRules(HashedURLChecker):

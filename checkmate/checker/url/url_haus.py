@@ -2,10 +2,11 @@
 
 from tempfile import TemporaryDirectory
 
+from checkmatelib.url import hash_for_rule
+
 from checkmate.checker.pipeline import Download, Pipeline, ReadCSVFile, UnzipFile
 from checkmate.checker.url._hashed_url_checker import HashedURLChecker
 from checkmate.models import Reason, URLHausRule
-from checkmate.url import hash_for_rule
 
 
 class URLHaus(HashedURLChecker):

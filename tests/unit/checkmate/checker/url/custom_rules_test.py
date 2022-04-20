@@ -1,9 +1,9 @@
 import pytest
+from checkmatelib.url import hash_url
 from h_matchers import Any
 
 from checkmate.checker.url.custom_rules import BlocklistParser, CustomRules
 from checkmate.models import Reason
-from checkmate.url import hash_url
 from tests import factories
 
 
