@@ -2,6 +2,5 @@
 ipython
 ipdb
 supervisor
-docker-compose
 pyramid_ipython
 factory-boy
