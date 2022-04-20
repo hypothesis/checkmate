@@ -1,10 +1,10 @@
 alembic
 celery
 gunicorn
-h_pyramid_sentry
+h-checkmatelib
+h-pyramid-sentry
 importlib_resources
 marshmallow-jsonapi
-netaddr
 newrelic
 psycopg2
 pyramid
