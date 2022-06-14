@@ -20,14 +20,12 @@ disable=invalid-name,
         missing-docstring,
         missing-type-doc,
         missing-return-type-doc,
-        no-self-use,
         redefined-outer-name,
         too-few-public-methods,
         too-many-arguments,
 
         # We use Black to format our code automatically, so we don't need
         # PyLint to check formatting for us.
-        bad-continuation,
         line-too-long,
 
 [REPORTS]

@@ -84,7 +84,7 @@ class HTTPBasicAuthSecurityPolicy:
 
         return Identity("", [])
 
-    def authenticated_userid(self, request):  # pylint:disable=no-self-use
+    def authenticated_userid(self, request):
         credentials = extract_http_basic_credentials(request)
 
         if credentials:
