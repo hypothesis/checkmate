@@ -207,7 +207,7 @@ pytz==2021.3
     # via
     #   -r requirements/requirements.txt
     #   celery
-requests==2.28.0
+requests==2.28.1
     # via
     #   -r requirements/requirements.txt
     #   h-checkmatelib
