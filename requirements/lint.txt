@@ -274,7 +274,7 @@ pyramid-exclog==1.1
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
-pyramid-googleauth==1.0.2
+pyramid-googleauth==1.0.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
