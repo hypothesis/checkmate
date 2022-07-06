@@ -20,5 +20,6 @@ def mock_google_auth_service(patch):
     mock_google_auth_service.exchange_auth_code.return_value = (
         {"email": "user@hypothes.is"},
         sentinel.credentials,
+        {},
     )
     return mock_google_auth_service
