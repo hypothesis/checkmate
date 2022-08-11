@@ -200,7 +200,7 @@ pyramid-googleauth==1.0.3
     # via -r requirements/requirements.txt
 pyramid-jinja2==2.10
     # via -r requirements/requirements.txt
-pyramid-sanity==1.0.2
+pyramid-sanity==1.0.3
     # via -r requirements/requirements.txt
 pyramid-services==2.2
     # via -r requirements/requirements.txt
