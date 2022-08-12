@@ -1,0 +1,27 @@
+# A manually triggered workflow that will install the `latest`
+# container version available for Checkmate on Docker Hub.
+#
+# To be run after a successful run of the initial_release workflow.
+#
+# The initial_release workflow deals with testing, creating a
+# Docker image and updating the QA service.
+name: prod-release
+
+concurrency:
+  group: ${{ github.event.repository.name }}-release
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+
+jobs:
+  prod:
+    name: ${{ github.event.repository.name }}
+    uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
+    with:
+      Application: ${{ github.event.repository.name }}
+      Environment: prod
+      Region: us-west-1
+      Operation: deploy
+      Version: latest
+    secrets: inherit
