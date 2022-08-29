@@ -1,7 +1,7 @@
 alembic
 celery
 gunicorn
-h-checkmatelib
+checkmatelib
 h-pyramid-sentry
 importlib_resources
 marshmallow-jsonapi
