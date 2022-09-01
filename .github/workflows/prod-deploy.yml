@@ -5,10 +5,10 @@
 #
 # The initial_release workflow deals with testing, creating a
 # Docker image and updating the QA service.
-name: prod-release
+name: prod-deploy
 
 concurrency:
-  group: ${{ github.event.repository.name }}-release
+  group: ${{ github.event.repository.name }}-deploy
   cancel-in-progress: true
 
 on:
