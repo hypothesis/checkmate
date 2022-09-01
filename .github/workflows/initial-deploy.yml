@@ -2,10 +2,10 @@
 #
 # Once this is complete the prod_release workflow needs to be run to 
 # update production.
-name: initial-release
+name: initial-deploy
 
 concurrency:
-  group: ${{ github.event.repository.name }}-release
+  group: ${{ github.event.repository.name }}-deploy
   cancel-in-progress: true
 
 on:
