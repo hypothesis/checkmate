@@ -23,6 +23,8 @@ RUN apk add --no-cache --virtual \
 
 COPY . .
 
+ENV PYTHONPATH /var/lib/hypothesis:$PYTHONPATH
+
 USER hypothesis
 
 CMD /usr/bin/supervisord -c /var/lib/hypothesis/conf/supervisord.conf
