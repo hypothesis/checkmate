@@ -21,7 +21,7 @@ def update_remote_dev_data():
             [
                 "git",
                 "clone",
-                "git@github.com:hypothesis/devdata.git",
+                "https://github.com/hypothesis/devdata.git",
                 git_dir,
                 # Truncate the git history, we just want the files
                 "--depth=1",
