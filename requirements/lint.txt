@@ -82,7 +82,7 @@ click-repl==0.2.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   celery
-coverage==7.0.4
+coverage==7.0.5
     # via -r requirements/tests.txt
 dill==0.3.4
     # via pylint
@@ -220,6 +220,10 @@ pep517==0.13.0
     # via
     #   -r requirements/tests.txt
     #   build
+pip==22.2.1
+    # via
+    #   -r requirements/tests.txt
+    #   pip-tools
 pip-sync-faster==0.0.3
     # via
     #   -r requirements/lint.in
@@ -351,6 +355,20 @@ sentry-sdk==1.0.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   h-pyramid-sentry
+setuptools==65.5.1
+    # via
+    #   -r requirements/requirements.txt
+    #   -r requirements/tests.txt
+    #   astroid
+    #   google-auth
+    #   gunicorn
+    #   pastedeploy
+    #   pip-tools
+    #   plaster
+    #   pyramid
+    #   zope-deprecation
+    #   zope-interface
+    #   zope-sqlalchemy
 six==1.15.0
     # via
     #   -r requirements/requirements.txt
@@ -470,23 +488,3 @@ zope-sqlalchemy==1.6
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
-
-# The following packages are considered to be unsafe in a requirements file:
-pip==22.2.1
-    # via
-    #   -r requirements/tests.txt
-    #   pip-tools
-setuptools==65.5.1
-    # via
-    #   -r requirements/requirements.txt
-    #   -r requirements/tests.txt
-    #   astroid
-    #   google-auth
-    #   gunicorn
-    #   pastedeploy
-    #   pip-tools
-    #   plaster
-    #   pyramid
-    #   zope-deprecation
-    #   zope-interface
-    #   zope-sqlalchemy
