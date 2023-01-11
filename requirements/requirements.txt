@@ -138,11 +138,21 @@ rsa==4.7
     # via google-auth
 sentry-sdk==1.0.0
     # via h-pyramid-sentry
+setuptools==65.5.1
+    # via
+    #   google-auth
+    #   gunicorn
+    #   pastedeploy
+    #   plaster
+    #   pyramid
+    #   zope-deprecation
+    #   zope-interface
+    #   zope-sqlalchemy
 six==1.15.0
     # via
     #   click-repl
     #   google-auth
-sqlalchemy==1.4.45
+sqlalchemy==1.4.46
     # via
     #   -r requirements/requirements.in
     #   alembic
@@ -187,15 +197,3 @@ zope-interface==5.2.0
     #   zope-sqlalchemy
 zope-sqlalchemy==1.6
     # via -r requirements/requirements.in
-
-# The following packages are considered to be unsafe in a requirements file:
-setuptools==65.5.1
-    # via
-    #   google-auth
-    #   gunicorn
-    #   pastedeploy
-    #   plaster
-    #   pyramid
-    #   zope-deprecation
-    #   zope-interface
-    #   zope-sqlalchemy
