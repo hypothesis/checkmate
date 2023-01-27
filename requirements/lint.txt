@@ -383,7 +383,7 @@ soupsieve==2.0.1
     # via
     #   -r requirements/tests.txt
     #   beautifulsoup4
-sqlalchemy==1.4.46
+sqlalchemy==2.0.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -413,10 +413,13 @@ translationstring==1.4
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid
-typing-extensions==3.10.0.2
+typing-extensions==4.4.0
     # via
+    #   -r requirements/requirements.txt
+    #   -r requirements/tests.txt
     #   astroid
     #   pylint
+    #   sqlalchemy
 urllib3==1.26.5
     # via
     #   -r requirements/requirements.txt
