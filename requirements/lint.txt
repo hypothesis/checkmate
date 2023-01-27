@@ -270,7 +270,7 @@ pyasn1-modules==0.2.8
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   google-auth
-pydocstyle==6.1.1
+pydocstyle==6.3.0
     # via -r requirements/lint.in
 pyjwt==2.4.0
     # via
@@ -377,7 +377,7 @@ six==1.15.0
     #   google-auth
     #   packaging
     #   python-dateutil
-snowballstemmer==2.1.0
+snowballstemmer==2.2.0
     # via pydocstyle
 soupsieve==2.0.1
     # via
