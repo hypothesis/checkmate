@@ -50,8 +50,8 @@ def update_dev_data():
 if __name__ == "__main__":
     update_remote_dev_data()
 
-    config_file = sys.argv[1]
-    with bootstrap(config_file) as env:
+    CONFIG_FILE = sys.argv[1]
+    with bootstrap(CONFIG_FILE) as env:
         request = env["request"]
 
         with request.tm:
