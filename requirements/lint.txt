@@ -283,7 +283,7 @@ pyparsing==2.4.7
     # via
     #   -r requirements/tests.txt
     #   packaging
-pyramid==2.0
+pyramid==2.0.1
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
