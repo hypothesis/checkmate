@@ -100,6 +100,7 @@ class Checkmate:
             self.route,
             headers={"Cookie": f"session={self.session}"},
             json={"data": {"type": "AllowRule", "attributes": {"url": url}}},
+            timeout=(10, 10),
         )
 
         if response.ok:
