@@ -216,7 +216,7 @@ pyjwt==2.4.0
     #   pyramid-googleauth
 pyparsing==3.0.9
     # via packaging
-pyramid==2.0
+pyramid==2.0.1
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
