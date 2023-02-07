@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup python
         uses: actions/setup-python@v2
@@ -32,7 +32,7 @@ jobs:
         id: list-python-versions
         run: |
           pip install hdev
-          echo "::set-output name=python_headline_version::`hdev python_version --style plain --first`"
+          echo "python_headline_version=`hdev python_version --style plain --first`" >> $GITHUB_OUTPUT
 
   backend:
     name: Backend
@@ -59,7 +59,7 @@ jobs:
       run: python -m pip install 'tox<4'
 
     - name: Checkout git repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Create test databases
       run: |
@@ -67,7 +67,7 @@ jobs:
         psql -U postgres -h localhost -p 5434 -c 'CREATE DATABASE checkmate_functests'
 
     - name: Cache the .tox dir
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: .tox
         key: ${{ runner.os }}-tox-${{ secrets.CACHE_VERSION }}-${{ hashFiles('tox.ini', 'requirements*', 'setup.py', 'setup.cfg') }}
