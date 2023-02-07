@@ -138,21 +138,11 @@ rsa==4.7
     # via google-auth
 sentry-sdk==1.0.0
     # via h-pyramid-sentry
-setuptools==65.5.1
-    # via
-    #   google-auth
-    #   gunicorn
-    #   pastedeploy
-    #   plaster
-    #   pyramid
-    #   zope-deprecation
-    #   zope-interface
-    #   zope-sqlalchemy
 six==1.15.0
     # via
     #   click-repl
     #   google-auth
-sqlalchemy==1.4.46
+sqlalchemy==2.0.2
     # via
     #   -r requirements/requirements.in
     #   alembic
@@ -163,6 +153,8 @@ transaction==3.0.0
     #   zope-sqlalchemy
 translationstring==1.4
     # via pyramid
+typing-extensions==4.4.0
+    # via sqlalchemy
 urllib3==1.26.5
     # via
     #   requests
