@@ -4,7 +4,7 @@
 #
 #    pip-compile --allow-unsafe requirements/requirements.in
 #
-alembic==1.9.2
+alembic==1.9.3
     # via -r requirements/requirements.in
 amqp==5.0.9
     # via kombu
@@ -138,16 +138,6 @@ rsa==4.7
     # via google-auth
 sentry-sdk==1.0.0
     # via h-pyramid-sentry
-setuptools==65.5.1
-    # via
-    #   google-auth
-    #   gunicorn
-    #   pastedeploy
-    #   plaster
-    #   pyramid
-    #   zope-deprecation
-    #   zope-interface
-    #   zope-sqlalchemy
 six==1.15.0
     # via
     #   click-repl
