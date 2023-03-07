@@ -4,7 +4,7 @@
 #
 #    pip-compile --allow-unsafe requirements/lint.in
 #
-alembic==1.9.4
+alembic==1.10.1
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -395,8 +395,11 @@ translationstring==1.4
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid
-typing-extensions==4.4.0
+typing-extensions==4.5.0
     # via
+    #   -r requirements/requirements.txt
+    #   -r requirements/tests.txt
+    #   alembic
     #   astroid
     #   pylint
 urllib3==1.26.5

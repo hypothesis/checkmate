@@ -4,7 +4,7 @@
 #
 #    pip-compile --allow-unsafe requirements/dev.in
 #
-alembic==1.9.4
+alembic==1.10.1
     # via -r requirements/requirements.txt
 amqp==5.0.9
     # via
@@ -302,6 +302,10 @@ translationstring==1.4
     # via
     #   -r requirements/requirements.txt
     #   pyramid
+typing-extensions==4.5.0
+    # via
+    #   -r requirements/requirements.txt
+    #   alembic
 urllib3==1.26.5
     # via
     #   -r requirements/requirements.txt
