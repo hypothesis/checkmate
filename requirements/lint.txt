@@ -20,7 +20,6 @@ attrs==21.4.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   jsonschema
-    #   pytest
 beautifulsoup4==4.9.3
     # via
     #   -r requirements/tests.txt
@@ -319,7 +318,7 @@ pyrsistent==0.18.1
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   jsonschema
-pytest==7.2.2
+pytest==7.3.0
     # via -r requirements/tests.txt
 python-dateutil==2.8.1
     # via
