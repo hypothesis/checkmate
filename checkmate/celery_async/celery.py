@@ -7,43 +7,41 @@ from contextlib import contextmanager
 
 import celery.signals
 from celery import Celery
-from kombu import Exchange, Queue
 from pyramid.scripting import prepare
 
 from checkmate.app import create_app
-from checkmate.celery_async.policy import RETRY_POLICY_QUICK
 
 LOG = logging.getLogger(__name__)
 
 
 app = Celery("checkmate")
 app.conf.update(
-    # Without some kind of default here we can't even import the module
-    # in the tests
     broker_url=os.environ.get(
         "CELERY_BROKER_URL", "amqp://guest:guest@localhost:5673//"
     ),
-    # What options should we have when sending messages to the queue?
-    broker_transport_options=RETRY_POLICY_QUICK,
+    broker_transport_options={
+        # Celery's docs are very unclear about this but: when publishing a
+        # message to RabbitMQ these options end up getting passed to Kombu's
+        # _ensure_connection() function:
+        # https://github.com/celery/kombu/blob/3e098dc94ed2a389276ccf3606a0ded3da157d72/kombu/connection.py#L399-L453
+        #
+        # By default _ensure_connection() can spend over 6s trying to establish
+        # a connection to RabbitMQ if RabbitMQ is down. This means that if
+        # RabbitMQ goes down then all of our web processes can quickly become
+        # occupied trying to establish connections when web requests try to
+        # call Celery tasks with .delay() or .apply_async().
+        #
+        # These options change it to use a smaller number of retries and less
+        # time between retries so that attempts fail fast when RabbitMQ is down
+        # and our whole web app remains responsive.
+        #
+        # For more info see: https://github.com/celery/celery/issues/4627#issuecomment-396907957
+        "max_retries": 2,
+        "interval_start": 0.2,
+        "interval_step": 0.2,
+    },
     # Tell celery where our tasks are defined
     imports=("checkmate.celery_async.tasks",),
-    # Acknowledge tasks after the task has executed, rather than just before
-    task_acks_late=True,
-    # Don't store any results, we only use this for scheduling
-    task_ignore_result=True,
-    task_queues=[
-        Queue(
-            "celery",
-            # We don't care if the messages are lost if the broker restarts
-            durable=False,
-            routing_key="celery",
-            exchange=Exchange("celery", type="direct", durable=False),
-        ),
-    ],
-    # Only accept one task at a time rather than pulling lots off the queue
-    # ahead of time. This lets other workers have a go if we fail
-    worker_prefetch_multiplier=1,
-    worker_disable_rate_limits=True,
 )
 
 
