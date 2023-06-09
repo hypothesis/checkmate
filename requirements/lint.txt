@@ -329,7 +329,7 @@ pytz==2021.3
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   celery
-requests==2.28.2
+requests==2.31.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
