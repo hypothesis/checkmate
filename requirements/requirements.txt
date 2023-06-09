@@ -127,7 +127,7 @@ pyrsistent==0.18.1
     # via jsonschema
 pytz==2021.3
     # via celery
-requests==2.28.2
+requests==2.31.0
     # via
     #   -r requirements/requirements.in
     #   checkmatelib
