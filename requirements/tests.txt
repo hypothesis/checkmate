@@ -151,10 +151,12 @@ oauthlib==3.1.0
     # via
     #   -r requirements/requirements.txt
     #   requests-oauthlib
-packaging==20.4
+packaging==23.1
     # via
+    #   -r requirements/requirements.txt
     #   build
     #   pytest
+    #   zope-sqlalchemy
 pastedeploy==2.1.1
     # via
     #   -r requirements/requirements.txt
@@ -197,8 +199,6 @@ pyjwt==2.4.0
     # via
     #   -r requirements/requirements.txt
     #   pyramid-googleauth
-pyparsing==2.4.7
-    # via packaging
 pyramid==2.0.1
     # via
     #   -r requirements/requirements.txt
@@ -254,7 +254,6 @@ six==1.15.0
     #   -r requirements/requirements.txt
     #   click-repl
     #   google-auth
-    #   packaging
     #   python-dateutil
 soupsieve==2.0.1
     # via beautifulsoup4
@@ -341,5 +340,5 @@ zope-interface==5.2.0
     #   transaction
     #   wired
     #   zope-sqlalchemy
-zope-sqlalchemy==2.0
+zope-sqlalchemy==3.0
     # via -r requirements/requirements.txt
