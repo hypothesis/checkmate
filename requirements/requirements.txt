@@ -81,6 +81,8 @@ newrelic==8.8.0
     # via -r requirements/requirements.in
 oauthlib==3.1.0
     # via requests-oauthlib
+packaging==23.1
+    # via zope-sqlalchemy
 pastedeploy==2.1.1
     # via plaster-pastedeploy
 plaster==1.0
@@ -187,5 +189,5 @@ zope-interface==5.2.0
     #   transaction
     #   wired
     #   zope-sqlalchemy
-zope-sqlalchemy==2.0
+zope-sqlalchemy==3.0
     # via -r requirements/requirements.in

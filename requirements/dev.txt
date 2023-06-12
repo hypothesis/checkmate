@@ -157,8 +157,11 @@ oauthlib==3.1.0
     # via
     #   -r requirements/requirements.txt
     #   requests-oauthlib
-packaging==21.3
-    # via build
+packaging==23.1
+    # via
+    #   -r requirements/requirements.txt
+    #   build
+    #   zope-sqlalchemy
 parso==0.8.2
     # via jedi
 pastedeploy==2.1.1
@@ -212,8 +215,6 @@ pyjwt==2.4.0
     # via
     #   -r requirements/requirements.txt
     #   pyramid-googleauth
-pyparsing==3.0.9
-    # via packaging
 pyramid==2.0.1
     # via
     #   -r requirements/requirements.txt
@@ -353,5 +354,5 @@ zope-interface==5.2.0
     #   transaction
     #   wired
     #   zope-sqlalchemy
-zope-sqlalchemy==2.0
+zope-sqlalchemy==3.0
     # via -r requirements/requirements.txt
