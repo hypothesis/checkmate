@@ -250,7 +250,7 @@ six==1.15.0
     #   python-dateutil
 soupsieve==2.1
     # via beautifulsoup4
-sqlalchemy==1.4.48
+sqlalchemy==2.0.16
     # via
     #   -r requirements/requirements.txt
     #   alembic
@@ -274,6 +274,7 @@ typing-extensions==4.5.0
     #   -r requirements/requirements.txt
     #   alembic
     #   kombu
+    #   sqlalchemy
 tzdata==2023.3
     # via
     #   -r requirements/requirements.txt
