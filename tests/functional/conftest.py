@@ -1,6 +1,7 @@
 import contextlib
 
 import pytest
+import sqlalchemy as sa
 from webtest import TestApp
 
 from checkmate import db
@@ -18,7 +19,7 @@ def clean_database(db_engine):
     with contextlib.closing(db_engine.connect()) as conn:
         transaction = conn.begin()
         tnames = ", ".join('"' + t.name + '"' for t in tables)
-        conn.execute(f"TRUNCATE {tnames};")
+        conn.execute(sa.text(f"TRUNCATE {tnames};"))
         transaction.commit()
 
 
