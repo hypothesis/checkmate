@@ -83,10 +83,11 @@ def _stamp_db(engine):  # pragma: no cover
     database after initializing it.
 
     """
-    try:
-        engine.execute("select 1 from alembic_version")
-    except sqlalchemy.exc.ProgrammingError:
-        alembic.command.stamp(alembic.config.Config("conf/alembic.ini"), "head")
+    with engine.connect() as connection:
+        try:
+            connection.execute(sqlalchemy.text("select 1 from alembic_version"))
+        except sqlalchemy.exc.ProgrammingError:
+            alembic.command.stamp(alembic.config.Config("conf/alembic.ini"), "head")
 
 
 def _session(request):  # pragma: no cover
