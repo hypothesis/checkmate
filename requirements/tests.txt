@@ -84,7 +84,7 @@ greenlet==1.0.0
     # via
     #   -r requirements/requirements.txt
     #   sqlalchemy
-gunicorn==20.1.0
+gunicorn==21.0.1
     # via -r requirements/requirements.txt
 h-matchers==1.2.15
     # via -r requirements/tests.in
@@ -155,6 +155,7 @@ packaging==23.1
     # via
     #   -r requirements/requirements.txt
     #   build
+    #   gunicorn
     #   pytest
     #   zope-sqlalchemy
 pastedeploy==2.1.1
