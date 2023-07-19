@@ -78,7 +78,7 @@ greenlet==1.0.0
     # via
     #   -r requirements/requirements.txt
     #   sqlalchemy
-gunicorn==21.0.1
+gunicorn==21.1.0
     # via -r requirements/requirements.txt
 h-matchers==1.2.15
     # via -r requirements/functests.in
