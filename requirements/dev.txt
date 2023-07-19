@@ -88,7 +88,7 @@ greenlet==1.0.0
     # via
     #   -r requirements/requirements.txt
     #   sqlalchemy
-gunicorn==21.0.1
+gunicorn==21.1.0
     # via -r requirements/requirements.txt
 h-pyramid-sentry==1.2.4
     # via -r requirements/requirements.txt
