@@ -200,7 +200,7 @@ pyjwt==2.4.0
     # via
     #   -r requirements/requirements.txt
     #   pyramid-googleauth
-pyramid==2.0.1
+pyramid==2.0.2
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
