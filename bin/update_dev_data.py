@@ -43,6 +43,7 @@ def update_dev_data():
         "example.net": Reason.MEDIA_VIDEO,
         "bad.example.com": Reason.MALICIOUS,
     }
+    # pylint:disable=used-before-assignment
     CustomRules(request.db).load_simple_rules(raw_rules)
     print(f"Loaded {len(raw_rules)} custom rules")
 
