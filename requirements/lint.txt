@@ -279,7 +279,7 @@ pyjwt==2.4.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid-googleauth
-pylint==3.0.0
+pylint==3.0.1
     # via -r requirements/lint.in
 pyramid==2.0.2
     # via
