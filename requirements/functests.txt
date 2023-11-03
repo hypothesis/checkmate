@@ -17,6 +17,7 @@ attrs==21.4.0
 backports-zoneinfo[tzdata]==0.2.1
     # via
     #   -r requirements/requirements.txt
+    #   backports-zoneinfo
     #   celery
     #   kombu
 beautifulsoup4==4.9.3
@@ -251,7 +252,7 @@ six==1.15.0
     #   python-dateutil
 soupsieve==2.1
     # via beautifulsoup4
-sqlalchemy==2.0.22
+sqlalchemy==2.0.23
     # via
     #   -r requirements/requirements.txt
     #   alembic

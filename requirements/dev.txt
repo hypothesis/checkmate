@@ -21,6 +21,7 @@ backcall==0.2.0
 backports-zoneinfo[tzdata]==0.2.1
     # via
     #   -r requirements/requirements.txt
+    #   backports-zoneinfo
     #   celery
     #   kombu
 billiard==4.1.0
@@ -279,7 +280,7 @@ six==1.15.0
     #   click-repl
     #   google-auth
     #   python-dateutil
-sqlalchemy==2.0.22
+sqlalchemy==2.0.23
     # via
     #   -r requirements/requirements.txt
     #   alembic
