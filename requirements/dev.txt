@@ -21,6 +21,7 @@ backcall==0.2.0
 backports-zoneinfo[tzdata]==0.2.1
     # via
     #   -r requirements/requirements.txt
+    #   backports-zoneinfo
     #   celery
     #   kombu
 billiard==4.1.0
@@ -105,7 +106,7 @@ importlib-metadata==4.8.1
     #   -r requirements/requirements.txt
     #   alembic
     #   pip-sync-faster
-importlib-resources==6.1.0
+importlib-resources==6.1.1
     # via
     #   -r requirements/requirements.txt
     #   alembic
