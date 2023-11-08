@@ -24,6 +24,13 @@ jobs:
         image: postgres:11.5-alpine
         ports:
           - 5434:5432
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
     - name: Checkout git repo
       uses: actions/checkout@v3
