@@ -31,7 +31,7 @@ beautifulsoup4==4.9.3
     # via
     #   -r requirements/tests.txt
     #   webtest
-billiard==4.1.0
+billiard==4.2.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -45,7 +45,7 @@ cachetools==4.2.1
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   google-auth
-celery==5.3.4
+celery==5.3.5
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -168,7 +168,7 @@ jsonschema==4.4.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   checkmatelib
-kombu==5.3.2
+kombu==5.3.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -421,7 +421,7 @@ venusian==3.0.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid
-vine==5.0.0
+vine==5.1.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
