@@ -34,7 +34,7 @@ cachetools==4.2.1
     # via
     #   -r requirements/requirements.txt
     #   google-auth
-celery==5.3.5
+celery==5.3.6
     # via -r requirements/requirements.txt
 certifi==2023.7.22
     # via
@@ -131,7 +131,7 @@ jsonschema==4.4.0
     # via
     #   -r requirements/requirements.txt
     #   checkmatelib
-kombu==5.3.3
+kombu==5.3.4
     # via
     #   -r requirements/requirements.txt
     #   celery
