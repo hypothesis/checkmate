@@ -65,7 +65,7 @@ click-repl==0.2.0
     # via
     #   -r requirements/requirements.txt
     #   celery
-coverage==7.3.2
+coverage==7.3.3
     # via -r requirements/tests.in
 exceptiongroup==1.0.0
     # via pytest
