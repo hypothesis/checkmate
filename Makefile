@@ -29,7 +29,7 @@ supervisor: python
 .PHONY: services
 services: args?=up -d
 services: python
-	@tox -qe dockercompose -- $(args)
+	@docker compose $(args)
 
 .PHONY: db
 db: args?=upgrade head
@@ -43,7 +43,7 @@ shell: python
 
 .PHONY: sql
 sql: python
-	@tox -qe dockercompose -- exec postgres psql --pset expanded=auto -U postgres
+	@docker compose exec postgres psql --pset expanded=auto -U postgres
 
 .PHONY: devdata
 devdata: python
