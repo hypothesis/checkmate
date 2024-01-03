@@ -8,9 +8,8 @@ from pyramid.testing import DummyRequest, testConfig
 
 from checkmate.db import create_engine
 
-_TEST_DATABASE_URL = os.environ.get(
-    "TEST_DATABASE_URL",
-    "postgresql://postgres@localhost:5434/checkmate_test",
+DATABASE_URL = os.environ.get(
+    "DATABASE_URL", "postgresql://postgres@localhost:5434/checkmate_test"
 )
 
 
@@ -20,13 +19,13 @@ def db_engine():
     # the current models. Doing this at the beginning of each test run ensures
     # that any schema changes made to the models since the last test run will
     # be applied to the test DB schema before running the tests again.
-    return create_engine(_TEST_DATABASE_URL, drop=True, max_overflow=15)
+    return create_engine(DATABASE_URL, drop=True, max_overflow=15)
 
 
 @pytest.fixture
 def pyramid_settings():
     return {
-        "database_url": _TEST_DATABASE_URL,
+        "database_url": DATABASE_URL,
         "checkmate_secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
         "api_keys": {"dev_api_key": "dev"},
         "pyramid_googleauth.secret": os.environ.get(
