@@ -151,7 +151,7 @@ six==1.15.0
     #   click-repl
     #   google-auth
     #   python-dateutil
-sqlalchemy==2.0.23
+sqlalchemy==2.0.25
     # via
     #   -r requirements/requirements.in
     #   alembic
@@ -162,7 +162,7 @@ transaction==3.0.0
     #   zope-sqlalchemy
 translationstring==1.4
     # via pyramid
-typing-extensions==4.5.0
+typing-extensions==4.9.0
     # via
     #   alembic
     #   kombu
