@@ -364,7 +364,7 @@ soupsieve==2.0.1
     # via
     #   -r requirements/tests.txt
     #   beautifulsoup4
-sqlalchemy==2.0.23
+sqlalchemy==2.0.25
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -395,7 +395,7 @@ translationstring==1.4
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid
-typing-extensions==4.5.0
+typing-extensions==4.9.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
