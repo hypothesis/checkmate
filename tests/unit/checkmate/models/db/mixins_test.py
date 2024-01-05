@@ -4,12 +4,12 @@ import pytest
 import sqlalchemy as sa
 from h_matchers import Any
 
-from checkmate.db import BASE
+from checkmate.db import Base
 from checkmate.models.db.mixins import BulkUpsertMixin, HashMatchMixin
 
 
 class TestHashMatchMixin:
-    class TableWithHash(BASE, HashMatchMixin):
+    class TableWithHash(Base, HashMatchMixin):
         __tablename__ = "test_table_with_hash"
 
         id = sa.Column(sa.Integer, autoincrement=True, primary_key=True)
@@ -30,6 +30,13 @@ class TestHashMatchMixin:
         assert items.count() == 1
         assert items[0].hash in ["hash_1", "hash_3"]
 
+    @pytest.fixture(autouse=True, scope="class")
+    def create_test_table_with_hash(self, db_engine):
+        self.TableWithHash.__table__.drop(db_engine, checkfirst=True)
+        self.TableWithHash.__table__.create(db_engine)
+        yield
+        self.TableWithHash.__table__.drop(db_engine)
+
     @pytest.fixture(autouse=True)
     def hashes(self, db_session):
         db_session.add_all(
@@ -42,7 +49,7 @@ class TestHashMatchMixin:
 
 
 class TestBulkUpsertMixin:
-    class TableWithBulkUpsert(BASE, BulkUpsertMixin):
+    class TableWithBulkUpsert(Base, BulkUpsertMixin):
         __tablename__ = "test_table_with_bulk_upsert"
 
         BULK_UPSERT_INDEX_ELEMENTS = ["id"]
@@ -94,9 +101,16 @@ class TestBulkUpsertMixin:
         )
 
     def test_it_fails_with_badly_configured_host_class(self):
-        class BadTable(BASE, BulkUpsertMixin):
+        class BadTable(Base, BulkUpsertMixin):
             __tablename__ = "bad_table"
             id = sa.Column(sa.Integer, primary_key=True)
 
         with pytest.raises(NotImplementedError):
             BadTable.bulk_upsert(sentinel.session, [{}])
+
+    @pytest.fixture(autouse=True, scope="class")
+    def create_test_table_with_bulk_upsert(self, db_engine):
+        self.TableWithBulkUpsert.__table__.drop(db_engine, checkfirst=True)
+        self.TableWithBulkUpsert.__table__.create(db_engine)
+        yield
+        self.TableWithBulkUpsert.__table__.drop(db_engine)

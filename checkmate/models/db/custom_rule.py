@@ -3,12 +3,12 @@
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import ARRAY
 
-from checkmate.db import BASE
+from checkmate.db import Base
 from checkmate.models.db.mixins import BulkUpsertMixin, HashMatchMixin
 from checkmate.models.reason import Reason
 
 
-class CustomRule(BASE, HashMatchMixin, BulkUpsertMixin):
+class CustomRule(Base, HashMatchMixin, BulkUpsertMixin):
     """Rule about blocking a particular resource."""
 
     BULK_UPSERT_INDEX_ELEMENTS = ["rule"]

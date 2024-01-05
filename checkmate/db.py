@@ -2,8 +2,6 @@
 
 import logging
 
-import alembic.command
-import alembic.config
 import sqlalchemy
 import zope.sqlalchemy
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -32,7 +30,7 @@ class BaseClass:
         )
 
 
-BASE = declarative_base(
+Base = declarative_base(
     # pylint: disable=line-too-long
     # Create a default metadata object with naming conventions for indexes and
     # constraints. This makes changing such constraints and indexes with
@@ -46,48 +44,8 @@ BASE = declarative_base(
 SESSION = sessionmaker()
 
 
-def create_engine(
-    database_url,
-    drop=False,
-    pool_size=5,
-    max_overflow=10,
-):  # pragma: no cover
-    """Create all the database tables if they don't already exist.
-
-    If `drop=True` is given then delete all existing tables first and then
-    re-create them. Tests use this. If `drop=False` existing tables won't be
-    touched.
-
-    :param database_url: Postgres DSN to connect to
-    :param drop: Whether or not to delete existing tables
-    :param pool_size: Number of connections to keep open inside the connection pool
-    :param max_overflow: Number of connections that can be opened above and beyond `pool_size`
-    :return: An SQLAlchemy engine object
-    """
-
-    engine = sqlalchemy.create_engine(
-        database_url, pool_size=pool_size, max_overflow=max_overflow
-    )
-    if drop:
-        BASE.metadata.drop_all(engine)
-
-    BASE.metadata.create_all(engine)
-
-    return engine
-
-
-def _stamp_db(engine):  # pragma: no cover
-    """Stamp the database with the latest revision if it isn't already stamped.
-
-    This is convenient in development environments to automatically stamp a new
-    database after initializing it.
-
-    """
-    with engine.connect() as connection:
-        try:
-            connection.execute(sqlalchemy.text("select 1 from alembic_version"))
-        except sqlalchemy.exc.ProgrammingError:
-            alembic.command.stamp(alembic.config.Config("conf/alembic.ini"), "head")
+def create_engine(database_url):  # pragma: no cover
+    return sqlalchemy.create_engine(database_url)
 
 
 def _session(request):  # pragma: no cover
@@ -126,10 +84,6 @@ def includeme(config):  # pragma: no cover
     database_url = config.registry.settings["database_url"]
     engine = create_engine(database_url)
     config.registry["database_engine"] = engine
-
-    # This is set in conf/development.ini
-    if config.registry.settings.get("dev"):
-        _stamp_db(engine)
 
     # Add a property to all requests for easy access to the session. This means
     # that view functions need only refer to ``request.db`` in order to

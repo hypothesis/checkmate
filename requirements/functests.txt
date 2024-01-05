@@ -60,6 +60,10 @@ click-repl==0.3.0
     # via
     #   -r requirements/requirements.txt
     #   celery
+factory-boy==3.3.0
+    # via -r requirements/functests.in
+faker==22.2.0
+    # via factory-boy
 google-auth==2.26.1
     # via
     #   -r requirements/requirements.txt
@@ -216,6 +220,7 @@ python-dateutil==2.8.2
     # via
     #   -r requirements/requirements.txt
     #   celery
+    #   faker
 referencing==0.32.1
     # via
     #   -r requirements/requirements.txt

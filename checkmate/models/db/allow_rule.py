@@ -3,11 +3,11 @@
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import ARRAY
 
-from checkmate.db import BASE
+from checkmate.db import Base
 from checkmate.models.db.mixins import HashMatchMixin
 
 
-class AllowRule(BASE, HashMatchMixin):
+class AllowRule(Base, HashMatchMixin):
     """Rule about allowing a particular resource."""
 
     BULK_UPSERT_INDEX_ELEMENTS = ["rule"]
