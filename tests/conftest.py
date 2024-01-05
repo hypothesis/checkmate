@@ -1,36 +1,60 @@
 import functools
-import os
+from os import environ
 from unittest import mock
 
 import httpretty
 import pytest
 from pyramid.testing import DummyRequest, testConfig
+from sqlalchemy.orm import sessionmaker
 
 from checkmate.db import create_engine
-
-DATABASE_URL = os.environ.get(
-    "DATABASE_URL", "postgresql://postgres@localhost:5434/checkmate_test"
-)
+from tests import factories
 
 
 @pytest.fixture(scope="session")
 def db_engine():
-    # Delete all database tables and re-initialize the database schema based on
-    # the current models. Doing this at the beginning of each test run ensures
-    # that any schema changes made to the models since the last test run will
-    # be applied to the test DB schema before running the tests again.
-    return create_engine(DATABASE_URL, drop=True, max_overflow=15)
+    return create_engine(environ["DATABASE_URL"])
+
+
+@pytest.fixture(scope="session")
+def db_sessionfactory():
+    return sessionmaker()
+
+
+@pytest.fixture
+def db_session(db_engine, db_sessionfactory):
+    """Return the SQLAlchemy database session.
+
+    This returns a session that is wrapped in an external transaction that is
+    rolled back after each test, so tests can't make database changes that
+    affect later tests.  Even if the test (or the code under test) calls
+    session.commit() this won't touch the external transaction.
+
+    This is the same technique as used in SQLAlchemy's own CI:
+    https://docs.sqlalchemy.org/en/20/orm/session_transaction.html#joining-a-session-into-an-external-transaction-such-as-for-test-suites
+    """
+    connection = db_engine.connect()
+    transaction = connection.begin()
+    session = db_sessionfactory(
+        bind=connection, join_transaction_mode="create_savepoint"
+    )
+    factories.set_sqlalchemy_session(session, persistence="commit")
+
+    yield session
+
+    factories.clear_sqlalchemy_session()
+    session.close()
+    transaction.rollback()
+    connection.close()
 
 
 @pytest.fixture
 def pyramid_settings():
     return {
-        "database_url": DATABASE_URL,
-        "checkmate_secret": os.environ.get("CHECKMATE_SECRET", "not-very-secret"),
+        "database_url": environ["DATABASE_URL"],
+        "checkmate_secret": environ.get("CHECKMATE_SECRET", "not-very-secret"),
         "api_keys": {"dev_api_key": "dev"},
-        "pyramid_googleauth.secret": os.environ.get(
-            "CHECKMATE_SECRET", "not-very-secret"
-        ),
+        "pyramid_googleauth.secret": environ.get("CHECKMATE_SECRET", "not-very-secret"),
         "pyramid_googleauth.google_client_id": "google_client_id",
         "pyramid_googleauth.google_client_secret": "google_client_secret",
         "public_host": "localhost",

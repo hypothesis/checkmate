@@ -15,7 +15,7 @@ from tests.functional.services import signature_service  # pylint:disable=unused
 @pytest.fixture(autouse=True)
 def clean_database(db_engine):
     """Delete any data added by the previous test."""
-    tables = reversed(db.BASE.metadata.sorted_tables)
+    tables = reversed(db.Base.metadata.sorted_tables)
     with contextlib.closing(db_engine.connect()) as conn:
         transaction = conn.begin()
         tnames = ", ".join('"' + t.name + '"' for t in tables)

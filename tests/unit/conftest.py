@@ -1,14 +1,11 @@
 """A place to put fixture functions that are useful application-wide."""
 import json
 
-import sqlalchemy
 from pyramid import testing
 from pyramid.request import apply_request_extensions
 from pyramid.testing import DummyRequest
-from sqlalchemy.orm import sessionmaker
 
 from checkmate.routes import add_routes
-from tests import factories
 from tests.unit.services import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
 
@@ -59,34 +56,3 @@ def pyramid_request(
     )
     apply_request_extensions(pyramid_request)
     return pyramid_request
-
-
-SESSION_MAKER = sessionmaker()
-
-
-@pytest.fixture
-def db_session(db_engine):
-    """Get a standalone database session for preparing database state."""
-
-    conn = db_engine.connect()
-    trans = conn.begin()
-    session = SESSION_MAKER(bind=conn)
-    session.begin_nested()  # pylint:disable=no-member
-
-    @sqlalchemy.event.listens_for(session, "after_transaction_end")
-    def restart_savepoint(session, transaction):  # pylint:disable=unused-variable
-        if (
-            transaction.nested
-            and not transaction._parent.nested  # pylint: disable=protected-access
-        ):
-            session.begin_nested()
-
-    factories.set_sqlalchemy_session(session, persistence="commit")
-
-    try:
-        yield session
-    finally:
-        factories.clear_sqlalchemy_session()
-        session.close()  # pylint:disable=no-member
-        trans.rollback()
-        conn.close()

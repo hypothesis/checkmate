@@ -1,14 +1,14 @@
 import sqlalchemy as sa
 
-from checkmate.db import BASE
+from checkmate.db import Base
 
 
-class Child(BASE):
+class Child(Base):
     __tablename__ = "child"
     id = sa.Column(sa.Integer, primary_key=True)
 
 
-class ModelClass(BASE):
+class ModelClass(Base):
     __tablename__ = "model_class"
     id = sa.Column(sa.Integer, primary_key=True)
     column = sa.Column(sa.Integer, sa.ForeignKey("child.id"))

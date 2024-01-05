@@ -2,11 +2,11 @@
 
 import sqlalchemy as sa
 
-from checkmate.db import BASE
+from checkmate.db import Base
 from checkmate.models.db.mixins import BulkUpsertMixin, HashMatchMixin
 
 
-class URLHausRule(BASE, HashMatchMixin, BulkUpsertMixin):
+class URLHausRule(Base, HashMatchMixin, BulkUpsertMixin):
     """Rule about blocking a particular resource."""
 
     BULK_UPSERT_INDEX_ELEMENTS = ["id"]
