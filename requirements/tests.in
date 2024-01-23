@@ -6,4 +6,5 @@ pytest
 factory-boy
 webtest
 h-matchers
+h-testkit
 -r requirements.txt
