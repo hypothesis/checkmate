@@ -2,6 +2,7 @@ alembic
 celery
 gunicorn
 checkmatelib
+sentry-sdk
 h-pyramid-sentry
 importlib_resources
 marshmallow-jsonapi
