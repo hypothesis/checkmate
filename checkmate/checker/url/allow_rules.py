@@ -1,4 +1,5 @@
 """A checker based on our own curated allow list."""
+
 from checkmate.checker.url._hashed_url_checker import HashedURLChecker
 from checkmate.models import AllowRule, Reason
 

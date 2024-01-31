@@ -247,7 +247,7 @@ class JSONAPIResponse:
         # return a 201 Created status code.
         "PATCH": 200,
         # Updating things, JSON:API patch body expected
-        "DELETE": 204
+        "DELETE": 204,
         # Delete obviously, no body
     }
 

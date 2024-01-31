@@ -1,4 +1,5 @@
 """The main application entrypoint module."""
+
 import logging
 import os
 import re

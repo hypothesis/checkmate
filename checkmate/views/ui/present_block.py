@@ -1,4 +1,5 @@
 """User feedback for blocked pages."""
+
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.view import view_config
 

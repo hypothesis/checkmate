@@ -1,4 +1,5 @@
 """A checker based on our own curated ruleset."""
+
 import re
 from logging import getLogger
 

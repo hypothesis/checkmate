@@ -5,6 +5,7 @@ Revises: 94e03258437b
 Create Date: 2021-01-08 13:17:37.947693
 
 """
+
 # pylint:disable=invalid-name,no-member
 import sqlalchemy as sa
 from alembic import op

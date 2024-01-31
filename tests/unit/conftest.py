@@ -1,4 +1,5 @@
 """A place to put fixture functions that are useful application-wide."""
+
 import json
 
 from pyramid import testing
