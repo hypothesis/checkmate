@@ -6,7 +6,7 @@ def add_routes(config):
 
     config.add_route("root", "/")
 
-    config.add_route("get_status", "/_status")
+    config.add_route("status", "/_status")
     config.add_route("check_url", "/api/check")
 
     # Serve content from the static/static directory at /ui/static
