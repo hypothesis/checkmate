@@ -148,7 +148,9 @@ rpds-py==0.16.2
 rsa==4.9
     # via google-auth
 sentry-sdk==1.39.1
-    # via h-pyramid-sentry
+    # via
+    #   -r requirements/requirements.in
+    #   h-pyramid-sentry
 six==1.16.0
     # via python-dateutil
 sqlalchemy==2.0.25
