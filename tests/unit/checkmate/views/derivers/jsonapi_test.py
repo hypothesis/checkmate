@@ -86,7 +86,7 @@ class TestJSONAPIResponse:
 
     def test_it_raises_if_no_schema_is_present_for_non_dicts(self, response):
         class TestObject:
-            ...
+            pass
 
         with pytest.raises(ValueError):
             JSONAPIResponse(TestObject()).make_response(response)
@@ -208,24 +208,24 @@ class TestJSONAPIRequest:
         ),
     )
     def test_it_allows_valid_content_types(self, pyramid_request, content_type):
-        pyramid_request.content_type = pyramid_request.headers[
-            "Content-Type"
-        ] = content_type
+        pyramid_request.content_type = pyramid_request.headers["Content-Type"] = (
+            content_type
+        )
 
         JSONAPIRequest.parse(pyramid_request, body_schema=None)
 
     def test_it_rejects_invalid_content_types(self, pyramid_request):
-        pyramid_request.content_type = pyramid_request.headers[
-            "Content-Type"
-        ] = "text/html"
+        pyramid_request.content_type = pyramid_request.headers["Content-Type"] = (
+            "text/html"
+        )
 
         with pytest.raises(HTTPUnsupportedMediaType):
             JSONAPIRequest.parse(pyramid_request, body_schema=None)
 
     def test_it_rejects_content_types_with_media_type_params(self, pyramid_request):
-        pyramid_request.headers[
-            "Content-Type"
-        ] = "application/vnd.api+json; no-media-params=are-allowed"
+        pyramid_request.headers["Content-Type"] = (
+            "application/vnd.api+json; no-media-params=are-allowed"
+        )
 
         with pytest.raises(HTTPUnsupportedMediaType):
             JSONAPIRequest.parse(pyramid_request, body_schema=None)
@@ -397,7 +397,7 @@ class TestJSONAPIViewDeriver:
 
 @pytest.fixture
 def pyramid_request(pyramid_request):
-    pyramid_request.content_type = pyramid_request.headers[
-        "Content-Type"
-    ] = "application/vnd.api+json"
+    pyramid_request.content_type = pyramid_request.headers["Content-Type"] = (
+        "application/vnd.api+json"
+    )
     return pyramid_request
