@@ -210,7 +210,7 @@ pyramid-exclog==1.1
     # via -r requirements/requirements.txt
 pyramid-googleauth==1.0.5
     # via -r requirements/requirements.txt
-pyramid-jinja2==2.10
+pyramid-jinja2==2.10.1
     # via -r requirements/requirements.txt
 pyramid-sanity==1.0.3
     # via -r requirements/requirements.txt
