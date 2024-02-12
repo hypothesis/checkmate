@@ -256,7 +256,7 @@ six==1.16.0
     #   python-dateutil
 soupsieve==2.5
     # via beautifulsoup4
-sqlalchemy==2.0.25
+sqlalchemy==2.0.26
     # via
     #   -r requirements/requirements.txt
     #   alembic
