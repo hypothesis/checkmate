@@ -273,7 +273,7 @@ six==1.16.0
     #   -r requirements/requirements.txt
     #   asttokens
     #   python-dateutil
-sqlalchemy==2.0.25
+sqlalchemy==2.0.27
     # via
     #   -r requirements/requirements.txt
     #   alembic
