@@ -98,7 +98,7 @@ idna==3.6
     #   requests
 importlib-metadata==7.0.1
     # via pip-sync-faster
-importlib-resources==6.1.1
+importlib-resources==6.1.2
     # via
     #   -r requirements/requirements.txt
     #   checkmatelib
