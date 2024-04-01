@@ -102,7 +102,7 @@ importlib-resources==6.3.0
     #   checkmatelib
 ipdb==0.13.13
     # via -r requirements/dev.in
-ipython==8.22.2
+ipython==8.23.0
     # via
     #   -r requirements/dev.in
     #   ipdb
@@ -301,6 +301,7 @@ typing-extensions==4.9.0
     # via
     #   -r requirements/requirements.txt
     #   alembic
+    #   ipython
     #   sqlalchemy
 tzdata==2023.4
     # via
