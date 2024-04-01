@@ -52,7 +52,7 @@ hupper==1.12
     # via pyramid
 idna==3.6
     # via requests
-importlib-resources==6.3.0
+importlib-resources==6.4.0
     # via
     #   -r requirements/requirements.in
     #   checkmatelib
