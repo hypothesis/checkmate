@@ -44,7 +44,7 @@ google-auth-oauthlib==1.2.0
     # via pyramid-googleauth
 greenlet==3.0.3
     # via sqlalchemy
-gunicorn==21.2.0
+gunicorn==22.0.0
     # via -r requirements.in
 h-pyramid-sentry==1.2.4
     # via -r requirements.in
