@@ -13,7 +13,7 @@ amqp==5.2.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   kombu
-astroid==3.1.0
+astroid==3.2.2
     # via pylint
 attrs==23.2.0
     # via
@@ -270,7 +270,7 @@ pyjwt==2.8.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid-googleauth
-pylint==3.1.0
+pylint==3.2.2
     # via -r requirements/lint.in
 pyproject-hooks==1.0.0
     # via
