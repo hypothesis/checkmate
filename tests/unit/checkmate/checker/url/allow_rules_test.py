@@ -25,7 +25,7 @@ class TestAllowRules:
 
         hits = allow_rules.check_url(hash_url("http://not-a-match.com"))
 
-        assert hits == Any.generator.containing([Reason.NOT_ALLOWED]).only()
+        assert hits == Any.generator().containing([Reason.NOT_ALLOWED]).only()
 
     @pytest.fixture
     def allow_rules(self, db_session):

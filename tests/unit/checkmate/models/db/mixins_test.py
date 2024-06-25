@@ -19,7 +19,7 @@ class TestHashMatchMixin:
         items = self.TableWithHash.find_matches(
             db_session, hex_hashes=["hash_1", "hash_3"]
         )
-        assert [item.hash for item in items] == Any.list.containing(
+        assert [item.hash for item in items] == Any.list().containing(
             ["hash_1", "hash_3"]
         ).only()
 
@@ -87,7 +87,8 @@ class TestBulkUpsertMixin:
 
         assert (
             rows
-            == Any.iterable.containing(
+            == Any.iterable()
+            .containing(
                 [
                     Any.instance_of(self.TableWithBulkUpsert).with_attrs(expected)
                     for expected in [
@@ -97,7 +98,8 @@ class TestBulkUpsertMixin:
                         {"id": 4, "name": "over_block_size", "other": "post_4"},
                     ]
                 ]
-            ).only()
+            )
+            .only()
         )
 
     def test_it_fails_with_badly_configured_host_class(self):

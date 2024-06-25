@@ -35,7 +35,7 @@ def update_remote_dev_data():
         )
 
 
-def update_dev_data():
+def update_dev_data(db):
     """Create some usable data to run against in dev."""
 
     raw_rules = {
@@ -43,7 +43,7 @@ def update_dev_data():
         "example.net": Reason.MEDIA_VIDEO,
         "bad.example.com": Reason.MALICIOUS,
     }
-    CustomRules(request.db).load_simple_rules(raw_rules)
+    CustomRules(db).load_simple_rules(raw_rules)
     print(f"Loaded {len(raw_rules)} custom rules")
 
 
@@ -55,4 +55,4 @@ if __name__ == "__main__":
         request = env["request"]
 
         with request.tm:
-            update_dev_data()
+            update_dev_data(request.db)

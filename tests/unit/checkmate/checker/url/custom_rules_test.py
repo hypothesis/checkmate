@@ -17,7 +17,7 @@ class TestCustomRules:
 
         hits = custom_rules.check_url(hash_url(url))
 
-        assert hits == Any.generator.containing(rule.reasons).only()
+        assert hits == Any.generator().containing(rule.reasons).only()
 
     def test_it_can_match_multiple_rules(self, custom_rules):
         factories.CustomRule(url="http://sub.domain.com", reasons=[Reason.HIGH_IO])
@@ -26,7 +26,8 @@ class TestCustomRules:
         hits = custom_rules.check_url(hash_url("http://sub.domain.com"))
 
         assert (
-            hits == Any.generator.containing([Reason.HIGH_IO, Reason.MALICIOUS]).only()
+            hits
+            == Any.generator().containing([Reason.HIGH_IO, Reason.MALICIOUS]).only()
         )
 
     @pytest.fixture
