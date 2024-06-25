@@ -13,12 +13,12 @@ class TestReadTextFile:
     def test_it_reads_from_the_source(self, text_file):
         result = ReadTextFile()(sentinel.working_dir, source=text_file)
 
-        assert result == Any.generator.containing(["line1\n", "line2"]).only()
+        assert result == Any.generator().containing(["line1\n", "line2"]).only()
 
     def test_it_reads_from_a_specified_name(self, text_file):
         result = ReadTextFile(text_file)(sentinel.working_dir)
 
-        assert result == Any.generator.containing(["line1\n", "line2"]).only()
+        assert result == Any.generator().containing(["line1\n", "line2"]).only()
 
     def test_it_raises_if_not_given_a_file(self):
         with pytest.raises(StageException):
@@ -36,12 +36,12 @@ class TestReadCSVFile:
     def test_it_reads_from_the_source(self, csv_file):
         result = ReadCSVFile()(sentinel.working_dir, source=csv_file)
 
-        assert result == Any.generator.containing([["a", "b", "c"], ["1", "2", "3"]])
+        assert result == Any.generator().containing([["a", "b", "c"], ["1", "2", "3"]])
 
     def test_it_reads_from_a_specified_name(self, csv_file):
         result = ReadCSVFile(csv_file)(sentinel.working_dir)
 
-        assert result == Any.generator.containing([["a", "b", "c"], ["1", "2", "3"]])
+        assert result == Any.generator().containing([["a", "b", "c"], ["1", "2", "3"]])
 
     def test_it_raises_if_not_given_a_file(self):
         with pytest.raises(StageException):

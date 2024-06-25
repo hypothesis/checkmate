@@ -103,6 +103,7 @@ def main():
     if args.delete:
         delete(engine)
 
+    stamped = None
     if args.create or args.stamp:
         stamped = is_stamped(engine)
 

@@ -15,7 +15,7 @@ class TestURLHaus:
 
         response = URLHaus(sentinel.db_session).check_url(["hex_hash"])
 
-        assert response == Any.generator.containing([Reason.MALICIOUS]).only()
+        assert response == Any.generator().containing([Reason.MALICIOUS]).only()
         # The above will exhaust the generator and allow us to make assertions
         # about the call
         URLHausRule.find_matches.assert_called_once_with(
@@ -27,7 +27,7 @@ class TestURLHaus:
 
         response = URLHaus(sentinel.db_session).check_url(["hex_hash"])
 
-        assert response == Any.generator.containing([]).only()
+        assert response == Any.generator().containing([]).only()
 
     @httprettified
     def test_reinitialize_db(self, URLHausRule):
