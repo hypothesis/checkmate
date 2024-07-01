@@ -82,7 +82,7 @@ click-repl==0.3.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   celery
-coverage==7.5.3
+coverage==7.5.4
     # via -r requirements/tests.txt
 dill==0.3.7
     # via pylint
