@@ -138,7 +138,7 @@ netaddr==0.10.1
     # via
     #   -r requirements/requirements.txt
     #   checkmatelib
-newrelic==9.10.0
+newrelic==9.11.0
     # via -r requirements/requirements.txt
 oauthlib==3.2.2
     # via
