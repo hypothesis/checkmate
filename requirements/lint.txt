@@ -217,7 +217,7 @@ pastedeploy==3.1.0
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   plaster-pastedeploy
-pip-sync-faster==0.0.3
+pip-sync-faster==0.0.4
     # via
     #   -r requirements/lint.in
     #   -r requirements/tests.txt
