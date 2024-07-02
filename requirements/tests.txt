@@ -38,7 +38,7 @@ charset-normalizer==3.3.2
     # via
     #   -r requirements/requirements.txt
     #   requests
-checkmatelib==1.0.15
+checkmatelib==1.0.17
     # via -r requirements/requirements.txt
 click==8.1.7
     # via
@@ -136,7 +136,7 @@ marshmallow==3.20.1
     #   marshmallow-jsonapi
 marshmallow-jsonapi==0.24.0
     # via -r requirements/requirements.txt
-netaddr==0.10.1
+netaddr==1.3.0
     # via
     #   -r requirements/requirements.txt
     #   checkmatelib
