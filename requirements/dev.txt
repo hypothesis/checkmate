@@ -82,7 +82,7 @@ greenlet==3.0.3
     # via
     #   -r requirements/requirements.txt
     #   sqlalchemy
-gunicorn==22.0.0
+gunicorn==23.0.0
     # via -r requirements/requirements.txt
 h-pyramid-sentry==1.2.4
     # via -r requirements/requirements.txt
