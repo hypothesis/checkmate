@@ -19,7 +19,7 @@ class TestOrderedEnum:
         "op",
         [operator.lt, operator.le, operator.eq, operator.ne, operator.ge, operator.gt],
     )
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def test_comparison(self, l_pos, l_value, op, r_pos, r_value):
         assert op(l_value, r_value) is op(l_pos, r_pos)
 

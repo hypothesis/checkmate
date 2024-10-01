@@ -80,7 +80,7 @@ class TestCascadingSecurityPolicy:
     @pytest.mark.parametrize(
         "iface,subpolicy", [(SubPolicy1, "subpolicy1"), (SubPolicy2, "subpolicy2")]
     )
-    def test_remember(
+    def test_remember(  # pylint:disable=too-many-positional-arguments
         self,
         iface,
         subpolicy,
