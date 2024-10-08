@@ -18,13 +18,3 @@ filterwarnings = [
     # https://github.com/webpy/webpy/issues/732
     "ignore:^'cgi' is deprecated and slated for removal in Python 3.13:DeprecationWarning:webob",
 ]
-
-
-[tool.hdev]
-project_name = "checkmate"
-project_type = "application"
-
-[tool.hdev.clean]
-# File and directory names which will be removed anywhere they
-# are found. These support shell expansions and patterns
-file_names=["*.gz"]
