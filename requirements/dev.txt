@@ -188,7 +188,7 @@ prompt-toolkit==3.0.43
     #   -r requirements/requirements.txt
     #   click-repl
     #   ipython
-psycopg2==2.9.9
+psycopg2==2.9.10
     # via -r requirements/requirements.txt
 ptyprocess==0.7.0
     # via pexpect
