@@ -412,7 +412,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-waitress==3.0.1
+waitress==3.0.2
     # via
     #   -r requirements/tests.txt
     #   webtest
@@ -427,7 +427,7 @@ webob==1.8.8
     #   -r requirements/tests.txt
     #   pyramid
     #   webtest
-webtest==3.0.1
+webtest==3.0.2
     # via -r requirements/tests.txt
 wheel==0.42.0
     # via
