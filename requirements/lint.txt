@@ -308,7 +308,7 @@ pyramid-services==2.2
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
-pyramid-tm==2.5
+pyramid-tm==2.6
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
