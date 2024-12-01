@@ -298,7 +298,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-waitress==3.0.1
+waitress==3.0.2
     # via webtest
 wcwidth==0.2.13
     # via
@@ -309,7 +309,7 @@ webob==1.8.8
     #   -r requirements/requirements.txt
     #   pyramid
     #   webtest
-webtest==3.0.1
+webtest==3.0.2
     # via -r requirements/tests.in
 wheel==0.42.0
     # via pip-tools
