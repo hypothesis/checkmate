@@ -126,7 +126,7 @@ pyramid-sanity==1.0.4
     # via -r requirements/requirements.in
 pyramid-services==2.2
     # via -r requirements/requirements.in
-pyramid-tm==2.5
+pyramid-tm==2.6
     # via -r requirements/requirements.in
 python-dateutil==2.8.2
     # via celery
