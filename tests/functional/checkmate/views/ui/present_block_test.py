@@ -7,7 +7,7 @@ class TestAPIAuth:
     def test_if_the_link_is_not_signed_it_401s(self, app):
         # `url` will be an unsigned link (it doesn't come from
         # SecureLinkService).
-        app.get("/ui/block", params={"url": "example.com"}, status=401)
+        app.get("/block", params={"url": "example.com"}, status=401)
 
     def test_if_the_link_is_signed_it_renders_the_block_page(
         self, app, secure_link_service

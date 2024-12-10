@@ -144,9 +144,7 @@ class CheckmateConfigurator:
         self.add_api_keys_from_env("api_keys")
 
         config.include("pyramid_googleauth")
-        config.add_settings(
-            {"pyramid_googleauth.login_success_redirect_url": "/ui/admin"}
-        )
+        config.add_settings({"pyramid_googleauth.login_success_redirect_url": "/admin"})
 
         # Setup a cookie based session to store our authentication details in
         session_factory = SignedCookieSessionFactory(

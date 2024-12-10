@@ -106,7 +106,7 @@ class TestSecureLinkService:
 
     @pytest.fixture
     def pyramid_request(self, pyramid_request):
-        pyramid_request.matched_route = Route("present_block", "/ui/block")
+        pyramid_request.matched_route = Route("present_block", "/block")
 
         return pyramid_request
 
