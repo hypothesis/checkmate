@@ -153,6 +153,5 @@ curl http://dev_api_key@localhost:9099/api/check?url=http://example.com/
 
 ### Accessing the admin pages
 
-To access the admin UI for Checkmate, visit http://localhost:9099/ui/admin.
+To access the admin UI for Checkmate, visit http://localhost:9099/admin.
 You will need to login using an @hypothes.is Google account.
-

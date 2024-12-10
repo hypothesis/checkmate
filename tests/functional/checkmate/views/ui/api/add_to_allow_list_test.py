@@ -3,16 +3,16 @@ import pytest
 
 class TestAddToAllowList:
     def test_a_request_with_no_auth_is_not_authenticated(self, app, json_body):
-        app.post_json("/ui/api/rule", json_body, status=403)
+        app.post_json("/api/rule", json_body, status=403)
 
     def test_a_request_with_http_basic_auth_is_not_authenticated(self, app, json_body):
         app.authorization = ("Basic", ("dev_api_key", ""))
 
-        app.post_json("/ui/api/rule", json_body, status=403)
+        app.post_json("/api/rule", json_body, status=403)
 
     @pytest.mark.usefixtures("logged_in")
     def test_a_request_with_a_session_cookie_succeeds(self, app, json_body):
-        response = app.post_json("/ui/api/rule", json_body, status=201)
+        response = app.post_json("/api/rule", json_body, status=201)
 
         assert response.json == {
             "data": {
