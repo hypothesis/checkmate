@@ -3,7 +3,7 @@ from unittest.mock import sentinel
 import pytest
 from pyramid.httpexceptions import HTTPUnauthorized
 
-from checkmate.views.ui.present_block import present_block
+from checkmate.views.present_block import present_block
 
 
 @pytest.mark.usefixtures("secure_link_service")

@@ -1,8 +1,8 @@
 import pytest
 from marshmallow import ValidationError
 
+from checkmate.views.api.add_to_allow_list import AllowRuleSchema, add_to_allow_list
 from checkmate.views.derivers.jsonapi import JSONAPIBody
-from checkmate.views.ui.api.add_to_allow_list import AllowRuleSchema, add_to_allow_list
 
 DELETE = ...
 
