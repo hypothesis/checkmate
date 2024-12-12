@@ -1,0 +1,24 @@
+<style>
+    code {
+        word-break: break-all;
+    }
+    nav ul {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+    }
+    nav ul li {
+        margin-right: 15px;
+    }
+</style>
+
+<nav>
+  <ul>
+    <li><a href="{{ request.route_url('admin_pages') }}">Admin</a></li>
+    <li><a href="{{ request.route_url('admin_allow_rule') }}">Allow Rule</a></li>
+    <li><a href="{{ request.route_url("pyramid_googleauth.logout") }}">Logout</a></li>
+  </ul>
+</nav>
+
+{% block content %}
+{% endblock %}
