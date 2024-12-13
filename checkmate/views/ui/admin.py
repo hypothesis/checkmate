@@ -45,18 +45,23 @@ class AdminPagesViews:
 
 @view_defaults(
     route_name="admin.allow_rule",
-    permission=Permissions.ADMIN,
     renderer="checkmate:templates/admin/allow_rule.html.jinja2",
 )
 class AdminAllowRuleViews:
     def __init__(self, request):
         self.request = request
 
-    @view_config(request_method="GET")
+    @view_config(
+        request_method="GET",
+        permission=Permissions.ADMIN,
+    )
     def get(self):
         return {}
 
-    @view_config(request_method="POST")
+    @view_config(
+        request_method="POST",
+        permission=Permissions.ADMIN,
+    )
     def post(self):
         url = self.request.params["url"]
         try:
@@ -64,3 +69,7 @@ class AdminAllowRuleViews:
         except ResourceConflict as e:
             return {"messages": e.messages}
         return {"allow_rule": allow_rule}
+
+    @forbidden_view_config()
+    def logged_out(self):
+        return HTTPFound(location=self.request.route_url("pyramid_googleauth.login"))

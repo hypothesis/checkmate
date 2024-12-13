@@ -74,6 +74,13 @@ class TestAdminAllowRuleViews:
         )
         assert response == {"messages": exception.messages}
 
+    def test_logged_out_redirects_to_login(self, pyramid_request, views):
+        response = views.logged_out()
+
+        assert response == temporary_redirect_to(
+            pyramid_request.route_url("pyramid_googleauth.login")
+        )
+
     @pytest.fixture()
     def views(self, pyramid_request):
         return AdminAllowRuleViews(pyramid_request)
