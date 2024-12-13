@@ -1,5 +1,6 @@
 import pytest
 
+from checkmate.exceptions import ResourceConflict
 from checkmate.views.ui.admin import (
     AdminAllowRuleViews,
     AdminPagesViews,
@@ -54,10 +55,24 @@ class TestAdminAllowRuleViews:
 
         response = views.post()
 
-        rule_service.add_to_allow_list.assert_called_once_with("http://example.com")
+        rule_service.add_to_allow_list.assert_called_once_with(
+            pyramid_request.params["url"]
+        )
         assert response == {
             "allow_rule": rule_service.add_to_allow_list.return_value,
         }
+
+    def test_post_with_conflict(self, pyramid_request, views, rule_service):
+        pyramid_request.params["url"] = "http://example.com"
+        exception = ResourceConflict("conflict")
+        rule_service.add_to_allow_list.side_effect = exception
+
+        response = views.post()
+
+        rule_service.add_to_allow_list.assert_called_once_with(
+            pyramid_request.params["url"]
+        )
+        assert response == {"messages": exception.messages}
 
     @pytest.fixture()
     def views(self, pyramid_request):
