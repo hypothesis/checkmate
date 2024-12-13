@@ -15,7 +15,7 @@
   <p>Allowed as {{ allow_rule.rule }} with hash {{ allow_rule.hash }}</p>
 {% endif %}
 
-<form action="{{ request.route_url('admin_allow_rule') }}" method="post">
+<form action="{{ request.route_url('admin.allow_rule') }}" method="post">
   <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
   <label>
     <input type="url" name="url" placeholder="URL" size="100">

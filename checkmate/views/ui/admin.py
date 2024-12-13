@@ -1,14 +1,29 @@
 from http.cookies import SimpleCookie
 
-from pyramid.httpexceptions import HTTPFound
-from pyramid.view import forbidden_view_config, view_config, view_defaults
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound
+from pyramid.view import (
+    forbidden_view_config,
+    notfound_view_config,
+    view_config,
+    view_defaults,
+)
 
 from checkmate.exceptions import JSONAPIException
 from checkmate.security import Permissions
 from checkmate.services import RuleService
 
 
-@view_defaults(route_name="admin_pages", request_method="GET")
+@view_config(route_name="admin.index")
+def index(request):
+    return HTTPFound(location=request.route_url("admin.allow_rule"))
+
+
+@notfound_view_config(path_info="/admin/*", append_slash=True)
+def notfound(_request):
+    return HTTPNotFound()
+
+
+@view_defaults(route_name="admin.pages", request_method="GET")
 class AdminPagesViews:
     def __init__(self, request):
         self.request = request
@@ -29,7 +44,7 @@ class AdminPagesViews:
 
 
 @view_defaults(
-    route_name="admin_allow_rule",
+    route_name="admin.allow_rule",
     permission=Permissions.ADMIN,
     renderer="checkmate:templates/admin/allow_rule.html.jinja2",
 )
