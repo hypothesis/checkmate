@@ -59,6 +59,6 @@ class TestAdminAllowRuleViews:
             "allow_rule": rule_service.add_to_allow_list.return_value,
         }
 
-    @pytest.fixture
+    @pytest.fixture()
     def views(self, pyramid_request):
         return AdminAllowRuleViews(pyramid_request)

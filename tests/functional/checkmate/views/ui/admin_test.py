@@ -22,3 +22,19 @@ class TestAdminPages:
 class TestAdminLoginFailure:
     def test_it(self, app):
         app.get("/googleauth/login/failure", status=401)
+
+
+@pytest.mark.usefixtures("logged_in")
+class TestAdminAllowRule:
+    def test_allow_rule_form_renders_correctly(self, app):
+        response = app.get("/admin/allow_rule/", status=200)
+
+        assert response.content_type == "text/html"
+
+    def test_post_allow_rule_form_submission(self, app):
+        response = app.post(
+            "/admin/allow_rule/", status=200, params={"url": "http://google.com"}
+        )
+
+        assert response.content_type == "text/html"
+        assert "Allowed as google.com/" in response.text
