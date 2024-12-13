@@ -1,26 +1,26 @@
 {% extends "checkmate:templates/admin/base.html.jinja2" %}
 {% block content %}
 
-<h2>Add to Allow List</h2>
+  <h2>Add to Allow List</h2>
 
-{% if messages %}
-  <div>
-    {% for message in messages %}
-      <p>{{ message.detail }}</p>
-    {% endfor %}
-  </div>
-{% endif %}
+  {% if messages %}
+    <div>
+      {% for message in messages %}
+        <p>{{ message.detail }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
 
-{% if allow_rule %}
-  <p>Allowed as {{ allow_rule.rule }} with hash {{ allow_rule.hash }}</p>
-{% endif %}
+  {% if allow_rule %}
+    <p>Allowed as {{ allow_rule.rule }} with hash {{ allow_rule.hash }}</p>
+  {% endif %}
 
-<form action="{{ request.route_url('admin.allow_rule') }}" method="post">
-  <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
-  <label>
-    <input type="url" name="url" placeholder="URL" size="100">
-  </label>
-  <input type="submit" value="Submit">
-</form>
+  <form action="{{ request.route_url('admin.allow_rule') }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
+    <label>
+      <input type="url" name="url" placeholder="URL" size="100">
+    </label>
+    <input type="submit" value="Submit">
+  </form>
 
 {% endblock %}

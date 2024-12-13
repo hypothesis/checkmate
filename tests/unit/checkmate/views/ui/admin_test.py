@@ -62,6 +62,14 @@ class TestAdminAllowRuleViews:
             "allow_rule": rule_service.add_to_allow_list.return_value,
         }
 
+    def test_post_empty_url(self, pyramid_request, views, rule_service):
+        pyramid_request.params["url"] = ""
+
+        response = views.post()
+
+        rule_service.add_to_allow_list.assert_not_called()
+        assert response == {"messages": [{"detail": "URL is required"}]}
+
     def test_post_with_conflict(self, pyramid_request, views, rule_service):
         pyramid_request.params["url"] = "http://example.com"
         exception = ResourceConflict("conflict")

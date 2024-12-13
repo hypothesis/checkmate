@@ -63,7 +63,9 @@ class AdminAllowRuleViews:
         permission=Permissions.ADMIN,
     )
     def post(self):
-        url = self.request.params["url"]
+        url = self.request.params.get("url")
+        if not url:
+            return {"messages": [{"detail": "URL is required"}]}
         try:
             allow_rule = self.request.find_service(RuleService).add_to_allow_list(url)
         except ResourceConflict as e:
