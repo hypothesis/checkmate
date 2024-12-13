@@ -8,7 +8,7 @@ from pyramid.view import (
     view_defaults,
 )
 
-from checkmate.exceptions import JSONAPIException
+from checkmate.exceptions import ResourceConflict
 from checkmate.security import Permissions
 from checkmate.services import RuleService
 
@@ -61,6 +61,6 @@ class AdminAllowRuleViews:
         url = self.request.params["url"]
         try:
             allow_rule = self.request.find_service(RuleService).add_to_allow_list(url)
-        except JSONAPIException as e:
+        except ResourceConflict as e:
             return {"messages": e.messages}
         return {"allow_rule": allow_rule}
