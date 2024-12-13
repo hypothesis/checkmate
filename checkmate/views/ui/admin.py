@@ -48,7 +48,7 @@ class AdminPagesViews:
     permission=Permissions.ADMIN,
     renderer="checkmate:templates/admin/allow_rule.html.jinja2",
 )
-class AdminAllowViews:
+class AdminAllowRuleViews:
     def __init__(self, request):
         self.request = request
 
