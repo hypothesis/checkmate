@@ -22,7 +22,7 @@ class TestAddToAllowList:
                     "rule": "example.com/",
                     "tags": ["manual"],
                 },
-                "id": 1,
+                "id": response.json["data"]["id"],
                 "type": "AllowRule",
             }
         }

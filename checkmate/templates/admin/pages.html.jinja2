@@ -1,8 +1,5 @@
-<style>
-    code {
-        word-break: break-all;
-    }
-</style>
+{% extends "checkmate:templates/admin/base.html.jinja2" %}
+{% block content %}
 
 <h1>Hello {{ request.session.user.name }}</h1>
 
@@ -21,8 +18,5 @@
 
 <h2>Add to allow list</h2>
 
-
 <code>tox -qe dev --run-command "python bin/add_to_allow_list.py --session={{ session }} --route={{ request.route_url('add_to_allow_list') }}"</code>
-
-<hr>
-<a href="{{ request.route_url("pyramid_googleauth.logout") }}">Logout</a>
+{%  endblock %}
