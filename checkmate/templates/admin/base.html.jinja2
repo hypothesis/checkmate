@@ -22,9 +22,8 @@
 
 <nav>
   <ul>
-    <li><a href="{{ request.route_url('admin.index') }}">Admin</a></li>
-    <li><a href="{{ request.route_url('admin.pages') }}">Pages</a></li>
-    <li><a href="{{ request.route_url('admin.allow_rule') }}">Allow Rule</a></li>
+    <li><a href="{{ request.route_url("admin.index") }}">Admin</a></li>
+    <li><a href="{{ request.route_url("admin.allow_rule") }}">Allow Rule</a></li>
     <li><a href="{{ request.route_url("pyramid_googleauth.logout") }}">Logout</a></li>
   </ul>
 </nav>
