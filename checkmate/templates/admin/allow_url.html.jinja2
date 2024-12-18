@@ -27,7 +27,7 @@
     <div class="container">
       <fieldset class="box mt-6">
         <legend class="label has-text-centered">Add to Allow List</legend>
-        <form action="{{ request.route_url('admin.allow_rule') }}" method="POST">
+        <form action="{{ request.route_url("admin.allow_url") }}" method="POST">
           <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
 
           <div class="field is-horizontal">
