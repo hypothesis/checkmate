@@ -2,30 +2,37 @@
 <html lang="en">
 <head>
   <title>Checkmate Admin</title>
-  <style>
-      code {
-          word-break: break-all;
-      }
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+          integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@vizuaalog/bulmajs@0.12.2/dist/bulma.min.js"></script>
 
-      nav ul {
-          display: flex;
-          list-style-type: none;
-          padding: 0;
-      }
-
-      nav ul li {
-          margin-right: 15px;
-      }
-  </style>
 </head>
 <body>
 
-<nav>
-  <ul>
-    <li><a href="{{ request.route_url("admin.index") }}">Admin</a></li>
-    <li><a href="{{ request.route_url("admin.allow_rule") }}">Allow Rule</a></li>
-    <li><a href="{{ request.route_url("pyramid_googleauth.logout") }}">Logout</a></li>
-  </ul>
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="{{ request.route_url("admin.index") }}">
+      <p class="is-size-4">ADMIN</p>
+    </a>
+  </div>
+  <div class="navbar-menu is-active">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item"
+         href="{{ request.route_url("admin.allow_rule") }}">Allow URL</a>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-light"
+               href="{{ request.route_url("pyramid_googleauth.logout") }}">Log out</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </nav>
 
 {% block content %}
