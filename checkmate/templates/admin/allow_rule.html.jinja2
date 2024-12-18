@@ -1,26 +1,63 @@
 {% extends "checkmate:templates/admin/base.html.jinja2" %}
 {% block content %}
 
-  <h2>Add to Allow List</h2>
+  <section>
+    <div class="container">
+      {% if messages %}
+        <article class="message is-danger">
+          <div class="message-body">
+            {% for message in messages %}
+              <p>{{ message.detail }}</p>
+            {% endfor %}
+          </div>
+        </article>
+      {% endif %}
 
-  {% if messages %}
-    <div>
-      {% for message in messages %}
-        <p>{{ message.detail }}</p>
-      {% endfor %}
+      {% if allow_rule %}
+        <article class="message">
+          <div class="message-body">
+            <p>Allowed as {{ allow_rule.rule }} with hash {{ allow_rule.hash }}</p>
+          </div>
+        </article>
+      {% endif %}
     </div>
-  {% endif %}
+  </section>
 
-  {% if allow_rule %}
-    <p>Allowed as {{ allow_rule.rule }} with hash {{ allow_rule.hash }}</p>
-  {% endif %}
+  <section>
+    <div class="container">
+      <fieldset class="box mt-6">
+        <legend class="label has-text-centered">Add to Allow List</legend>
+        <form action="{{ request.route_url('admin.allow_rule') }}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
 
-  <form action="{{ request.route_url('admin.allow_rule') }}" method="post">
-    <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
-    <label>
-      <input type="url" name="url" placeholder="URL" size="100">
-    </label>
-    <input type="submit" value="Submit">
-  </form>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">URL</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control is-expanded">
+                  <input class="input" name="url" type="text" placeholder="URL" size="100">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label"></label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control is-expanded">
+                  <input type="submit" class="button is-info" value="Add">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </fieldset>
+    </div>
+  </section>
 
 {% endblock %}
