@@ -9,7 +9,7 @@ def test_admin_index(pyramid_request):
     response = index(pyramid_request)
 
     assert response == temporary_redirect_to(
-        pyramid_request.route_url("admin.allow_rule")
+        pyramid_request.route_url("admin.allow_url")
     )
 
 
@@ -19,7 +19,7 @@ def test_not_found_view(pyramid_request):
     assert response.status_code == 404
 
 
-class TestAdminAllowRuleViews:
+class TestAdminAllowURLViews:
     def test_get(self, views):
         response = views.get()
 

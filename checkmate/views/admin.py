@@ -13,7 +13,7 @@ from checkmate.services import RuleService
 
 @view_config(route_name="admin.index")
 def index(request):
-    return HTTPFound(location=request.route_url("admin.allow_rule"))
+    return HTTPFound(location=request.route_url("admin.allow_url"))
 
 
 @notfound_view_config(path_info="/admin/*", append_slash=True)
@@ -22,8 +22,8 @@ def notfound(_request):
 
 
 @view_defaults(
-    route_name="admin.allow_rule",
-    renderer="checkmate:templates/admin/allow_rule.html.jinja2",
+    route_name="admin.allow_url",
+    renderer="checkmate:templates/admin/allow_url.html.jinja2",
 )
 class AdminAllowRuleViews:
     def __init__(self, request):
