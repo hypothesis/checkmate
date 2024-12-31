@@ -2,7 +2,12 @@ from unittest import mock
 
 import pytest
 
-from checkmate.services import RuleService, SignatureService, URLCheckerService
+from checkmate.services import (
+    CustomRuleService,
+    RuleService,
+    SignatureService,
+    URLCheckerService,
+)
 from checkmate.services.secure_link import SecureLinkService
 
 
@@ -37,3 +42,8 @@ def url_checker_service(mock_service):
 @pytest.fixture
 def rule_service(mock_service):
     return mock_service(RuleService)
+
+
+@pytest.fixture
+def custom_rule_service(mock_service):
+    return mock_service(CustomRuleService)
