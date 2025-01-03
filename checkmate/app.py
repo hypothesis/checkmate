@@ -62,9 +62,7 @@ class CheckmateConfigurator:
         return keys
 
     def _configure_checkmate(self, config):
-        if self.celery_worker:
-            self.add_setting_from_env("checkmate_blocklist_url")
-        else:
+        if not self.celery_worker:
             # The celery workers don't need to know about this stuff
 
             config.include("pyramid_services")
