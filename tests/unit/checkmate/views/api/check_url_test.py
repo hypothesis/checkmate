@@ -1,3 +1,5 @@
+import logging
+
 import pytest
 
 from checkmate.exceptions import BadURL, BadURLParameter
@@ -82,7 +84,7 @@ class TestURLCheck:
         url_checker_service.check_url.assert_called_once_with(
             pyramid_request.params["url"],
             allow_all=None,
-            ignore_reasons=set([Reason.MEDIA_IMAGE, Reason.MALICIOUS]),
+            ignore_reasons={Reason.MEDIA_IMAGE, Reason.MALICIOUS},
         )
 
     def test_it_returns_an_error_for_no_url(self, pyramid_request):
@@ -105,3 +107,33 @@ class TestURLCheck:
 
         with pytest.raises(BadURLParameter):
             check_url(pyramid_request)
+
+    def test_it_logs_allowed_url(self, pyramid_request, info_caplog):
+        url = "http://example.com"
+        pyramid_request.params["url"] = url
+        pyramid_request.params["allow_all"] = "1"
+
+        check_url(pyramid_request)
+
+        assert info_caplog.messages == [
+            f"Access allowed for URL {url!r} via source {Source.ALLOW_LIST.value}"
+        ]
+
+    def test_it_logs_blocked_url(
+        self, pyramid_request, info_caplog, url_checker_service
+    ):
+        url = "http://example.com"
+        pyramid_request.params["url"] = url
+        detection = Detection(Reason.MALICIOUS, Source.BLOCK_LIST)
+        url_checker_service.check_url.return_value = (detection,)
+
+        check_url(pyramid_request)
+
+        assert info_caplog.messages == [
+            f"Access blocked for URL {url!r} via source {detection.source.value} due to reason {detection.reason.value}"
+        ]
+
+    @pytest.fixture
+    def info_caplog(self, caplog):
+        caplog.set_level(logging.INFO)
+        return caplog
