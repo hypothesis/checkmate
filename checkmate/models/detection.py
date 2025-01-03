@@ -34,11 +34,3 @@ class Detection:
             return False
 
         return (other.reason, other.source) == (self.reason, self.source)
-
-    def __lt__(self, other):
-        if not isinstance(other, Detection):
-            raise TypeError(
-                "Can only compare a Detection with another instance of itself"
-            )
-
-        return self.reason < other.reason
