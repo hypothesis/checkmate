@@ -7,7 +7,6 @@ from checkmate.app import CheckmateConfigurator
 
 CELERY_SETTINGS = {
     "database_url": "celery_db",
-    "checkmate_blocklist_url": "some_url",
 }
 
 REQUIRED_APP_SETTINGS = {

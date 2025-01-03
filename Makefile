@@ -125,7 +125,6 @@ run-docker:
 	    -e "NEW_RELIC_LICENSE_KEY=$(NEW_RELIC_LICENSE_KEY)" \
 	    -e "NEW_RELIC_ENVIRONMENT=dev" \
 	    -e "NEW_RELIC_APP_NAME=checkmate (dev)" \
-	    -e "CHECKMATE_BLOCKLIST_URL=https://hypothesis-via.s3-us-west-1.amazonaws.com/via-blocklist.txt" \
 	    -p 9099:9099 \
 	    --name checkmate hypothesis/checkmate:$(DOCKER_TAG)
 
