@@ -1,3 +1,4 @@
+from checkmate.services.custom_rule import CustomRuleService
 from checkmate.services.rule import RuleService
 from checkmate.services.secure_link import SecureLinkService
 from checkmate.services.signature import SignatureService
@@ -17,4 +18,7 @@ def includeme(config):  # pragma: no cover
     )
     config.register_service_factory(
         "checkmate.services.rule.factory", iface=RuleService
+    )
+    config.register_service_factory(
+        "checkmate.services.custom_rule.factory", iface=CustomRuleService
     )

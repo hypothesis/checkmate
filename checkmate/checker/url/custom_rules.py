@@ -44,18 +44,18 @@ class CustomRules(HashedURLChecker):
         CustomRule.bulk_upsert(
             self._session,
             values=[
-                self._value_from_domain(domain, reason)
+                self.value_from_domain(domain, reason)
                 for domain, reason in raw_rules.items()
             ],
         )
 
     @staticmethod
-    def _value_from_domain(domain, reason):  # pragma: no cover
+    def value_from_domain(domain, reason):  # pragma: no cover
         if "*" in domain:
             # It's a wild card!
             domain = domain.lstrip("*")
             if "*" in domain:
-                raise ValueError("Cannot convert non prefix wildcard")
+                raise ValueError(f"Cannot convert non prefix wildcard: {domain!r}")
 
         # Using a raw domain as a URL is close enough, as it's subject
         # to normalisation anyway

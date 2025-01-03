@@ -16,6 +16,7 @@ def add_routes(config):
 
     config.add_route("admin.index", "/admin/")
     config.add_route("admin.allow_url", "/admin/allow_url/")
+    config.add_route("admin.block_list", "/admin/block_list/")
 
     config.add_route("add_to_allow_list", "/api/rule", request_method="POST")
 

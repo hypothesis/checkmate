@@ -1,0 +1,63 @@
+{% extends "checkmate:templates/admin/base.html.jinja2" %}
+{% block content %}
+
+  <section>
+    <div class="container">
+      {% if errors %}
+        <article class="message is-danger">
+          <div class="message-body">
+            {% for error in errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        </article>
+      {% endif %}
+
+      {% if message %}
+        <article class="message">
+          <div class="message-body">
+            <p>{{ message }}</p>
+          </div>
+        </article>
+      {% endif %}
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <fieldset class="box mt-6">
+        <legend class="label has-text-centered">Update Block List</legend>
+        <form action="{{ request.route_url("admin.block_list") }}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
+
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Block List</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control is-expanded">
+                  <textarea class="textarea" name="block-list" rows="20">{{ block_list }}</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label"></label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control is-expanded">
+                  <input type="submit" class="button is-info" value="Update">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </fieldset>
+    </div>
+  </section>
+
+{% endblock %}

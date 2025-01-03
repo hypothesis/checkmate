@@ -30,3 +30,31 @@ class TestAdminAllowURL:
 
         assert response.content_type == "text/html"
         assert "Allowed as google.com/" in response.text
+
+
+class TestAdminBlockList:
+    def test_if_youre_not_logged_in_it_redirects_to_the_login_page(
+        self, app, route_url
+    ):
+        response = app.get("/admin/block_list/")
+
+        assert response == temporary_redirect_to(route_url("pyramid_googleauth.login"))
+
+    @pytest.mark.usefixtures("logged_in")
+    def test_form_renders_correctly(self, app):
+        response = app.get("/admin/block_list/", status=200)
+
+        assert response.content_type == "text/html"
+
+    @pytest.mark.usefixtures("logged_in")
+    def test_post_form_submission(self, app):
+        block_list = "example.com/ other\nmalicious.com/ malicious"
+        response = app.post(
+            "/admin/block_list/",
+            status=200,
+            params={"block-list": block_list},
+        )
+
+        assert response.content_type == "text/html"
+        assert "Block List set successfully" in response.text
+        assert block_list in response.text
