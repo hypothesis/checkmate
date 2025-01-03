@@ -47,15 +47,11 @@ def check_url(request):
         # If everything is fine give a 204 which is successful, but has no body
         return HTTPNoContent()
 
-    # Get unique reasons from the detections sorted by severity (decreasing)
-    reasons = list(
-        sorted(
-            set(detection.reason for detection in detections),
-        )
-    )
+    # Get unique reasons mapped to corresponding detections
+    reasons = {detection.reason: detection for detection in detections}
 
-    # Reasons are in severity order, worst first
-    worst_reason = reasons[0]
+    # Reasons are ordered, worst first
+    worst_reason = min(reasons)
 
     blocked_for = request.GET.get("blocked_for", BlockedFor.GENERAL.value)
 
