@@ -24,7 +24,7 @@ certifi==2024.7.4
     #   sentry-sdk
 charset-normalizer==3.3.2
     # via requests
-checkmatelib==1.0.17
+checkmatelib==1.0.18
     # via -r requirements/requirements.in
 click==8.1.7
     # via
