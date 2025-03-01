@@ -62,7 +62,7 @@ click-repl==0.3.0
     #   celery
 coverage==7.6.10
     # via -r requirements/tests.in
-factory-boy==3.3.1
+factory-boy==3.3.3
     # via -r requirements/tests.in
 faker==22.0.0
     # via factory-boy
