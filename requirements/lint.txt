@@ -86,7 +86,7 @@ coverage==7.6.10
     # via -r requirements/tests.txt
 dill==0.3.7
     # via pylint
-factory-boy==3.3.1
+factory-boy==3.3.3
     # via -r requirements/tests.txt
 faker==22.0.0
     # via
