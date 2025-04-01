@@ -4,7 +4,7 @@
 #
 #    pip-compile --allow-unsafe requirements/lint.in
 #
-alembic==1.14.1
+alembic==1.15.2
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -383,7 +383,7 @@ translationstring==1.4
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   pyramid
-typing-extensions==4.9.0
+typing-extensions==4.13.0
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
