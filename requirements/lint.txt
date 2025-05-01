@@ -25,7 +25,7 @@ beautifulsoup4==4.12.2
     # via
     #   -r requirements/tests.txt
     #   webtest
-billiard==4.2.0
+billiard==4.2.1
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -39,7 +39,7 @@ cachetools==5.3.2
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   google-auth
-celery==5.4.0
+celery==5.5.2
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -161,7 +161,7 @@ jsonschema-specifications==2023.12.1
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   jsonschema
-kombu==5.3.4
+kombu==5.5.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
@@ -389,11 +389,11 @@ typing-extensions==4.13.0
     #   -r requirements/tests.txt
     #   alembic
     #   sqlalchemy
-tzdata==2023.4
+tzdata==2025.2
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
-    #   celery
+    #   kombu
 urllib3==2.2.2
     # via
     #   -r requirements/requirements.txt
