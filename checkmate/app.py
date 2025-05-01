@@ -8,6 +8,7 @@ import pyramid.config
 import pyramid_tm
 from pyramid.session import SignedCookieSessionFactory
 
+from checkmate._version import get_version
 from checkmate.security import SecurityPolicy
 
 logger = logging.getLogger(__name__)
@@ -110,11 +111,20 @@ class CheckmateConfigurator:
         config.add_settings({"tm.manager_hook": pyramid_tm.explicit_manager})
 
     def _configure_sentry(self, config):
-        # Configure sentry
         config.add_settings(
             {
                 "h_pyramid_sentry.filters": [],
                 "h_pyramid_sentry.sqlalchemy_support": True,
+                # Enable Sentry's "Releases" feature, see:
+                # https://docs.sentry.io/platforms/python/configuration/options/#release
+                #
+                # h_pyramid_sentry passes any h_pyramid_sentry.init.* Pyramid settings
+                # through to sentry_sdk.init(), see:
+                # https://github.com/hypothesis/h-pyramid-sentry?tab=readme-ov-file#settings
+                #
+                # For the full list of options that sentry_sdk.init() supports see:
+                # https://docs.sentry.io/platforms/python/configuration/options/
+                "h_pyramid_sentry.init.release": get_version(),
             }
         )
         if self.celery_worker:
