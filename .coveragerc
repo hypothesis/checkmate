@@ -8,6 +8,7 @@ omit =
     checkmate/migrations/*
     checkmate/pshell.py
     checkmate/scripts/init_db.py
+    checkmate/_version.py
 
 [report]
 show_missing = True
