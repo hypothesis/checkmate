@@ -1,29 +1,22 @@
-FROM python:3.11.11-alpine3.19
-LABEL maintainer="Hypothes.is Project and contributors"
+FROM python:3.11.7-alpine3.16
 
-# Install nginx & supervisor
-RUN apk add --no-cache nginx gettext supervisor libpq git
+RUN apk add --no-cache nginx supervisor
 
-# Create the hypothesis user, group, home directory and package directory.
 RUN addgroup -S hypothesis && adduser -S -G hypothesis -h /var/lib/hypothesis hypothesis
 WORKDIR /var/lib/hypothesis
 
-# Copy minimal data to allow installation of python dependencies.
-COPY requirements/requirements.txt ./
+COPY requirements/prod.txt ./
 
-# Install build deps, build, and then clean up.
 RUN apk add --no-cache --virtual \
     build-deps \
     build-base \
-    postgresql-dev \
-    libffi-dev \
   && pip install --no-cache-dir -U pip \
-  && pip install --no-cache-dir -r requirements.txt \
+  && pip install --no-cache-dir -r prod.txt \
   && apk del build-deps
 
 COPY . .
 
-ENV PYTHONPATH /var/lib/hypothesis:$PYTHONPATH
+EXPOSE 9099
 
 USER hypothesis
 

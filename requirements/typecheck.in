@@ -1,3 +1,6 @@
+-r prod.txt
+
 pip-tools
 pip-sync-faster
-coverage[toml]
+
+mypy

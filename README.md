@@ -1,156 +1,111 @@
-Checkmate
-=========
+<a href="https://github.com/hypothesis/checkmate/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://img.shields.io/github/actions/workflow/status/hypothesis/checkmate/ci.yml?branch=main"></a>
+<a><img src="https://img.shields.io/badge/python-3.11-success"></a>
+<a href="https://github.com/hypothesis/checkmate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-BSD--2--Clause-success"></a>
+<a href="https://github.com/hypothesis/cookiecutters/tree/main/pyramid-app"><img src="https://img.shields.io/badge/cookiecutter-pyramid--app-success"></a>
+<a href="https://black.readthedocs.io/en/stable/"><img src="https://img.shields.io/badge/code%20style-black-000000"></a>
 
-A service for checking URLs are safe.
+# Checkmate
 
-Installing Checkmate in a development environment
--------------------------------------------------
+Your friendly URL vetting service.
 
-### You will need
+## Setting up Your Checkmate Development Environment
 
-* [Git](https://git-scm.com/)
+First you'll need to install:
 
-* [pyenv](https://github.com/pyenv/pyenv)
-  Follow the instructions in the pyenv README to install it.
-  The Homebrew method works best on macOS.
+* [Git](https://git-scm.com/).
+  On Ubuntu: `sudo apt install git`, on macOS: `brew install git`.
+* [GNU Make](https://www.gnu.org/software/make/).
+  This is probably already installed, run `make --version` to check.
+* [pyenv](https://github.com/pyenv/pyenv).
+  Follow the instructions in pyenv's README to install it.
+  The **Homebrew** method works best on macOS.
+  The **Basic GitHub Checkout** method works best on Ubuntu.
+  You _don't_ need to set up pyenv's shell integration ("shims"), you can
+  [use pyenv without shims](https://github.com/pyenv/pyenv#using-pyenv-without-shims).
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+  On Ubuntu follow [Install on Ubuntu](https://docs.docker.com/desktop/install/ubuntu/).
+  On macOS follow [Install on Mac](https://docs.docker.com/desktop/install/mac-install/).
 
-* [Docker](https://docs.docker.com/install/).
-  Follow the [instructions on the Docker website](https://docs.docker.com/install/)
-  to install Docker.
+Then to set up your development environment:
 
-### Clone the Git repo
-
-    git clone https://github.com/hypothesis/checkmate.git
-
-This will download the code into a `checkmate` directory in your current working
-directory. You need to be in the `checkmate` directory from the remainder of the
-installation process:
-
-    cd checkmate
-
-### Run the services with Docker Compose
-
-Start the services that Checkmate requires using Docker Compose:
-
-    make services
-
-### Create the development data and settings
-
-Create the database contents and environment variable settings needed to get
-Checkmate working:
-
-    make devdata
-
-### Start the development server
-
-    make dev
-
-The first time you run `make dev` it might take a while to start because it'll
-need to install the application dependencies and build the assets.
-
-This will start the app on http://localhost:9099.
-
-**That's it!** You’ve finished setting up your Checkmate development environment.
-Run `make help` to see all the commands that are available for running the tests,
-linting, code formatting, etc.
-
-API
----
-
-### `GET /api/check?url=<url_to_check>`
-
-Check a specific URL for problems. The return values are in a [JSON:API](https://jsonapi.org/) style.
-
-**Return codes:**
-
- * `200` - The URL has reasons to block (JSON body)
- * `204` - The URL has no reasons to block (no body)
- * `400` - There is something wrong with your request
-
-**Return examples:**
-
-Reasons are listed in decreasing order of severity.
-
-```json5
-// 200 OK
-{
-    "data": [
-        {
-            "type": "reason", "id": "malicious",
-            "attributes": {"severity": "mandatory"}
-        },
-        {
-            "type": "reason", "id": "high-io",
-            "attributes": {"severity": "advisory"}
-        }
-    ],
-    "meta": {
-        "maxSeverity": "mandatory"
-    }
-}
+```terminal
+git clone https://github.com/hypothesis/checkmate.git
+cd checkmate
+make services
+make devdata
+make help
 ```
 
-In the case of errors:
+To run Checkmate locally run `make dev` and visit http://localhost:9099.
 
-```json5
-// 400 Bad Request
-{
-    "errors": [
-        {
-            "id": "BadURLParameter",
-            "detail": "Parameter 'url' is required",
-            "source": {"parameter": "url"}
-        }
-    ]
-}
+## Changing the Project's Python Version
+
+To change what version of Python the project uses:
+
+1. Change the Python version in the
+   [cookiecutter.json](.cookiecutter/cookiecutter.json) file. For example:
+
+   ```json
+   "python_version": "3.10.4",
+   ```
+
+2. Re-run the cookiecutter template:
+
+   ```terminal
+   make template
+   ```
+
+3. Re-compile the `requirements/*.txt` files.
+   This is necessary because the same `requirements/*.in` file can compile to
+   different `requirements/*.txt` files in different versions of Python:
+
+   ```terminal
+   make requirements
+   ```
+
+4. Commit everything to git and send a pull request
+
+## Changing the Project's Python Dependencies
+
+### To Add a New Dependency
+
+Add the package to the appropriate [`requirements/*.in`](requirements/)
+file(s) and then run:
+
+```terminal
+make requirements
 ```
 
-### `GET /_status`
+### To Remove a Dependency
 
-Check the service status
+Remove the package from the appropriate [`requirements/*.in`](requirements)
+file(s) and then run:
 
-**Return codes:**
-
- * `200` - If the service is up
-
-**Return example:**
-
-```json5
-//200 OK
-{"status": "okay"}
+```terminal
+make requirements
 ```
 
-Configuration
--------------
+### To Upgrade or Downgrade a Dependency
 
-Environment variables:
+We rely on [Dependabot](https://github.com/dependabot) to keep all our
+dependencies up to date by sending automated pull requests to all our repos.
+But if you need to upgrade or downgrade a package manually you can do that
+locally.
 
-| Name | Effect | Example |
-|------|--------|---------|
-| `CHECKMATE_SECRET` | Secret used for signing URLs | `AB823F97FF2E330C1A20`
-| `PUBLIC_SCHEME` | Scheme used on the public accessible checkmate instance | `https`
-| `PUBLIC_HOST` | Host of the public accessible checkmate instance | `some-domain.com`
+To upgrade a package to the latest version in all `requirements/*.txt` files:
 
-For details of changing the blocklist see:
-
- * https://stackoverflow.com/c/hypothesis/questions/102/250
-
-Using Checkmate in a development environment
---------------------------------------------
-
-### Authenticating requests
-
-To authenticate requests to the dev server you must specify an API key via
-HTTP Basic Authentication. Set the username field to the API key and leave the
-password blank. In the local development environment a default `dev_api_key` API
-key is accepted:
-
-
-```sh
-curl http://dev_api_key@localhost:9099/api/check?url=http://example.com/
+```terminal
+make requirements --always-make args='--upgrade-package <FOO>'
 ```
 
-### Accessing the admin pages
+To upgrade or downgrade a package to a specific version:
 
-To access the admin UI for Checkmate, visit http://localhost:9099/admin.
-You will need to login using an @hypothes.is Google account.
+```terminal
+make requirements --always-make args='--upgrade-package <FOO>==<X.Y.Z>'
+```
+
+To upgrade **all** packages to their latest versions:
+
+```terminal
+make requirements --always-make args=--upgrade
+```

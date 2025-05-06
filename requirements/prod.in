@@ -1,0 +1,8 @@
+pyramid
+gunicorn
+newrelic
+sqlalchemy
+psycopg2
+alembic
+pyramid-tm
+zope.sqlalchemy

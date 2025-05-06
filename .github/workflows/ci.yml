@@ -1,29 +1,87 @@
 name: CI
-
 on:
   push:
     paths-ignore:
       - '.cookiecutter/*'
+      - '.github/dependabot.yml'
+      - 'bin/logger'
+      - 'bin/make_python'
+      - 'bin/make_template'
+      - 'conf/development.ini'
+      - 'conf/production.ini'
+      - 'conf/supervisord*.conf'
       - 'docs/*'
       - 'requirements/*.in'
       - 'requirements/dev.txt'
+      - '.docker.env'
       - '**/.gitignore'
-      - '*.md'
+      - 'Dockerfile'
       - 'LICENSE'
+      - '*.md'
+      - 'docker-compose.yml'
+  workflow_dispatch:
   workflow_call:
-
+  schedule:
+  - cron: '0 1 * * *'
 jobs:
-  backend:
-    name: Backend
+  Format:
     runs-on: ubuntu-latest
-    env:
-      TOX_PARALLEL_NO_SPINNER: 1
-
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Cache the .tox dir
+        uses: actions/cache@v3
+        with:
+          path: .tox
+          key: format-${{ runner.os }}-tox-${{ hashFiles('tox.ini') }}-${{ hashFiles('requirements/*') }}
+          restore-keys: |
+            format-${{ runner.os }}-tox-
+      - run: python -m pip install 'tox<4'
+      - run: tox -e checkformatting
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Cache the .tox dir
+        uses: actions/cache@v3
+        with:
+          path: .tox
+          key: lint-${{ runner.os }}-tox-${{ hashFiles('tox.ini') }}-${{ hashFiles('requirements/*') }}
+          restore-keys: |
+            lint-${{ runner.os }}-tox-
+      - run: python -m pip install 'tox<4'
+      - run: tox -e lint
+  Typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Cache the .tox dir
+        uses: actions/cache@v3
+        with:
+          path: .tox
+          key: typecheck-${{ runner.os }}-tox-${{ hashFiles('tox.ini') }}-${{ hashFiles('requirements/*') }}
+          restore-keys: |
+            typecheck-${{ runner.os }}-tox-
+      - run: python -m pip install 'tox<4'
+      - run: tox -e typecheck
+  Tests:
+    runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:15.6-alpine
+        image: postgres:15.3-alpine
         ports:
-          - 5434:5432
+        - 55949:5432
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
         options: >-
@@ -32,32 +90,81 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-    - name: Checkout git repo
-      uses: actions/checkout@v3
-
-    - name: Setup python
-      uses: actions/setup-python@v4
-      with:
-        python-version-file: '.python-version'
-
-    - name: Update pip
-      run: python -m pip install --upgrade pip
-
-    - name: Install tox
-      run: python -m pip install 'tox<4'
-
-    - name: Create test databases
-      run: |
-        psql -U postgres -h localhost -p 5434 -c 'CREATE DATABASE checkmate_test'
-        psql -U postgres -h localhost -p 5434 -c 'CREATE DATABASE checkmate_functests'
-
-    - name: Cache the .tox dir
-      uses: actions/cache@v3
-      with:
-        path: .tox
-        key: ${{ runner.os }}-tox-${{ secrets.CACHE_VERSION }}-${{ hashFiles('tox.ini', 'requirements*', 'setup.py', 'setup.cfg') }}
-        restore-keys: |
-          ${{ runner.os }}-tox-${{ secrets.CACHE_VERSION }}-
-
-    - name: Run tox
-      run: tox --parallel auto -e lint,checkformatting,tests,coverage,functests
+      - uses: actions/checkout@v3
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Cache the .tox dir
+        uses: actions/cache@v3
+        with:
+          path: .tox
+          key: tests-${{ runner.os }}-tox-${{ hashFiles('tox.ini') }}-${{ hashFiles('requirements/*') }}
+          restore-keys: |
+            tests-${{ runner.os }}-tox-
+      - name: Create test database
+        run: psql -U postgres -h localhost -p 55949 -c 'CREATE DATABASE checkmate_tests'
+      - run: python -m pip install 'tox<4'
+      - run: tox -e tests
+        env:
+          COVERAGE_FILE: .coverage.${{ matrix.python-version }}
+      - name: Upload coverage file
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-python${{ matrix.python-version}}
+          path: .coverage.*
+          include-hidden-files: true
+  Coverage:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Cache the .tox dir
+        uses: actions/cache@v3
+        with:
+          path: .tox
+          key: coverage-${{ runner.os }}-tox-${{ hashFiles('tox.ini') }}-${{ hashFiles('requirements/*') }}
+          restore-keys: |
+            coverage-${{ runner.os }}-tox-
+      - name: Download coverage files
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-python*
+          merge-multiple: true
+      - run: python -m pip install 'tox<4'
+      - run: tox -e coverage
+  Functests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15.3-alpine
+        ports:
+        - 55949:5432
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Cache the .tox dir
+        uses: actions/cache@v3
+        with:
+          path: .tox
+          key: functests-${{ runner.os }}-tox-${{ hashFiles('tox.ini') }}-${{ hashFiles('requirements/*') }}
+          restore-keys: |
+            functests-${{ runner.os }}-tox-
+      - name: Create test database
+        run: psql -U postgres -h localhost -p 55949 -c 'CREATE DATABASE checkmate_functests'
+      - run: python -m pip install 'tox<4'
+      - run: tox -e functests
