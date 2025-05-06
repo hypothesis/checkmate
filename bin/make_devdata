@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+import subprocess
+import tempfile
+from pathlib import Path
+
+if __name__ == "__main__":
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        git_dir = Path(tmpdirname) / "devdata"
+        subprocess.check_call(
+            [
+                "git",
+                "clone",
+                "--depth",
+                "1",
+                "https://github.com/hypothesis/devdata.git",
+                git_dir,
+            ]
+        )
+        devdata_file = git_dir / "checkmate" / "devdata.env"
+        devdata_file.replace(Path(__file__).parent.parent / ".devdata.env")

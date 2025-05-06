@@ -1,0 +1,8 @@
+#!/bin/bash
+docker run \
+    --add-host host.docker.internal:host-gateway \
+    --net checkmate_default \
+    --env-file .docker.env \
+    --env-file .devdata.env \
+    -p 9099:9099 \
+    hypothesis/checkmate:dev

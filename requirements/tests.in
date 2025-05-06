@@ -1,10 +1,11 @@
 pip-tools
 pip-sync-faster
-coverage
-httpretty
+-r prod.txt
 pytest
+pytest-cov
 factory-boy
-webtest
+pytest-factoryboy
 h-matchers
 h-testkit
--r requirements.txt
+httpretty
+freezegun

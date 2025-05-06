@@ -1,16 +1,10 @@
-version: '3'
 services:
   postgres:
-    image: postgres:15.6-alpine
+    image: postgres:15.3-alpine
     ports:
-      - '127.0.0.1:5434:5432'
+      - "127.0.0.1:55949:5432"
     healthcheck:
-        test: ["CMD", "pg_isready", "-U", "postgres"]
-        interval: 1s
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 1s
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
-  rabbit:
-    image: rabbitmq:3.12-management-alpine
-    ports:
-      - '127.0.0.1:5673:5672'
-      - '127.0.0.1:15673:15672'

@@ -1,6 +1,8 @@
 pip-tools
 pip-sync-faster
-pylint
-pydocstyle
 -r tests.txt
--r requirements.txt
+-r functests.txt
+toml # Needed for pydocstyle to support pyproject.toml.
+pylint>=3.0.0
+pydocstyle
+pycodestyle

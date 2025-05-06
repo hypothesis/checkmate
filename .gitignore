@@ -1,7 +1,15 @@
-.devdata.env
+/build
+coverage
+node_modules
+yarn-error.log
 .coverage*
 .tox
+*.egg-info
 *.pyc
-*.egg-info/
 supervisord.log
 supervisord.pid
+.DS_Store
+.devdata*
+.eslintcache
+*.tsbuildinfo
+.vscode

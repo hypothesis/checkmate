@@ -1,8 +1,6 @@
--r requirements.txt
 pip-tools
 pip-sync-faster
-ipython
-ipdb
-supervisor
-pyramid_ipython
+-r prod.txt
 factory-boy
+pyramid-ipython
+supervisor
