@@ -283,7 +283,7 @@ tzdata==2025.2
     # via
     #   -r requirements.txt
     #   kombu
-urllib3==2.2.2
+urllib3==2.5.0
     # via
     #   -r requirements.txt
     #   requests
