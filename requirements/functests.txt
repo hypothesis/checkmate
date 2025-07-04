@@ -188,6 +188,8 @@ pyasn1-modules==0.3.0
     # via
     #   -r requirements/requirements.txt
     #   google-auth
+pygments==2.19.2
+    # via pytest
 pyjwt==2.8.0
     # via
     #   -r requirements/requirements.txt
@@ -218,7 +220,7 @@ pyramid-services==2.2
     # via -r requirements/requirements.txt
 pyramid-tm==2.6
     # via -r requirements/requirements.txt
-pytest==8.3.5
+pytest==8.4.1
     # via -r requirements/functests.in
 python-dateutil==2.8.2
     # via
