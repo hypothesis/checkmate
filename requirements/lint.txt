@@ -39,7 +39,7 @@ cachetools==5.3.2
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
     #   google-auth
-celery==5.5.2
+celery==5.5.3
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt

@@ -27,7 +27,7 @@ cachetools==5.3.2
     # via
     #   -r requirements/requirements.txt
     #   google-auth
-celery==5.5.2
+celery==5.5.3
     # via -r requirements/requirements.txt
 certifi==2024.7.4
     # via
