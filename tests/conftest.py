@@ -2,8 +2,8 @@ import functools
 from os import environ
 from unittest import mock
 
-import httpretty
 import pytest
+import responses
 from pyramid.testing import DummyRequest, testConfig
 
 
@@ -23,19 +23,14 @@ def pyramid_settings():
 
 
 @pytest.fixture(autouse=True)
-def httpretty_():
-    """Monkey-patch Python's socket core module to mock all HTTP responses.
+def responses_():
+    """Mock all HTTP responses using responses library.
 
     We never want real HTTP requests to be sent by the tests so replace them
-    all with mock responses. This handles requests sent using the standard
-    urllib2 library and the third-party httplib2 and requests libraries.
+    all with mock responses. This handles requests sent using the requests library.
     """
-    httpretty.enable(allow_net_connect=False)
-
-    yield
-
-    httpretty.disable()
-    httpretty.reset()
+    with responses.RequestsMock() as rsps:
+        yield rsps
 
 
 @pytest.fixture

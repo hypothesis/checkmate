@@ -1,9 +1,8 @@
 import os
 from unittest.mock import sentinel
 
-import httpretty
 import pytest
-from httpretty import httprettified
+import responses
 from requests.exceptions import HTTPError, ReadTimeout
 
 from checkmate.checker.pipeline import Download
@@ -11,10 +10,10 @@ from checkmate.exceptions import StageException, StageRetryableException
 
 
 class TestDownload:
-    @httprettified
+    @responses.activate
     def test_it_downloads_a_file(self, tmpdir):
         url = "https://example.com"
-        httpretty.register_uri(httpretty.GET, url, body="some content")
+        responses.add(responses.GET, url, body="some content")
 
         result = Download(url)(tmpdir)
 

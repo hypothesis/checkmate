@@ -1,7 +1,7 @@
 pip-tools
 pip-sync-faster
 coverage
-httpretty
+responses
 pytest
 factory-boy
 webtest

@@ -2,8 +2,8 @@ from unittest.mock import sentinel
 
 import importlib_resources
 import pytest
+import responses
 from h_matchers import Any
-from httpretty import httprettified, httpretty
 
 from checkmate.checker.url import URLHaus
 from checkmate.models import Reason
@@ -29,10 +29,10 @@ class TestURLHaus:
 
         assert response == Any.generator().containing([]).only()
 
-    @httprettified
+    @responses.activate
     def test_reinitialize_db(self, URLHausRule):
-        httpretty.register_uri(
-            httpretty.GET,
+        responses.add(
+            responses.GET,
             "https://urlhaus.abuse.ch/downloads/csv/",
             body=self.read_fixture("csv.txt.zip"),
         )
@@ -42,9 +42,10 @@ class TestURLHaus:
         URLHausRule.delete_all.assert_called_once_with(sentinel.db_session)
         self.assert_expected_sync(response, URLHausRule)
 
+    @responses.activate
     def test_partial_update(self, URLHausRule):
-        httpretty.register_uri(
-            httpretty.GET,
+        responses.add(
+            responses.GET,
             "https://urlhaus.abuse.ch/downloads/csv_recent/",
             body=self.read_fixture("csv.txt"),
         )

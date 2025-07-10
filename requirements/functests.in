@@ -1,6 +1,6 @@
 pip-tools
 pip-sync-faster
-httpretty
+responses
 pytest
 factory-boy
 webtest
