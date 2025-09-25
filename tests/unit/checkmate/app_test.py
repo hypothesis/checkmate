@@ -1,9 +1,9 @@
-from unittest.mock import ANY, call, create_autospec
+from unittest.mock import ANY, call, create_autospec, sentinel
 
 import pytest
 from pyramid.config import Configurator
 
-from checkmate.app import CheckmateConfigurator
+from checkmate.app import CheckmateConfigurator, sentry_before_send_log
 
 CELERY_SETTINGS = {
     "database_url": "celery_db",
@@ -32,6 +32,24 @@ APP_SETTINGS = {
     **OPTIONAL_APP_SETTINGS,
     **DIFFERENT_ENVVAR_NAME_APP_SETTINGS,
 }
+
+
+class TestSentryBeforeSendLog:
+    @pytest.mark.parametrize(
+        "log,should_be_filtered_out",
+        [
+            ({"attributes": {"logger.name": "gunicorn.access"}}, True),
+            ({"attributes": {"logger.name": "foo"}}, False),
+            ({}, False),
+        ],
+    )
+    def test_it(self, log, should_be_filtered_out):
+        result = sentry_before_send_log(log, sentinel.hint)
+
+        if should_be_filtered_out:
+            assert result is None
+        else:
+            assert result == log
 
 
 class TestCheckmateConfigurator:
