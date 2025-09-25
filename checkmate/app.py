@@ -7,6 +7,7 @@ import re
 import pyramid.config
 import pyramid_tm
 from pyramid.session import SignedCookieSessionFactory
+from sentry_sdk.types import Hint, Log
 
 from checkmate._version import get_version
 from checkmate.security import SecurityPolicy
@@ -14,6 +15,15 @@ from checkmate.security import SecurityPolicy
 logger = logging.getLogger(__name__)
 
 API_KEY_RE = re.compile(r"^CHECKMATE_API_KEY_(?P<user>.*)$")
+
+
+def sentry_before_send_log(log: Log, _hint: Hint) -> Log | None:
+    """Filter out log messages that we don't want to send to Sentry Logs."""
+
+    if log.get("attributes", {}).get("logger.name") == "gunicorn.access":
+        return None
+
+    return log
 
 
 class CheckmateConfigurator:
@@ -125,6 +135,8 @@ class CheckmateConfigurator:
                 # For the full list of options that sentry_sdk.init() supports see:
                 # https://docs.sentry.io/platforms/python/configuration/options/
                 "h_pyramid_sentry.init.release": get_version(),
+                "h_pyramid_sentry.init.enable_logs": True,
+                "h_pyramid_sentry.init.before_send_log": sentry_before_send_log,
             }
         )
         if self.celery_worker:
