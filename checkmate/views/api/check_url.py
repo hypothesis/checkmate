@@ -1,16 +1,12 @@
 """URL checking."""
 
-import logging
-
 from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 
 from checkmate.exceptions import BadURL, BadURLParameter
-from checkmate.models import BlockedFor, Reason, Source
+from checkmate.models import BlockedFor, Reason
 from checkmate.security import Permissions
 from checkmate.services import SecureLinkService, URLCheckerService
-
-logger = logging.getLogger(__name__)
 
 
 @view_config(route_name="check_url", renderer="json", permission=Permissions.CHECK_URL)
@@ -49,9 +45,6 @@ def check_url(request):
 
     if not detections:
         # If everything is fine give a 204 which is successful, but has no body
-        logger.info(
-            "Access allowed for URL %r via source %s", url, Source.ALLOW_LIST.value
-        )
         return HTTPNoContent()
 
     # Get unique reasons mapped to corresponding detections
@@ -59,12 +52,6 @@ def check_url(request):
 
     # Reasons are ordered, worst first
     worst_reason = min(reasons)
-    logger.info(
-        "Access blocked for URL %r via source %s due to reason %s",
-        url,
-        reasons[worst_reason].source.value,
-        worst_reason.value,
-    )
 
     blocked_for = request.GET.get("blocked_for", BlockedFor.GENERAL.value)
 
