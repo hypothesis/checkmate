@@ -60,7 +60,7 @@ click-repl==0.3.0
     # via
     #   -r requirements/requirements.txt
     #   celery
-coverage==7.10.6
+coverage==7.10.7
     # via -r requirements/tests.in
 factory-boy==3.3.3
     # via -r requirements/tests.in
