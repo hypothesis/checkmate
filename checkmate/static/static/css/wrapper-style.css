@@ -32,7 +32,7 @@ a:hover {
 /* Major page chunks */
 
 header {
-  padding: 40px 0 0 0;
+  padding: 60px 0 0 0;
 }
 
 article > p:first-child {
@@ -79,7 +79,6 @@ body.danger {
   }
   header {
     line-height: 1;
-    padding: 0;
     font-size: 36px;
   }
   h1 {
