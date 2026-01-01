@@ -368,7 +368,7 @@ soupsieve==2.5
     # via
     #   -r requirements/tests.txt
     #   beautifulsoup4
-sqlalchemy==2.0.44
+sqlalchemy==2.0.45
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
