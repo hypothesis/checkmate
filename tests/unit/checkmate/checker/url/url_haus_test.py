@@ -42,6 +42,7 @@ class TestURLHaus:
         URLHausRule.delete_all.assert_called_once_with(sentinel.db_session)
         self.assert_expected_sync(response, URLHausRule)
 
+    @httprettified
     def test_partial_update(self, URLHausRule):
         httpretty.register_uri(
             httpretty.GET,
