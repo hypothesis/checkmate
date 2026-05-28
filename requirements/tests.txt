@@ -96,8 +96,6 @@ idna==3.7
     # via
     #   -r requirements.txt
     #   requests
-importlib-metadata==7.0.1
-    # via pip-sync-faster
 importlib-resources==6.5.2
     # via
     #   -r requirements.txt
@@ -190,7 +188,7 @@ pyasn1-modules==0.3.0
     # via
     #   -r requirements.txt
     #   google-auth
-pygments==2.19.2
+pygments==2.20.0
     # via pytest
 pyjwt==2.8.0
     # via
@@ -319,8 +317,6 @@ wired==0.3
     # via
     #   -r requirements.txt
     #   pyramid-services
-zipp==3.19.1
-    # via importlib-metadata
 zope-deprecation==5.0
     # via
     #   -r requirements.txt
