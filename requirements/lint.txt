@@ -459,7 +459,7 @@ zope-sqlalchemy==4.1
     #   -r requirements/tests.txt
 
 # The following packages are considered to be unsafe in a requirements file:
-pip==26.1
+pip==26.1.2
     # via
     #   -r requirements/requirements.txt
     #   -r requirements/tests.txt
