@@ -4,14 +4,14 @@ updates:
 - package-ecosystem: pip
   directory: "/"
   schedule:
-    interval: monthly
-  open-pull-requests-limit: 10
+    interval: weekly
+  open-pull-requests-limit: 20
 
 - package-ecosystem: docker
   directory: "/"
   schedule:
-    interval: monthly
-  open-pull-requests-limit: 10
+    interval: weekly
+  open-pull-requests-limit: 20
   ignore:
     # Only send PRs for patch versions of Python.
     - dependency-name: "python"
