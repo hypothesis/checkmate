@@ -12,8 +12,6 @@ click==8.1.7
     # via
     #   black
     #   pip-tools
-importlib-metadata==7.0.1
-    # via pip-sync-faster
 isort==6.1.0
     # via -r format.in
 mypy-extensions==1.0.0
@@ -40,13 +38,11 @@ pytokens==0.3.0
     # via black
 wheel==0.42.0
     # via pip-tools
-zipp==3.19.1
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 pip==26.1
     # via
     #   -r format.in
     #   pip-tools
-setuptools==78.1.1
+setuptools==83.0.0
     # via pip-tools
