@@ -6,6 +6,7 @@ Usage:
     python3 -m checkmate.scripts.init_db --help
 
 """
+
 # pylint:disable=import-outside-toplevel,unused-import
 import argparse
 import logging

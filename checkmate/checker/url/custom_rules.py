@@ -113,7 +113,7 @@ class BlocklistParser:  # pragma: no cover
             if match:
                 raw_rule, reason = match.group(1), match.group(2)
             else:
-                cls.LOG.warning("Cannot parse blocklist file line: '%s'")
+                cls.LOG.warning("Cannot parse blocklist file line: '%s'", line)
                 continue
 
             yield raw_rule, Reason.parse(reason)
